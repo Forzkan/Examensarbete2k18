@@ -1,0 +1,26 @@
+
+
+/* 
+ * COMPONENT ID (NOT FX:ID) FROM FXML CAN BE USED TO STYLE JAVAFX COMPONENTS 
+ * IN SIMILAR WAYS AS REGULAR CSS WORKS
+ */
+ 
+ 
+ .rootPane{
+ 	
+ }
+ 
+ 
+ .mainMenuPane{
+ 	
+ }
+ 
+  .mainMenuBtn{
+ 	-fx-background-color:TRANSPARENT;
+ }
+ 
+ .mainMenuBtn:hover{
+ 	-fx-background-color:black;
+ }
+ 
+ 
