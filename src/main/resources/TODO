@@ -1,0 +1,24 @@
+TODO::
+
+
+OPENCV
+Läsa upp på OpenCV för att upptäcka och hantera skillnader i bilder.
+
+Tutorial för att börja använda OpenCV: https://opencv-java-tutorials.readthedocs.io/en/latest/02-first-java-application-with-opencv.html
+Ett projekt med någon som använder OpenCV i ett JAVAFX image processing projekt : https://gist.github.com/rladstaetter/5332416
+
+
+
+TENSORFLOW
+
+3 videos för att sätta upp det i Java och eclipse, dock måste man kanske skriva skripten i python(?).
+https://www.youtube.com/watch?v=j3MZ0brQ0QE
+https://www.youtube.com/watch?v=ox5MJeeC4h4
+Tensorflow med Java, i Eclipse : https://www.youtube.com/watch?v=KGkUWe_-jCE
+
+
+
+MACHINE LEARNING VIDEOS/PLAYLISTS:
+Siraj Raval (Rätt bra tycker jag) - https://www.youtube.com/channel/UCWN3xxRkmTPmbKwht9FuE5A
+
+Google video om TensorFlow - https://www.youtube.com/watch?v=5DknTFbcGVM
