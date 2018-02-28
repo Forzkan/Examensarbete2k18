@@ -34,6 +34,9 @@ dependencies {
     compile 'org.kordamp.ikonli:ikonli-javafx:2.1.1'
 	compile 'org.kordamp.ikonli:ikonli-fontawesome5-pack:2.1.1'
 	
+	// Google Clouds Vision API 
+	compile 'com.google.cloud:google-cloud-vision:1.14.0'
+	
 	//	Logging (Log4j)
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.8.2'
   	compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.8.2'
