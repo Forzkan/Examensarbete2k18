@@ -33,6 +33,7 @@ dependencies {
     compile 'org.kordamp.ikonli:ikonli-websymbols-pack:2.1.1'
     compile 'org.kordamp.ikonli:ikonli-javafx:2.1.1'
 	compile 'org.kordamp.ikonli:ikonli-fontawesome5-pack:2.1.1'
+	compile 'org.kordamp.ikonli:ikonli-ionicons-pack:2.1.1'
 	
 	// Google Clouds Vision API 
 	compile 'com.google.cloud:google-cloud-vision:1.14.0'

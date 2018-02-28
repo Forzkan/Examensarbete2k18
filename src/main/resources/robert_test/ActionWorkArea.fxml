@@ -15,7 +15,6 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <AnchorPane fx:id="headerPane" prefHeight="40.0" prefWidth="1366.0" style="-fx-background-color: #303030;" BorderPane.alignment="CENTER">
@@ -27,13 +26,38 @@
                         <FontIcon iconColor="WHITE" iconLiteral="ion-bug" iconSize="26" />
                      </graphic>
                   </Button>
-                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="TESTING TOOL" wrappingWidth="194.74399948120117">
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="TESTING TOOL" wrappingWidth="838.7439994812012">
                      <font>
                         <Font name="Aileron Heavy" size="24.0" />
                      </font>
                      <HBox.margin>
                         <Insets left="10.0" top="5.0" />
                      </HBox.margin>
+                  </Text>
+                  <Text fill="WHITE" strokeType="INSIDE" strokeWidth="0.0" text="Current Mouse Position:" textAlignment="CENTER" wrappingWidth="191.07421875">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" strokeType="INSIDE" strokeWidth="0.0" text="X = " textAlignment="CENTER" wrappingWidth="44.07421875">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="currentXCoordinateText" fill="WHITE" strokeType="INSIDE" strokeWidth="0.0" wrappingWidth="95.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" strokeType="INSIDE" strokeWidth="0.0" text="Y = " textAlignment="CENTER" wrappingWidth="44.07421875">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="currentYCoordinateText" fill="WHITE" strokeType="INSIDE" strokeWidth="0.0" wrappingWidth="95.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
                   </Text>
                </children>
             </HBox>
@@ -53,7 +77,7 @@
                         <Insets />
                      </VBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                  <Button fx:id="openBrowserButton" mnemonicParsing="false" onAction="#onBrowerButtonClick" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
                      <graphic>
                         <FontIcon iconColor="WHITE" iconLiteral="ion-earth" iconSize="26" />
                      </graphic>
@@ -61,7 +85,7 @@
                         <Insets top="20.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="mouseClickAction" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                  <Button fx:id="mouseClickAction" mnemonicParsing="false" onAction="#onClickButtonPressed" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
                      <graphic>
                         <FontIcon iconColor="WHITE" iconLiteral="ion-mouse" iconSize="26" />
                      </graphic>
@@ -77,7 +101,7 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="selectWebPageButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                  <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
                      <graphic>
                         <FontIcon iconColor="WHITE" iconLiteral="ion-information-circled" iconSize="26" />
                      </graphic>
