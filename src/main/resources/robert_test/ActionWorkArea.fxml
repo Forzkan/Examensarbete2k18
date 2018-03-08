@@ -93,7 +93,7 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="snipImageButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                  <Button fx:id="snipImageButton" mnemonicParsing="false" onAction="#onScreenCropCaptureClicked" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
                      <graphic>
                         <FontIcon iconColor="WHITE" iconLiteral="ion-crop" iconSize="26" />
                      </graphic>
