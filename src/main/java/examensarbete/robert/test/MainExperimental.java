@@ -31,8 +31,6 @@ public class MainExperimental extends Application{
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			
-			waController.activateCursorPositionListener();
-
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
