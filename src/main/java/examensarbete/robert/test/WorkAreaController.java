@@ -7,7 +7,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+import examensarbete.model.action.AutomaticImageSnap;
 import examensarbete.model.action.BrowserAction;
+import examensarbete.model.action.ChromeWebAction;
 import examensarbete.model.action.ClickAction;
 import examensarbete.model.action.IAction;
 import examensarbete.model.action.SnapImageAction;
@@ -83,13 +85,15 @@ public class WorkAreaController {
 		}
 	}
 	
+	SnapImageAction snapAction;
 	@FXML
 	private void onScreenCropCaptureClicked(ActionEvent event){
-		SnapImageAction snapAction;
+		
 		try {
 			snapAction = new SnapImageAction(stage);
 			snapAction.actionSetup();
 			listOfActions.add(snapAction);
+			
 		} catch (AWTException e) {
 			System.out.println(e.getMessage());
 		}
@@ -107,7 +111,24 @@ public class WorkAreaController {
 		}
 	}
 	
-	
+	@FXML
+	private void snapImageFromBounds() {
+		try {
+			ChromeWebAction cwa = new ChromeWebAction("http://www.google.com");
+			cwa.actionSetup();
+			cwa.performAction();
+			System.out.println(cwa.takeBrowserScreenshot());
+		} catch (AWTException e) {
+			System.out.println(e.getMessage());
+		}
+//		AutomaticImageSnap autoSnap;
+//		try {
+//			autoSnap = new AutomaticImageSnap(snapAction.getRectangleBounds());
+//			autoSnap.actionSetup();
+//		} catch (AWTException e) {
+//			System.out.println(e.getMessage());
+//		}
+	}
 	 
 //	private EventHandler<MouseEvent> eHandler_MouseMovement;
 //	private WeakEventHandler<MouseEvent> weakEventHandler_MouseMovement;

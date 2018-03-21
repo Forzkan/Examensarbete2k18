@@ -73,9 +73,9 @@
          <children>
             <VBox minWidth="42.0" prefHeight="728.0" prefWidth="42.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Button fx:id="playButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                  <Button fx:id="playButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;" onAction="#snapImageFromBounds">
                      <graphic>
-                        <FontIcon iconColor="#00ff15" iconLiteral="ion-play" iconSize="26" />
+                        <FontIcon iconColor="#00ff15" iconLiteral="ion-play" iconSize="26"/>
                      </graphic>
                      <VBox.margin>
                         <Insets left="1.0" top="2.0" />

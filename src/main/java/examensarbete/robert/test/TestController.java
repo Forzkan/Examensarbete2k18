@@ -100,7 +100,7 @@ public class TestController {
 	void selectFolderPressed(ActionEvent event) {
 		DirectoryChooser chooser = new DirectoryChooser();
 		chooser.setTitle("Robert 2k18");
-		File defaultDirectory = new File("C:\\_dev\\Workspace\\JAVA\\git_repos\\Examensarbete2k18");
+		File defaultDirectory = new File("C:\\");
 		chooser.setInitialDirectory(defaultDirectory);
 
 		selectedDirectory = chooser.showDialog(primaryStage);
@@ -151,6 +151,8 @@ public class TestController {
 	private boolean isAllowedFileEnding(String fe) {
 		switch (fe) {
 		case "png":
+			break;
+		case "jpeg":
 			break;
 		default:
 			return false;
@@ -211,6 +213,7 @@ public class TestController {
 			
 		}catch(Exception e) {
 			System.out.println("SOMETHING WENT WRONG WITH THE CLOUD VISION API.");
+			System.out.println(e.getMessage());
 		}
 
 	}

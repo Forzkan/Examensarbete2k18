@@ -1,16 +1,8 @@
 package examensarbete.model.action;
 
 import java.awt.AWTException;
-import java.awt.Image;
-
-import java.awt.Robot;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
-
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
 import javafx.scene.input.MouseEvent;
@@ -47,25 +39,12 @@ public class SnapImageAction extends ActionRobotBase implements IAction {
 	
 	@Override
 	public boolean performAction() {
-		try {
-			takeScreenShot();
-		} catch (AWTException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		// TODO:: Click on the image.
+
 		return false;
 	}
 	
 	
-	public Image takeScreenShot() throws AWTException, IOException {
-		Robot robot = new Robot();
-		java.awt.Rectangle area = snapImageRect.getBounds();
-		BufferedImage bufferedImage = robot.createScreenCapture(area);
-		bufferedImage = robot.createScreenCapture(area);
-		ImageIO.write(bufferedImage, "PNG", new File("C:\\_dev\\cropScreenShot.png"));
-
-		return null;
-	}
 
 	public void setX(int x) {
 		snapImageRect.x = x;
@@ -252,7 +231,7 @@ public class SnapImageAction extends ActionRobotBase implements IAction {
 			System.out.println(toString());
 			clearPopups();
 			try {
-				takeScreenShot();
+				this.takeScreenShot("D://", "SnapedImage", snapImageRect);
 			} catch (AWTException | IOException e) {
 				System.out.println(e.getMessage());
 			}
