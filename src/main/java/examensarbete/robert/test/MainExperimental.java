@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 
 public class MainExperimental extends Application{
 	
+	@SuppressWarnings("unused")
 	private final String rootFXML = "robert_test/ApplicationRoot.fxml";
 	
 	private final String workareaFXML = "robert_test/ActionWorkArea.fxml";

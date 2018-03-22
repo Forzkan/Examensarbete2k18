@@ -3,12 +3,14 @@ package examensarbete.model.action;
 import java.awt.AWTException;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+
+import examensarbete2k18.model.properties.PropertiesHandler;
+import examensarbete2k18.model.properties.TTProperties;
+
 import org.apache.commons.io.FileUtils;
 
 
@@ -30,13 +32,13 @@ public class ChromeWebAction extends ActionRobotBase implements IAction{
 		this.url = url;
 	}
 	
-	ChromeOptions options;
+	
 	@Override
 	public void actionSetup()    
 	{   
 		try {
 			// TODO:: This will probably have to be located outside of the resources folder, i.e. the actual jar file, so we should probably look in preferences for the installationPath and then a drivers folder.
-		    System.setProperty("webdriver.chrome.driver", "D:\\WORKSPACE\\chromedriver.exe");
+		    System.setProperty("webdriver.chrome.driver", PropertiesHandler.properties.getProperty(TTProperties.CHROMEDRIVER_EXE_PATH.toString()));
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -54,7 +56,6 @@ public class ChromeWebAction extends ActionRobotBase implements IAction{
 		    driver.navigate().to(url);
 		    System.out.println("DRIVER CAPABILITIES:");
 		    System.out.println(driver.getCapabilities());
-		    driver.navigate().to("https://sweclockers.se");
 		}catch(Exception e) {
 			System.out.println("A problem occured when starting up Chrome.");
 			System.out.println(e.getMessage());
@@ -63,8 +64,8 @@ public class ChromeWebAction extends ActionRobotBase implements IAction{
 	}
 	
 	
-	public String takeBrowserScreenshot() {
-		final File screenShot = new File("D:\\\\WORKSPACE\\screenshot.png").getAbsoluteFile();
+	public String takeBrowserScreenshot(String filename) {
+		final File screenShot = new File(PropertiesHandler.properties.getProperty(TTProperties.IMAGE_DIRECTORY.toString()) + "/" + filename + ".png").getAbsoluteFile();
 
 		final File outputFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 		try {

@@ -1,36 +1,42 @@
 package examensarbete.robert.test;
 
 import java.awt.AWTException;
-import java.awt.Desktop;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-
-import examensarbete.model.action.AutomaticImageSnap;
 import examensarbete.model.action.BrowserAction;
 import examensarbete.model.action.ChromeWebAction;
 import examensarbete.model.action.ClickAction;
 import examensarbete.model.action.IAction;
 import examensarbete.model.action.SnapImageAction;
 import examensarbete.model.action.TextTypeAction;
-import javafx.collections.ObservableList;
+import examensarbete2k18.model.properties.PropertiesHandler;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.event.WeakEventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Rectangle2D;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.stage.Popup;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
+
+//import java.awt.Desktop;
+//import java.io.IOException;
+//import java.net.URI;
+//import java.net.URISyntaxException;
+//import examensarbete.model.action.AutomaticImageSnapAction;
+//import javafx.collections.ObservableList;
+//import javafx.event.EventHandler;
+//import javafx.event.WeakEventHandler;
+//import javafx.geometry.Rectangle2D;
+//import javafx.scene.Scene;
+//import javafx.scene.input.MouseEvent;
+//import javafx.scene.paint.Color;
+//import javafx.scene.shape.Rectangle;
+//import javafx.stage.Popup;
+//import javafx.stage.Screen;
+
 	
 
 public class WorkAreaController {
@@ -48,17 +54,40 @@ public class WorkAreaController {
 	
 	private Stage stage;
 	private ArrayList<IAction> listOfActions = new ArrayList<IAction>();
-	
-	
+
 	
 	public WorkAreaController(Stage stage) {
 		this.stage = stage;
+		PropertiesHandler.InitializePropertiesHandler();
 	}
 	
 	@FXML
 	public void initialize() {
 		
 	}
+	
+	
+	@FXML
+	private void openPreferencesWindow() {
+		try {
+			FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource(""));
+			Object preferenceController = new Object();
+			fxmlLoader.setController(preferenceController); // TODO:: Proper controller.
+			Parent parent = (Parent) fxmlLoader.load();
+			Stage stage = new Stage();
+			stage.setTitle("Preferences");
+			stage.setScene(new Scene(parent));
+			stage.show();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
+	
 	
 
 	@FXML
@@ -117,7 +146,7 @@ public class WorkAreaController {
 			ChromeWebAction cwa = new ChromeWebAction("http://www.google.com");
 			cwa.actionSetup();
 			cwa.performAction();
-			System.out.println(cwa.takeBrowserScreenshot());
+			System.out.println(cwa.takeBrowserScreenshot("aUniqueNameForBrowserScreenshot"));
 		} catch (AWTException e) {
 			System.out.println(e.getMessage());
 		}

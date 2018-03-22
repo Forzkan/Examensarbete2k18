@@ -1,0 +1,9 @@
+package examensarbete2k18.model.properties;
+
+public enum TTProperties {
+	CHROMEDRIVER_EXE_PATH,
+	INSTALLATION_DIRECTORY,
+	TESTCASE_DIRECTORY,
+	IMAGE_DIRECTORY,
+	DEFAULT_SELECT_DIR,
+}

@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 
-import javafx.collections.ObservableList;
+//import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
+//import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,7 +18,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.Screen;
+//import javafx.stage.Screen;
 import javafx.stage.Stage;
 //Imports the Google Cloud client library
 
@@ -31,12 +31,16 @@ import com.google.cloud.vision.v1.Feature.Type;
 //import com.google.cloud.vision.v1.Image;
 import com.google.cloud.vision.v1.ImageAnnotatorClient;
 import com.google.protobuf.ByteString;
+
+import examensarbete2k18.model.properties.PropertiesHandler;
+import examensarbete2k18.model.properties.TTProperties;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import javax.imageio.ImageTypeSpecifier;
+//import javax.imageio.ImageTypeSpecifier;
 
 
 public class TestController {
@@ -86,10 +90,12 @@ public class TestController {
 	
 	
 	Stage primaryStage;
-
+	PropertiesHandler propertiesHandler;
+	
 	public TestController(Stage primaryStage) {
 		this.primaryStage = primaryStage;
 		this.gCloudVision = new GoogleCloudVision();
+		PropertiesHandler.InitializePropertiesHandler();
 	}
 
 	private File selectedDirectory;
@@ -100,7 +106,7 @@ public class TestController {
 	void selectFolderPressed(ActionEvent event) {
 		DirectoryChooser chooser = new DirectoryChooser();
 		chooser.setTitle("Robert 2k18");
-		File defaultDirectory = new File("C:\\");
+		File defaultDirectory = new File(PropertiesHandler.properties.getProperty(TTProperties.DEFAULT_SELECT_DIR.toString()));
 		chooser.setInitialDirectory(defaultDirectory);
 
 		selectedDirectory = chooser.showDialog(primaryStage);
@@ -225,6 +231,7 @@ public class TestController {
 	
 	
 	// https://cloud.google.com/vision/docs/detecting-web
+	@SuppressWarnings("unused")
 	private void testCloudVisionAPI() throws IOException, Exception {
 		
 		if (imageFiles.size() > 0) {

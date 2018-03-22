@@ -35,13 +35,12 @@ public class SnapImageAction extends ActionRobotBase implements IAction {
 		snapImageRect.setBounds(x, y, width, height);
 	}
 
-	
+	private ClickWithinBoundsAction wBoundsClickAction;
 	
 	@Override
 	public boolean performAction() {
-		// TODO:: Click on the image.
-
-		return false;
+		wBoundsClickAction.performAction();
+		return true;
 	}
 	
 	
@@ -231,7 +230,8 @@ public class SnapImageAction extends ActionRobotBase implements IAction {
 			System.out.println(toString());
 			clearPopups();
 			try {
-				this.takeScreenShot("D://", "SnapedImage", snapImageRect);
+				this.takeScreenShot("D://", "UserSnappedImage", snapImageRect);
+				wBoundsClickAction = new ClickWithinBoundsAction(snapImageRect);
 			} catch (AWTException | IOException e) {
 				System.out.println(e.getMessage());
 			}

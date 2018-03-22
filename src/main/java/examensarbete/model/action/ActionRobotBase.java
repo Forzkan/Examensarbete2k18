@@ -3,6 +3,7 @@ package examensarbete.model.action;
 import java.awt.AWTException;
 import java.awt.Rectangle;
 import java.awt.Robot;
+import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -52,7 +53,12 @@ public class ActionRobotBase{
 		}
 		return img;
 	}
-	
+
+	protected void performClick(int x, int y) {
+		robot.mouseMove(x, y);
+		robot.mousePress(InputEvent.BUTTON1_MASK);
+		robot.mouseRelease(InputEvent.BUTTON1_MASK);
+	}
 	
 	protected ObservableList<Screen> getAllScreens(){
 		return Screen.getScreens();

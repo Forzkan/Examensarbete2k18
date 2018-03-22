@@ -1,7 +1,6 @@
 package examensarbete.model.action;
 
 import java.awt.AWTException;
-import java.awt.event.InputEvent;
 import java.util.ArrayList;
 
 import javafx.event.EventHandler;
@@ -33,11 +32,7 @@ public class ClickAction extends ActionRobotBase implements IAction{
 	
 	
 	public boolean performAction() {
-		robot.mouseMove(x, y);
-		robot.mousePress(InputEvent.BUTTON1_MASK);
-		robot.mouseRelease(InputEvent.BUTTON1_MASK);
-		
-		
+		this.performClick(x, y);
 		return true;
 	}
 

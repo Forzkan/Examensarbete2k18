@@ -5,13 +5,13 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.IOException;
 
-public class AutomaticImageSnap extends ActionRobotBase implements IAction{
+public class AutomaticImageSnapAction extends ActionRobotBase implements IAction{
 
 	private Rectangle imageBounds;
 	private Image image;
 	private String imagePath;
 	
-	public AutomaticImageSnap(Rectangle imageBounds) throws AWTException {
+	public AutomaticImageSnapAction(Rectangle imageBounds) throws AWTException {
 		super(EActionType.AUTOIMAGESNAP);
 		this.imageBounds = imageBounds;
 	}
