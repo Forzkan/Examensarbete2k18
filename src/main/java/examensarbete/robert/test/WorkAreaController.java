@@ -80,8 +80,8 @@ public class WorkAreaController {
 			stage.show();
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Could not open the properties Window.");
+			System.out.println(e.getMessage());
 		}
 		
 		
