@@ -32,6 +32,8 @@ import com.google.cloud.vision.v1.Feature.Type;
 import com.google.cloud.vision.v1.ImageAnnotatorClient;
 import com.google.protobuf.ByteString;
 
+import examensarbete.google.cloud.vision.GCVImageResult;
+import examensarbete.model.jsonHandler.JsonHandler;
 import examensarbete2k18.model.properties.PropertiesHandler;
 import examensarbete2k18.model.properties.TTProperties;
 
@@ -160,6 +162,10 @@ public class TestController {
 			break;
 		case "jpeg":
 			break;
+		case "jpg":
+			break;
+		case "PNG":
+			break;
 		default:
 			return false;
 		}
@@ -206,17 +212,26 @@ public class TestController {
 	
 	@FXML
 	private void runButtonPressed() {
-
+		GCVImageResult result = new GCVImageResult();
+		result.setImagePath(getPathToDisplayedImage());
+		
 		try{
 //			testCloudVisionAPI();
-			gCloudVision.detectCropHints(getPathToDisplayedImage(), System.out);
-			gCloudVision.detectLogos(getPathToDisplayedImage(), System.out);
-			gCloudVision.detectProperties(getPathToDisplayedImage(), System.out);
-			gCloudVision.detectText(getPathToDisplayedImage(), System.out);
-			gCloudVision.detectWebDetections(getPathToDisplayedImage(), System.out);
-			gCloudVision.detectWebEntities(getPathToDisplayedImage(), System.out);
+//			gCloudVision.detectWebDetections(getPathToDisplayedImage(), System.out);			
 			
 			
+			// TEMPORARILY COMMENTED OUT
+//			gCloudVision.detectCropHints(getPathToDisplayedImage(), System.out,result);
+//			gCloudVision.detectLogos(getPathToDisplayedImage(), System.out,result);
+//			gCloudVision.detectProperties(getPathToDisplayedImage(), System.out,result);
+//			gCloudVision.detectText(getPathToDisplayedImage(), System.out,result);
+//			gCloudVision.detectWebEntities(getPathToDisplayedImage(), System.out,result);
+//			gCloudVision.detectLabels(getPathToDisplayedImage(), System.out,result);
+			
+			JsonHandler handler = new JsonHandler();
+			GCVImageResult loadedResult = handler.readGCVImageResult(PropertiesHandler.properties.getProperty(TTProperties.DEFAULT_SELECT_DIR.toString()) + "\\GCV_TEST.json");
+			handler.saveGCVImageResult(PropertiesHandler.properties.getProperty(TTProperties.DEFAULT_SELECT_DIR.toString()), "GCV_TEST_LOADED", loadedResult);
+
 		}catch(Exception e) {
 			System.out.println("SOMETHING WENT WRONG WITH THE CLOUD VISION API.");
 			System.out.println(e.getMessage());
