@@ -117,9 +117,6 @@ public class TestController {
 			selectedFolderPath.setText(selectedDirectory.getAbsolutePath());
 			onFolderSelected();
 		}
-		
-
-
 	}
 
 	private ArrayList<LoadedImage> imageFiles = new ArrayList<LoadedImage>();

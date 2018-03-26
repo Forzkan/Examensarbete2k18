@@ -18,13 +18,13 @@ public class MainExperimental extends Application{
 	public void start(Stage primaryStage) throws Exception {
 		
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(rootFXML));
-			loader.setController(new TestController(primaryStage));
+//			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(rootFXML));
+//			loader.setController(new TestController(primaryStage));
 			
 			
-//			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(workareaFXML));
-//			WorkAreaController waController = new WorkAreaController(primaryStage);
-//			loader.setController(waController);
+			FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(workareaFXML));
+			WorkAreaController waController = new WorkAreaController(primaryStage);
+			loader.setController(waController);
 			
 			Parent parent = loader.load();
 			Scene scene = new Scene(parent);

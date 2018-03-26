@@ -1,11 +1,12 @@
 package examensarbete2k18.model.properties;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Properties;
 
 public class PropertiesHandler {
@@ -17,6 +18,28 @@ public class PropertiesHandler {
 	public static void InitializePropertiesHandler() {
 		if(configFileExist() == false) {
 			createDefaultConfigFile();
+		}else {
+			loadPropertiesFile();
+		}
+	}
+	
+	private static void loadPropertiesFile() {
+		InputStream input = null;
+		try {
+			input = new FileInputStream(filename);
+			// load a properties file
+			properties.load(input);
+
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			if (input != null) {
+				try {
+					input.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	
@@ -44,15 +67,15 @@ public class PropertiesHandler {
 	}
 	
 	
-	public static void saveConfigProperties(ArrayList<TTProperties> ttProperties, String value) {
+	
+	public static void saveConfigProperties(ArrayList<TTProperties> ttProperties, ArrayList<String> values) {
 		OutputStream output = null;
 		try {
 			output = new FileOutputStream(filename);
 			// set the properties value
-			for(TTProperties prop : ttProperties) {
-				properties.setProperty(prop.toString(), value);
+			for(int i = 0; i < ttProperties.size(); i++) {
+				properties.setProperty(ttProperties.get(i).toString(), values.get(i));
 			}
-			
 			// save properties to project root folder
 			properties.store(output, null);
 			System.out.println("Successfully stored the new property.");
@@ -83,7 +106,7 @@ public class PropertiesHandler {
 
 			// save properties to project root folder
 			properties.store(output, null);
-
+			System.out.println("Default Configuration file has been created.");
 		} catch (IOException ex) {
 			System.out.println(ex.getMessage());
 		} finally {
@@ -99,41 +122,15 @@ public class PropertiesHandler {
 	
 	
 	private static boolean configFileExist() {
-		InputStream input = null;
 
-		try {
-
-			String filename = "config.properties";
-			input = PropertiesHandler.class.getClassLoader().getResourceAsStream(filename);
-			if (input == null) {
-				System.out.println("Unable to find properties file: " + filename + " \nCreating a new properties file.");
-				return false;
-			}
-
-			// load a properties file from class path, inside static method
-			properties.load(input);
-			
-			System.out.println("Loaded properties file: " + filename);
-			Enumeration<?> e = properties.propertyNames();
-			while (e.hasMoreElements()) {
-				String key = (String) e.nextElement();
-				String value = properties.getProperty(key);
-				System.out.println("Key : " + key + ", Value : " + value);
-			}
-
-		} catch (IOException ex) {
-			System.out.println(ex.getMessage());
-			return false;
-		} finally {
-			if (input != null) {
-				try {
-					input.close();
-				} catch (IOException e) {
-					System.out.println(e.getMessage());
-					return false;
-				}
-			}
+		String directory = System.getProperty("user.dir");
+		File p = new File(directory + "\\" + filename);
+		if(p.exists() && p.isDirectory() == false) {
+			System.out.println("Configuration file loaded.");
+			return true;
 		}
-		return true;
+		
+		System.out.println("Configuration file does not exist.");
+		return false;
 	}
 }

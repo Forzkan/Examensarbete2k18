@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #1e1919; -fx-border-color: black;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox layoutY="33.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -26,7 +25,7 @@
                   </Label>
                </children>
             </HBox>
-            <Label text="Installation Path" textFill="WHITE">
+            <Label text="Default Directory To Open" textFill="WHITE">
                <VBox.margin>
                   <Insets left="10.0" top="5.0" />
                </VBox.margin>
@@ -38,14 +37,14 @@
                <children>
                   <VBox prefHeight="41.0" prefWidth="530.0">
                      <children>
-                        <TextField disable="true" maxWidth="1.7976931348623157E308" prefWidth="520.0" style="-fx-border-color: black; -fx-background-color: black;">
+                        <TextField fx:id="defaultSelectedDir" maxWidth="1.7976931348623157E308" prefWidth="520.0" style="-fx-border-color: black; -fx-background-color: black;">
                            <VBox.margin>
                               <Insets left="10.0" />
                            </VBox.margin>
                         </TextField>
                      </children>
                   </VBox>
-                  <Button mnemonicParsing="false" style="-fx-border-color: black; -fx-background-color: black;" text="Open" textFill="WHITE">
+                  <Button mnemonicParsing="false" onAction="#defaultDirOpen" style="-fx-border-color: black; -fx-background-color: black;" text="Open" textFill="WHITE">
                      <HBox.margin>
                         <Insets left="5.0" />
                      </HBox.margin>
@@ -58,9 +57,9 @@
                   <Insets />
                </VBox.margin>
             </HBox>
-            <Label text="Save test cases path" textFill="WHITE">
+            <Label text="Installation Directory" textFill="WHITE">
                <VBox.margin>
-                  <Insets left="10.0" />
+                  <Insets left="10.0" top="5.0" />
                </VBox.margin>
                <font>
                   <Font size="14.0" />
@@ -70,14 +69,14 @@
                <children>
                   <VBox prefHeight="34.0" prefWidth="530.0">
                      <children>
-                        <TextField disable="true" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="523.0" style="-fx-border-color: black; -fx-background-color: black;">
+                        <TextField fx:id="installationDir" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="523.0" style="-fx-border-color: black; -fx-background-color: black;">
                            <VBox.margin>
                               <Insets left="10.0" />
                            </VBox.margin>
                         </TextField>
                      </children>
                   </VBox>
-                  <Button mnemonicParsing="false" style="-fx-border-color: black; -fx-background-color: black;" text="Open" textFill="WHITE">
+                  <Button mnemonicParsing="false" onAction="#installDirOpen" style="-fx-border-color: black; -fx-background-color: black;" text="Open" textFill="WHITE">
                      <HBox.margin>
                         <Insets left="5.0" />
                      </HBox.margin>
@@ -90,9 +89,96 @@
                   <Insets />
                </VBox.margin>
             </HBox>
-            <AnchorPane prefHeight="231.0" prefWidth="600.0">
+            <Label text="Path to Chrome Driver .exe" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="10.0" top="5.0" />
+               </VBox.margin>
+            </Label>
+            <HBox prefWidth="590.0">
                <children>
-                  <Button layoutX="542.0" layoutY="192.0" mnemonicParsing="false" style="-fx-border-color: black; -fx-background-color: black;" text="SAVE" textFill="WHITE" />
+                  <VBox prefHeight="34.0" prefWidth="530.0">
+                     <children>
+                        <TextField fx:id="chromeDriverExePath" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="523.0" style="-fx-border-color: black; -fx-background-color: black;">
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </TextField>
+                     </children>
+                  </VBox>
+                  <Button mnemonicParsing="false" onAction="#chromeDriverOpen" style="-fx-border-color: black; -fx-background-color: black;" text="Open" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+            <Label text="Test case directory" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="10.0" top="5.0" />
+               </VBox.margin>
+            </Label>
+            <HBox prefWidth="590.0">
+               <children>
+                  <VBox prefHeight="34.0" prefWidth="530.0">
+                     <children>
+                        <TextField fx:id="testcaseDir" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="523.0" style="-fx-border-color: black; -fx-background-color: black;">
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </TextField>
+                     </children>
+                  </VBox>
+                  <Button mnemonicParsing="false" onAction="#testCaseDirOpen" style="-fx-border-color: black; -fx-background-color: black;" text="Open" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+            <Label text="Image Directory" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="10.0" top="5.0" />
+               </VBox.margin>
+            </Label>
+            <HBox prefWidth="590.0">
+               <children>
+                  <VBox prefHeight="34.0" prefWidth="530.0">
+                     <children>
+                        <TextField fx:id="imageDirectory" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="523.0" style="-fx-border-color: black; -fx-background-color: black;">
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </TextField>
+                     </children>
+                  </VBox>
+                  <Button mnemonicParsing="false" onAction="#imageDirOpen" style="-fx-border-color: black; -fx-background-color: black;" text="Open" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+            <AnchorPane prefHeight="139.0" prefWidth="598.0">
+               <children>
+                  <Button layoutX="538.0" layoutY="70.0" mnemonicParsing="false" onAction="#savePreferences" style="-fx-border-color: black; -fx-background-color: black;" text="SAVE" textFill="WHITE" />
                </children>
             </AnchorPane>
          </children>
