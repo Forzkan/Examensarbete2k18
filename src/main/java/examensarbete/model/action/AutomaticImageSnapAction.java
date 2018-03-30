@@ -8,7 +8,7 @@ import examensarbete.model.test.TestImageImpl;
 import examensarbete2k18.model.properties.PropertiesHandler;
 import examensarbete2k18.model.properties.TTProperties;
 
-public class AutomaticImageSnapAction extends ActionRobotBase implements IAction{
+public class AutomaticImageSnapAction extends ActionBase {
 
 	
 	private TestImageImpl snapImage;
@@ -28,12 +28,19 @@ public class AutomaticImageSnapAction extends ActionRobotBase implements IAction
 		this.fullPageImage = fullPageImage;
 	}
 	
-	
+	@Override
+	public EActionType getType() {
+		return this.actionType;
+	}
 
 	public String getSnapImagePath() {
 		return snapImage.getPath();
 	}
 
+	public AutomaticImageSnapAction() {
+		super();
+		this.actionType = EActionType.AUTOIMAGESNAP;
+	}
 
 	
 	public AutomaticImageSnapAction(Rectangle imageBounds) throws AWTException {

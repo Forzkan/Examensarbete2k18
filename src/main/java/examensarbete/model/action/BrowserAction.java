@@ -9,13 +9,21 @@ import java.util.Optional;
 
 import javafx.scene.control.TextInputDialog;
 
-public class BrowserAction extends ActionRobotBase implements IAction{
+public class BrowserAction extends ActionBase{
 
 	private String browserPath = "";
 	
 	// OBSERVE : THIS IS NOT REALLY USED ANYLONGER..
 	public BrowserAction() throws AWTException {
-		super(EActionType.BROWSER);
+		super();
+		this.actionType = EActionType.BROWSER;
+	}
+	
+	
+	
+	@Override
+	public EActionType getType() {
+		return this.actionType;
 	}
 
 	@Override

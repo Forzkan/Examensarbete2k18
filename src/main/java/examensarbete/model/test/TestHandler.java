@@ -19,8 +19,9 @@ public class TestHandler {
 	}
 	
 	
-	public void addTest(String groupName, String testName, TestImpl test) {
-		testGroups.add(new TestGroup(groupName, testName, test));
+	public void saveNewTest(String testName,String groupName, TestImpl test) {
+		// SAVING THE NEWLY CREATED TEST.
+		saveTest(new TestGroup(testName, groupName, test));
 	}
 	
 	
@@ -44,13 +45,14 @@ public class TestHandler {
 	public void saveTest(TestGroup tg) {
 		json.saveTest(tg.getGroupName(), tg.getTestName(), tg.getTest());
 	}
-
+	
 	
 	
 	
 	// LOAD EXISTING TESTS.
 	
 	public void loadSavedTests() {
+		testGroups.clear();
 		createTestCollectionList();
 	}
 	

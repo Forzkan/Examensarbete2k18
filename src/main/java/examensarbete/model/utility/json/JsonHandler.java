@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import examensarbete.google.cloud.vision.GCVImageResult;
 import examensarbete.model.test.TestImpl;
@@ -73,17 +75,24 @@ public class JsonHandler {
 
 	public TestImpl readTest(String groupName, String testName) {
 		ObjectMapper mapper = new ObjectMapper();
-
+		mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
+		mapper.enableDefaultTyping();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+//		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		try {
 			// Convert JSON string from file to Object
+			System.out.println("Trying to read from path: " + createFullTestPath(groupName, testName));
 			TestImpl test = mapper.readValue(new File(createFullTestPath(groupName, testName)), TestImpl.class);
 			return test;
 		} catch (JsonGenerationException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
+			System.out.println(e.getMessage());
 		} catch (JsonMappingException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
+			System.out.println(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		return null;
 	}
@@ -93,6 +102,11 @@ public class JsonHandler {
 	
 	public void saveTest(String groupName, String testName, TestImpl test) {
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
+		mapper.enableDefaultTyping();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+//		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
 		try {
 			// check if we should create directory first.
 			File groupDir = new File(createGroupPath(groupName));

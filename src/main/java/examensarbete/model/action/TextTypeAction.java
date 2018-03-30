@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import javafx.scene.control.TextInputDialog;
 
-public class TextTypeAction extends ActionRobotBase implements IAction {
+public class TextTypeAction extends ActionBase{
 
 	private String text;
 	public String getText() {
@@ -19,7 +19,8 @@ public class TextTypeAction extends ActionRobotBase implements IAction {
 	
 	
 	public TextTypeAction() throws AWTException {
-		super(EActionType.TYPE);
+		super();
+		this.actionType = EActionType.TYPE;
 	}
 
 	@Override
@@ -46,6 +47,11 @@ public class TextTypeAction extends ActionRobotBase implements IAction {
 		dialog.setContentText("");
 		Optional<String> result = dialog.showAndWait();
 		result.ifPresent(name -> text = name);
+	}
+	
+	@Override
+	public EActionType getType() {
+		return this.actionType;
 	}
 
 }

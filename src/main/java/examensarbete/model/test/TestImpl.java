@@ -2,27 +2,37 @@ package examensarbete.model.test;
 
 import java.awt.AWTException;
 import java.util.ArrayList;
-import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonRootName;
+
+import examensarbete.model.action.ActionBase;
 import examensarbete.model.action.ChromeWebAction;
-import examensarbete.model.action.IAction;
 
-public class TestImpl implements Test{
+@JsonRootName("Test")
+public class TestImpl {
 
-	@Override
-	public List<TestStep> getTestSteps() {
-		// TODO Auto-generated method stub
-		return null;
+//	@Override
+//	public List<TestStep> getTestSteps() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public void saveTest() {
+//		// TODO Auto-generated method stub
+//		// The saving is done 1 level above this one, and is therefore not needed at this point unless we decide to divide different parts of a test to be saved in several files.
+//	}
+	
+	
+	
+	private String testName;
+	public String getTestName() {
+		return testName;
 	}
 
-	@Override
-	public void saveTest() {
-		// TODO Auto-generated method stub
-		// The saving is done 1 level above this one, and is therefore not needed at this point unless we decide to divide different parts of a test to be saved in several files.
+	public void setTestName(String testName) {
+		this.testName = testName;
 	}
-	
-	
-	
 	
 	
 	private ArrayList<TestStepImpl> steps = new ArrayList<TestStepImpl>();
@@ -34,7 +44,13 @@ public class TestImpl implements Test{
 		this.steps = steps;
 	}
 	
+	public TestImpl(String testName) {
+		this.setTestName(testName);
+	}
 	
+	public TestImpl() {
+		
+	}
 	
 	/**
 	 * Not in a constructor for the simple reason of making it easy to convert to and from json.
@@ -53,9 +69,10 @@ public class TestImpl implements Test{
 	}
 	
 	
-	public void addTestStep(IAction action) {
+	public void addTestStep(ActionBase action) {
 		TestStepImpl step = new TestStepImpl(action);
 		steps.add(step);
 	}
+
 	
 }

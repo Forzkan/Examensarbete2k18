@@ -1,5 +1,6 @@
 package examensarbete.model.test;
 
+import examensarbete.model.action.ActionBase;
 import examensarbete.model.action.IAction;
 
 public class TestStepImpl implements TestStep{
@@ -30,18 +31,20 @@ public class TestStepImpl implements TestStep{
 	
 	
 	
+	public TestStepImpl() {
+		
+	}
 	
 	
-	
-	private IAction mainAction;
-	public IAction getMainAction() {
+	private ActionBase mainAction;
+	public ActionBase getMainAction() {
 		return mainAction;
 	}
-	public void setMainAction(IAction mainAction) {
+	public void setMainAction(ActionBase mainAction) {
 		this.mainAction = mainAction;
 	}	
 	
-	public TestStepImpl(IAction action) {
+	public TestStepImpl(ActionBase action) {
 		this.setMainAction(action);
 	}
 	

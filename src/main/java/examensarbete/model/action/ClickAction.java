@@ -13,7 +13,7 @@ import javafx.stage.Popup;
 import javafx.stage.Screen;
 
 
-public class ClickAction extends ActionRobotBase implements IAction{
+public class ClickAction extends ActionBase{
 
 	private int x, y;	
 
@@ -32,7 +32,8 @@ public class ClickAction extends ActionRobotBase implements IAction{
 
 	
 	public ClickAction() throws AWTException {
-		super(EActionType.CLICK);
+		super();
+		this.actionType = EActionType.CLICK;
 	}
 	
 	
@@ -54,7 +55,10 @@ public class ClickAction extends ActionRobotBase implements IAction{
 		y = (int)screenY;
 	}
 
-	
+	@Override
+	public EActionType getType() {
+		return this.actionType;
+	}
 
 	
 

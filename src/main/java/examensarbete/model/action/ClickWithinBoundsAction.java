@@ -3,7 +3,7 @@ package examensarbete.model.action;
 import java.awt.AWTException;
 import java.awt.Rectangle;
 
-public class ClickWithinBoundsAction extends ActionRobotBase implements IAction {
+public class ClickWithinBoundsAction extends ActionBase {
 
 	private Rectangle bounds;
 	private int x, y;
@@ -21,10 +21,20 @@ public class ClickWithinBoundsAction extends ActionRobotBase implements IAction 
 		this.y = y;
 	}
 
+	@Override
+	public EActionType getType() {
+		return this.actionType;
+	}
+	
 	
 	public ClickWithinBoundsAction(Rectangle bounds) throws AWTException {
 		super(EActionType.AUTOCLICK);
 		this.bounds = bounds;
+	}
+	
+	public ClickWithinBoundsAction() {
+		super();
+		this.actionType = EActionType.AUTOCLICK;
 	}
 	
 	public void setClickPosition() {

@@ -65,7 +65,9 @@ public class TestImageImpl implements TestImage{
 	}
 	
 	
-	
+	public TestImageImpl() {
+		
+	}
 	
 	
 	

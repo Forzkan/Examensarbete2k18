@@ -15,7 +15,7 @@ import javafx.stage.Popup;
 import javafx.stage.Screen;
 
 
-public class SnapImageAction extends ActionRobotBase implements IAction {
+public class SnapImageAction extends ActionBase {
 
 	
 	private TestImageImpl snapImage;
@@ -35,11 +35,15 @@ public class SnapImageAction extends ActionRobotBase implements IAction {
 		this.fullPageImage = fullPageImage;
 	}
 
-
+	@Override
+	public EActionType getType() {
+		return this.actionType;
+	}
 	
 	
 	public SnapImageAction() throws AWTException {
-		super(EActionType.IMAGESNAP);
+		super();
+		this.actionType = EActionType.IMAGESNAP;
 	}
 
 	@Override

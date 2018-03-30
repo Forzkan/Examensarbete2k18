@@ -13,12 +13,30 @@ import javax.imageio.ImageIO;
 import javafx.collections.ObservableList;
 import javafx.stage.Screen;
 
-public class ActionRobotBase{
+public abstract class ActionBase implements IAction{
 
 	protected Robot robot;
 	protected EActionType actionType;
 	
-	public ActionRobotBase(EActionType actionType) throws AWTException {
+	public EActionType getActionType() {
+		return actionType;
+	}
+
+	public void setActionType(EActionType actionType) {
+		this.actionType = actionType;
+	}
+
+
+	public ActionBase() {
+		try {
+			robot = new Robot();
+		} catch (AWTException e) {
+			System.out.println("Could not initialize ClickRobot from the loaded test.");
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public ActionBase(EActionType actionType) throws AWTException {
 		try {
 			robot = new Robot();
 			this.actionType = actionType;
@@ -28,7 +46,8 @@ public class ActionRobotBase{
 			throw new AWTException(e.getMessage());
 		}
 	}
-
+	
+	
 	
 	protected String takeScreenShot(String path, String imageName, Rectangle bounds) throws AWTException, IOException {
 		Robot robot = new Robot();
@@ -63,6 +82,17 @@ public class ActionRobotBase{
 	protected ObservableList<Screen> getAllScreens(){
 		return Screen.getScreens();
 	}
+
+
+	
+	@Override
+	public abstract EActionType getType();
+
+	@Override
+	public abstract void actionSetup();
+	
+	@Override
+	public abstract boolean performAction();
 	
 	
 }

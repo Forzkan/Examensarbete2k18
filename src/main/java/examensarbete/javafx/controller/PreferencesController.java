@@ -14,9 +14,9 @@ public class PreferencesController {
 	
 	private Stage stage;
 	
-	public PreferencesController(Stage stage) {
-		this.stage = stage;
+	public PreferencesController() {
 	}
+	
 	
 	@FXML
 	private TextField 	defaultSelectedDir,
@@ -38,6 +38,8 @@ public class PreferencesController {
 			System.out.println("Error when setting properties text to preferences text field.");
 			System.out.println(e.getMessage());
 		}
+		// Set stage.
+		stage = ((Stage) defaultSelectedDir.getScene().getWindow());
 
 	}
 	

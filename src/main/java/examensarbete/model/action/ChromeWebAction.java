@@ -16,7 +16,7 @@ import javafx.scene.control.TextInputDialog;
 import org.apache.commons.io.FileUtils;
 
 
-public class ChromeWebAction extends ActionRobotBase implements IAction{
+public class ChromeWebAction extends ActionBase{
 	
 	private ChromeDriver driver;
 	private String url;
@@ -28,8 +28,14 @@ public class ChromeWebAction extends ActionRobotBase implements IAction{
 		this.url = url;
 	}
 
+	@Override
+	public EActionType getType() {
+		return this.actionType;
+	}
+	
 	public ChromeWebAction() throws AWTException {
-		super(EActionType.CHROMEBROWSER);
+		super();
+		this.actionType = EActionType.CHROMEBROWSER;
 	}
 	
 	
