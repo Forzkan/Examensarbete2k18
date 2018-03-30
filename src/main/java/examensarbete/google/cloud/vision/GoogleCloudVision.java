@@ -1,4 +1,4 @@
-package examensarbete.robert.test;
+package examensarbete.google.cloud.vision;
 
 import com.google.cloud.vision.v1.AnnotateImageRequest;
 import com.google.cloud.vision.v1.AnnotateImageResponse;
@@ -30,10 +30,6 @@ import com.google.cloud.vision.v1.WebDetection.WebPage;
 //import com.google.cloud.vision.v1.Word;
 
 import com.google.protobuf.ByteString;
-
-import examensarbete.google.cloud.vision.DominantGCVColor;
-import examensarbete.google.cloud.vision.GCVImageResult;
-import examensarbete.google.cloud.vision.GCVResult;
 
 import java.io.FileInputStream;
 import java.io.IOException;

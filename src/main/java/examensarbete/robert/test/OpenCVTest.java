@@ -1,4 +1,4 @@
-package examensarbete.model;
+package examensarbete.robert.test;
 
 import org.opencv.core.Core;
 import org.opencv.core.CvType;

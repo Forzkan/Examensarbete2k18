@@ -33,7 +33,8 @@ import com.google.cloud.vision.v1.ImageAnnotatorClient;
 import com.google.protobuf.ByteString;
 
 import examensarbete.google.cloud.vision.GCVImageResult;
-import examensarbete.model.jsonHandler.JsonHandler;
+import examensarbete.google.cloud.vision.GoogleCloudVision;
+import examensarbete.model.utility.json.JsonHandler;
 import examensarbete2k18.model.properties.PropertiesHandler;
 import examensarbete2k18.model.properties.TTProperties;
 

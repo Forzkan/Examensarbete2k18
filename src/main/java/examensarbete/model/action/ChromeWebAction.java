@@ -3,6 +3,7 @@ package examensarbete.model.action;
 import java.awt.AWTException;
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -10,6 +11,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import examensarbete2k18.model.properties.PropertiesHandler;
 import examensarbete2k18.model.properties.TTProperties;
+import javafx.scene.control.TextInputDialog;
 
 import org.apache.commons.io.FileUtils;
 
@@ -17,19 +19,17 @@ import org.apache.commons.io.FileUtils;
 public class ChromeWebAction extends ActionRobotBase implements IAction{
 	
 	private ChromeDriver driver;
-	String url;
+	private String url;
 	
 	public String getUrl() {
 		return url;
 	}
-
 	public void setUrl(String url) {
 		this.url = url;
 	}
 
-	public ChromeWebAction(String url) throws AWTException {
+	public ChromeWebAction() throws AWTException {
 		super(EActionType.CHROMEBROWSER);
-		this.url = url;
 	}
 	
 	
@@ -37,15 +37,21 @@ public class ChromeWebAction extends ActionRobotBase implements IAction{
 	public void actionSetup()    
 	{   
 		try {
-			// TODO:: This will probably have to be located outside of the resources folder, i.e. the actual jar file, so we should probably look in preferences for the installationPath and then a drivers folder.
+			createTextInputDialog();
 		    System.setProperty("webdriver.chrome.driver", PropertiesHandler.properties.getProperty(TTProperties.CHROMEDRIVER_EXE_PATH.toString()));
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
-		
-	    
 	}// TODO::https://www.youtube.com/watch?v=KMvgbYMYApM
-	
+
+	private void createTextInputDialog(){
+		TextInputDialog dialog = new TextInputDialog("");
+		dialog.setTitle("Text Input Dialog");
+		dialog.setHeaderText("Please enter web page url");
+		dialog.setContentText("");
+		Optional<String> result = dialog.showAndWait();
+		result.ifPresent(page -> url = page);
+	}
 	
 	@Override
 	public boolean performAction() {

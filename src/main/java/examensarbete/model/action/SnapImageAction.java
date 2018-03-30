@@ -3,6 +3,9 @@ package examensarbete.model.action;
 import java.awt.AWTException;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import examensarbete.main.TTMain;
+import examensarbete.model.test.TestImageImpl;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
 import javafx.scene.input.MouseEvent;
@@ -10,102 +13,90 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Popup;
 import javafx.stage.Screen;
-import javafx.stage.Stage;
+
 
 public class SnapImageAction extends ActionRobotBase implements IAction {
 
-	private java.awt.Rectangle snapImageRect = new java.awt.Rectangle();
-
-	private Stage stage;
 	
-	public SnapImageAction(Stage stage) throws AWTException {
+	private TestImageImpl snapImage;
+	private TestImageImpl fullPageImage;
+	
+	public TestImageImpl getSnapImage() {
+		return snapImage;
+	}
+	public void setSnapImage(TestImageImpl snapImage) {
+		this.snapImage = snapImage;
+	}
+
+	public TestImageImpl getFullPageImage() {
+		return fullPageImage;
+	}
+	public void setFullPageImage(TestImageImpl fullPageImage) {
+		this.fullPageImage = fullPageImage;
+	}
+
+
+	
+	
+	public SnapImageAction() throws AWTException {
 		super(EActionType.IMAGESNAP);
-		this.stage = stage;
-	}
-
-	public void setCoordinates(int x, int y) {
-		snapImageRect.setLocation(x, y);
-	}
-
-	public void setSize(int width, int height) {
-		snapImageRect.setSize(width, height);
-	}
-
-	public void setSnapRectangle(int x, int y, int width, int height) {
-		snapImageRect.setBounds(x, y, width, height);
-	}
-
-	private ClickWithinBoundsAction wBoundsClickAction;
-	
-	@Override
-	public boolean performAction() {
-		wBoundsClickAction.performAction();
-		return true;
-	}
-	
-	
-
-	public void setX(int x) {
-		snapImageRect.x = x;
-	}
-
-	public void setY(int y) {
-		snapImageRect.y = y;
-	}
-
-
-	public int getX() {
-		return (int) snapImageRect.getX();
-	}
-
-
-	public int getY() {
-		return (int) snapImageRect.getY();
-	}
-
-	public int getWidth() {
-		return (int) snapImageRect.getWidth();
-	}
-
-	public int getHeight() {
-		return (int) snapImageRect.getHeight();
-	}
-
-	public java.awt.Rectangle getRectangleBounds() {
-		return snapImageRect.getBounds();
-	}
-
-	public void setWidth(int width) {
-		snapImageRect.width = width;
-	}
-
-	
-	public void setHeight(int height) {
-		snapImageRect.height = height;
-	}
-
-	
-	public String toString() {
-		
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("ACTION: " + actionType.name().toString());
-		sb.append("\n--------\n");
-		sb.append("X : " + snapImageRect.x);
-		sb.append("\nY : " + snapImageRect.y);
-		sb.append("\nWidth : " + snapImageRect.width);
-		sb.append("\nHeight : " + snapImageRect.height);
-			
-		return sb.toString();
 	}
 
 	@Override
 	public void actionSetup() {
 		createScreenCoverForSnap();
 	}
-
+	
+	
+	@Override
+	public boolean performAction() {
+		ClickWithinBoundsAction wBoundsClickAction;
+		try {
+			wBoundsClickAction = new ClickWithinBoundsAction(snapImage.getBounds());
+			wBoundsClickAction.performAction();
+		} catch (AWTException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
 
 	
+	
+	
+
+
+
+
+
+
+
+	// ONLY USED FOR WHEN CREATING A NEW SNAPIMAGEACTION... NOT FOR WHEN IT IS LOADED.	
+	private void setCoordinates(int x, int y) {
+		snapImage.setX(x);
+		snapImage.setY(y);
+	}
+	private void setX(int x) {
+		snapImage.setX(x);
+	}
+	private void setY(int y) {
+		snapImage.setY(y);
+	}
+	
+	private void setWidth(int width) {
+		snapImage.setWidth(width);
+	}
+	private void setHeight(int height) {
+		snapImage.setHeight(height);
+	}
+	
+	
+	
+	
+	private int startX = 0;
+	private int startY = 0;
+	private Rectangle snapRectangle;
 	private ArrayList<Popup> popups = new ArrayList<Popup>();
 	private ArrayList<EventHandler<MouseEvent>> eventHandlers = new ArrayList<EventHandler<MouseEvent>>();
 	private ArrayList<WeakEventHandler<MouseEvent>> weakEventHandlers = new ArrayList<WeakEventHandler<MouseEvent>>();
@@ -113,7 +104,6 @@ public class SnapImageAction extends ActionRobotBase implements IAction {
 	
 	
 	public void createScreenCoverForSnap(){
-//		System.out.println(event.getScreenX());
 		for(Screen screen : getAllScreens())
 		{
 			Rectangle rect = new Rectangle();
@@ -130,12 +120,11 @@ public class SnapImageAction extends ActionRobotBase implements IAction {
 			popup.setY(screen.getVisualBounds().getMinY());
 			popup.setOpacity(0.08);
 			
-			popup.show(stage.getScene().getWindow());
+			popup.show(TTMain.primaryStage.getScene().getWindow());
 			
 			popups.add(popup);
 			setSnapClickAndReleasedEvents(popup);
 		}
-
 	}
 	
 	
@@ -144,12 +133,7 @@ public class SnapImageAction extends ActionRobotBase implements IAction {
 		snapMoving(popup);
 		snapReleased(popup);
 	}
-	
-	
-	
-	private int startX = 0;
-	private int startY = 0;
-	private Rectangle snapRectangle;
+
 	
 	private void snapClicked(Popup popup) {
 		EventHandler<MouseEvent> event_handler;
@@ -173,12 +157,12 @@ public class SnapImageAction extends ActionRobotBase implements IAction {
 		popup.getScene().setOnMousePressed(weak_event_handler);
 	}
 	
+	
 	private void snapMoving(Popup popup) {
 		EventHandler<MouseEvent> event_handler;
 		WeakEventHandler<MouseEvent> weak_event_handler;
 		
 		event_handler = (MouseEvent event) -> {
-//			System.out.println("IS MOVING");
 			if(startX > event.getScreenX()) {
 				//meaning we ahve a negative value for the width.. then we should set the new X to be the startX (i.e set it in the action object).
 				snapRectangle.setX((int)event.getScreenX());
@@ -229,9 +213,8 @@ public class SnapImageAction extends ActionRobotBase implements IAction {
 
 			System.out.println(toString());
 			clearPopups();
-			try {
-				this.takeScreenShot("D://", "UserSnappedImage", snapImageRect);
-				wBoundsClickAction = new ClickWithinBoundsAction(snapImageRect);
+			try {// TODO:: PATH!!
+				this.takeScreenShot("D://", "UserSnappedImage", snapImage.getBounds());
 			} catch (AWTException | IOException e) {
 				System.out.println(e.getMessage());
 			}

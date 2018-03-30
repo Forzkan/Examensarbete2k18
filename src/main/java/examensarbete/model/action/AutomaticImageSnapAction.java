@@ -1,40 +1,79 @@
 package examensarbete.model.action;
 
 import java.awt.AWTException;
-import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.IOException;
 
+import examensarbete.model.test.TestImageImpl;
+import examensarbete2k18.model.properties.PropertiesHandler;
+import examensarbete2k18.model.properties.TTProperties;
+
 public class AutomaticImageSnapAction extends ActionRobotBase implements IAction{
 
-	private Rectangle imageBounds;
-	private Image image;
-	private String imagePath;
+	
+	private TestImageImpl snapImage;
+	private TestImageImpl fullPageImage;
+
+	public TestImageImpl getSnapImage() {
+		return snapImage;
+	}
+	public void setSnapImage(TestImageImpl snapImage) {
+		this.snapImage = snapImage;
+	}
+
+	public TestImageImpl getFullPageImage() {
+		return fullPageImage;
+	}
+	public void setFullPageImage(TestImageImpl fullPageImage) {
+		this.fullPageImage = fullPageImage;
+	}
+	
+	
+
+	public String getSnapImagePath() {
+		return snapImage.getPath();
+	}
+
+
 	
 	public AutomaticImageSnapAction(Rectangle imageBounds) throws AWTException {
 		super(EActionType.AUTOIMAGESNAP);
-		this.imageBounds = imageBounds;
+		snapImage.setX(imageBounds.x);
+		snapImage.setY(imageBounds.y);
+		snapImage.setWidth(imageBounds.width);
+		snapImage.setHeight(imageBounds.height);
 	}
 
 	@Override
 	public void actionSetup() {
-		try {
-			imagePath = this.takeScreenShot("D://", "AutoSnapImage", imageBounds);
-			image = this.getImageFromPath(imagePath);
+		try {																													// TODO:: GIVE PROPER NAME.
+			String imagePath = this.takeScreenShot( PropertiesHandler.properties.getProperty(TTProperties.IMAGE_DIRECTORY.toString()), "AutoSnapImage", snapImage.getBounds());
+			snapImage.setPath(imagePath);
 		} catch (AWTException | IOException e) {
 			System.out.println(e.getMessage());
 		}	
 	}
 
+	
 	@Override
 	public boolean performAction() {
-		// With the imageBounds, snap the new image.
+		// With the imageBounds, click the new image.
+		try {
+			ClickWithinBoundsAction clickAction = new ClickWithinBoundsAction(snapImage.getBounds());
+			if(clickAction.performAction()) {
+				return true;
+			}
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 
-	public Image getImage() {
-		return image;
-	}
+	
+	
+//	public Image getImage() {
+//		return image;
+//	}
 
 	
 	

@@ -1,4 +1,4 @@
-package opencvtest;
+package examensarbete.model.test;
 
 import java.awt.Image;
 import java.awt.Point;

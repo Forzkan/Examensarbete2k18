@@ -1,4 +1,4 @@
-package opencvtest;
+package examensarbete.model.test;
 
 public interface TestAction {
 	int getActionDelay();

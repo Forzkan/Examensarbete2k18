@@ -3,6 +3,7 @@ package examensarbete.model.action;
 import java.awt.AWTException;
 import java.util.ArrayList;
 
+import examensarbete.main.TTMain;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
 import javafx.scene.input.MouseEvent;
@@ -10,68 +11,62 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Popup;
 import javafx.stage.Screen;
-import javafx.stage.Stage;
+
 
 public class ClickAction extends ActionRobotBase implements IAction{
 
 	private int x, y;	
-	private Stage stage;
-	
-	private ArrayList<Popup> popups = new ArrayList<Popup>();
-	private ArrayList<EventHandler<MouseEvent>> eventHandlers = new ArrayList<EventHandler<MouseEvent>>();
-	private ArrayList<WeakEventHandler<MouseEvent>> weakEventHandlers = new ArrayList<WeakEventHandler<MouseEvent>>();
-	
-	
-	
-	public ClickAction(Stage stage, int x, int y) throws AWTException {
-		super(EActionType.CLICK);
-		this.stage = stage;
+
+	public void setX(int x) {
 		this.x = x;
+	}
+	public void setY(int y) {
 		this.y = y;
+	}
+	public int getX() {
+		return x;
+	}
+	public int getY() {
+		return y;
+	}
+
+	
+	public ClickAction() throws AWTException {
+		super(EActionType.CLICK);
 	}
 	
 	
+	@Override
+	public void actionSetup() {
+		createScreenCover();
+	}
+	
+	@Override
 	public boolean performAction() {
 		this.performClick(x, y);
 		return true;
 	}
 
 
+	
 	public void setCoordinates(double screenX, double screenY) {
 		x = (int)screenX;
 		y = (int)screenY;
 	}
 
 	
-	public int getX() {
-		return x;
-	}
+
 	
-	public int getY() {
-		return y;
-	}
-	
-	
-	public String toString() {
-		
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("ACTION: " + actionType.name().toString());
-		sb.append("\n--------\n");
-		sb.append("X : " + x);
-		sb.append("\nY : " + y);
-		
-		return sb.toString();
-	}
 
 
-	@Override
-	public void actionSetup() {
-		createScreenCover();
-	}
-	
 
-	public void createScreenCover(){
+	// USED FOR SETTING UPP THE COORDINATES.
+	private ArrayList<Popup> popups = new ArrayList<Popup>();
+	private ArrayList<EventHandler<MouseEvent>> eventHandlers = new ArrayList<EventHandler<MouseEvent>>();
+	private ArrayList<WeakEventHandler<MouseEvent>> weakEventHandlers = new ArrayList<WeakEventHandler<MouseEvent>>();
+	
+	
+	private void createScreenCover(){
 
 		for(Screen screen : getAllScreens())
 		{
@@ -89,7 +84,7 @@ public class ClickAction extends ActionRobotBase implements IAction{
 			popup.setY(screen.getVisualBounds().getMinY());
 			popup.setOpacity(0.05);
 			
-			popup.show(stage.getScene().getWindow());
+			popup.show(TTMain.primaryStage.getScene().getWindow());
 			
 			popups.add(popup);
 			setOnMouseMovedEvent(popup);

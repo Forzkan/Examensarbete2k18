@@ -13,6 +13,7 @@ public class BrowserAction extends ActionRobotBase implements IAction{
 
 	private String browserPath = "";
 	
+	// OBSERVE : THIS IS NOT REALLY USED ANYLONGER..
 	public BrowserAction() throws AWTException {
 		super(EActionType.BROWSER);
 	}

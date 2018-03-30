@@ -9,6 +9,14 @@ import javafx.scene.control.TextInputDialog;
 public class TextTypeAction extends ActionRobotBase implements IAction {
 
 	private String text;
+	public String getText() {
+		return text;
+	}
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	
 	
 	public TextTypeAction() throws AWTException {
 		super(EActionType.TYPE);
@@ -17,7 +25,6 @@ public class TextTypeAction extends ActionRobotBase implements IAction {
 	@Override
 	public void actionSetup() {
 		createTextInputDialog();
-		
 	}
 
 	@Override
