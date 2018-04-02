@@ -71,7 +71,7 @@
          <children>
             <VBox minWidth="42.0" prefHeight="728.0" prefWidth="42.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Button fx:id="playButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#snapImageFromBounds" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                  <Button fx:id="playButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#runSelectedTests" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
                      <graphic>
                         <FontIcon iconColor="#00ff15" iconLiteral="ion-play" iconSize="26" />
                      </graphic>
@@ -151,9 +151,9 @@
                         <Insets left="1.0" />
                      </padding>
                   </Button>
-                  <Button maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#startTestRecording" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                  <Button fx:id="recordButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#startTestRecording" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
                      <graphic>
-                        <FontIcon iconColor="WHITE" iconLiteral="ion-record" iconSize="26" />
+                        <FontIcon fx:id="recordFontIcon" iconColor="WHITE" iconLiteral="ion-record" iconSize="26" />
                      </graphic>
                      <tooltip>
                         <Tooltip text="Record a test" />
@@ -200,7 +200,44 @@
                   <Insets bottom="1.0" right="1.0" top="1.0" />
                </opaqueInsets>
                <children>
-                  <AnchorPane fx:id="treeViewPane" prefHeight="726.0" prefWidth="300.0" style="-fx-background-color: white; -fx-border-color: black;" />
+                  <VBox>
+                     <children>
+                        <AnchorPane prefHeight="31.0" prefWidth="300.0" style="-fx-background-color: white; -fx-border-color: black;">
+                           <children>
+                              <HBox layoutX="181.0" layoutY="5.0" prefHeight="42.0" prefWidth="116.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="180.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
+                                 <children>
+                                    <Button fx:id="saveSelectedTestButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#saveSelectedTest" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                                       <graphic>
+                                          <FontIcon fx:id="recordFontIcon1" iconColor="WHITE" iconLiteral="fas-save" iconSize="26" />
+                                       </graphic>
+                                       <tooltip>
+                                          <Tooltip text="Save Selected Test" />
+                                       </tooltip>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="saveAllTestsButton" maxHeight="40.0" maxWidth="70.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#saveAllTests" prefHeight="40.0" prefWidth="70.0" style="-fx-background-color: #404040;" text=" All" textFill="WHITE">
+                                       <graphic>
+                                          <FontIcon fx:id="recordFontIcon11" iconColor="WHITE" iconLiteral="far-save" iconSize="26" />
+                                       </graphic>
+                                       <tooltip>
+                                          <Tooltip text="Record a test" />
+                                       </tooltip>
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="treeViewPane" prefHeight="684.0" prefWidth="193.0" style="-fx-background-color: white; -fx-border-color: black;" />
+                     </children>
+                  </VBox>
                   <AnchorPane layoutX="300.0" layoutY="-1.0" prefHeight="728.0" prefWidth="1023.0" style="-fx-background-color: #ffe2e2;">
                      <children>
                         <VBox layoutX="300.0" layoutY="256.0" prefHeight="727.0" prefWidth="1022.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">

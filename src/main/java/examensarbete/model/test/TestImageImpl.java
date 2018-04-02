@@ -49,10 +49,10 @@ public class TestImageImpl implements TestImage{
 	
 	
 	
-	public Rectangle getBounds() {
+	public Rectangle fetchTheBounds() {
 		return new Rectangle(x,y,width,height);
 	}
-	public void setBounds(int x, int y, int width, int height) {
+	public void setsTheBounds(int x, int y, int width, int height) {
 		this.x = x;
 		this.y = y;
 		this.width = width;

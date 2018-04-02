@@ -75,4 +75,18 @@ public class TestImpl {
 	}
 
 	
+	public boolean runTest() {
+		boolean passed = true;
+		for(TestStepImpl step : steps) {
+			passed = step.performTestStep(); 
+		}
+		return passed;
+	}
+
+	public void cleanup() {
+		ChromeWebAction cwa = (ChromeWebAction)steps.get(0).getMainAction();
+		cwa.closeBrowser();
+	}
+
+	
 }

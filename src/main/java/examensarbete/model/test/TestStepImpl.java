@@ -51,8 +51,9 @@ public class TestStepImpl implements TestStep{
 	
 	
 	@Override
-	public void performTestStep() {
-		// TODO:: PERFORM DIFFERENT THE MAIN ACTION, AND HANDLE THE OUTCOME OF IT.
+	public boolean performTestStep() {
+		// TODO:: PERFORM THE MAIN ACTION, AND HANDLE THE OUTCOME OF IT.
+		return mainAction.performAction();
 	}
 
 

@@ -9,5 +9,5 @@ public interface TestStep {
 	TestImage getTestStepContextImage();
 	void setTestStepContextImage(TestImage testImage);
 	//List<TestAction> getTestStepActions();
-	void performTestStep();
+	boolean performTestStep();
 }

@@ -54,7 +54,7 @@ public class AutomaticImageSnapAction extends ActionBase {
 	@Override
 	public void actionSetup() {
 		try {																													// TODO:: GIVE PROPER NAME.
-			String imagePath = this.takeScreenShot( PropertiesHandler.properties.getProperty(TTProperties.IMAGE_DIRECTORY.toString()), "AutoSnapImage", snapImage.getBounds());
+			String imagePath = this.takeScreenShot( PropertiesHandler.properties.getProperty(TTProperties.IMAGE_DIRECTORY.toString()), "AutoSnapImage", snapImage.fetchTheBounds());
 			snapImage.setPath(imagePath);
 		} catch (AWTException | IOException e) {
 			System.out.println(e.getMessage());
@@ -66,7 +66,7 @@ public class AutomaticImageSnapAction extends ActionBase {
 	public boolean performAction() {
 		// With the imageBounds, click the new image.
 		try {
-			ClickWithinBoundsAction clickAction = new ClickWithinBoundsAction(snapImage.getBounds());
+			ClickWithinBoundsAction clickAction = new ClickWithinBoundsAction(snapImage.fetchTheBounds());
 			if(clickAction.performAction()) {
 				return true;
 			}
