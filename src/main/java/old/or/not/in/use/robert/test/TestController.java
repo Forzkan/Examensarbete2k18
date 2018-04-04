@@ -1,4 +1,4 @@
-package examensarbete.robert.test;
+package old.or.not.in.use.robert.test;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,10 +33,10 @@ import com.google.cloud.vision.v1.ImageAnnotatorClient;
 import com.google.protobuf.ByteString;
 
 import examensarbete.google.cloud.vision.GCVImageResult;
-import examensarbete.google.cloud.vision.GoogleCloudVision;
-import examensarbete.model.utility.json.JsonHandler;
-import examensarbete2k18.model.properties.PropertiesHandler;
-import examensarbete2k18.model.properties.TTProperties;
+import examensarbete.google.cloud.vision.GCVConnector;
+import examensarbete.model.properties.PropertiesHandler;
+import examensarbete.model.properties.TTProperties;
+import examensarbete.model.utility.json.JsonMapper;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -86,7 +86,7 @@ public class TestController {
 	@FXML
 	private ImageView currentImage;
 	private int currentImageIndex = 0;
-	GoogleCloudVision gCloudVision;
+	GCVConnector gCloudVision;
 	
 	@FXML
 	private Button runButton;
@@ -97,7 +97,7 @@ public class TestController {
 	
 	public TestController(Stage primaryStage) {
 		this.primaryStage = primaryStage;
-		this.gCloudVision = new GoogleCloudVision();
+		this.gCloudVision = new GCVConnector();
 		PropertiesHandler.InitializePropertiesHandler();
 	}
 
@@ -226,7 +226,7 @@ public class TestController {
 //			gCloudVision.detectWebEntities(getPathToDisplayedImage(), System.out,result);
 //			gCloudVision.detectLabels(getPathToDisplayedImage(), System.out,result);
 			
-			JsonHandler handler = new JsonHandler();
+			JsonMapper handler = new JsonMapper();
 			GCVImageResult loadedResult = handler.readGCVImageResult(PropertiesHandler.properties.getProperty(TTProperties.DEFAULT_SELECT_DIR.toString()) + "\\GCV_TEST.json");
 			handler.saveGCVImageResult(PropertiesHandler.properties.getProperty(TTProperties.DEFAULT_SELECT_DIR.toString()), "GCV_TEST_LOADED", loadedResult);
 

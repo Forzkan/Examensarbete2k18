@@ -1,6 +1,9 @@
-package examensarbete.model.action;
+package old.or.not.in.use;
 
 import java.awt.AWTException;
+
+import examensarbete.model.action.ActionBase;
+import examensarbete.model.action.EActionType;
 
 public class KeyPressAction extends ActionBase{
 

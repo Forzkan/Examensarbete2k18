@@ -1,4 +1,4 @@
-package examensarbete2k18.model.properties;
+package examensarbete.model.properties;
 
 public enum TTProperties {
 	CHROMEDRIVER_EXE_PATH,

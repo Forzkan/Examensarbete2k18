@@ -3,15 +3,15 @@ package examensarbete.model.test;
 import java.io.File;
 import java.util.ArrayList;
 
+import examensarbete.model.properties.PropertiesHandler;
+import examensarbete.model.properties.TTProperties;
 import examensarbete.model.utility.FileUtility;
-import examensarbete.model.utility.json.JsonHandler;
-import examensarbete2k18.model.properties.PropertiesHandler;
-import examensarbete2k18.model.properties.TTProperties;
+import examensarbete.model.utility.json.JsonMapper;
 
 
 public class TestHandler {
 
-	private final JsonHandler json = new JsonHandler();
+	private final JsonMapper json = new JsonMapper();
 	private ArrayList<TestGroup> testGroups = new ArrayList<TestGroup>();
 	
 	public ArrayList<TestGroup> getTestList() {

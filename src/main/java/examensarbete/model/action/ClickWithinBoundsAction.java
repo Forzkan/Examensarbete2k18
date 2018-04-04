@@ -37,7 +37,7 @@ public class ClickWithinBoundsAction extends ActionBase {
 		this.actionType = EActionType.AUTOCLICK;
 	}
 	
-	public void setClickPosition() {
+	private void setClickPosition() {
 		x = (int) (bounds.getX() + (bounds.getWidth() / 2));
 		y = (int) (bounds.getY() + (bounds.getHeight() / 2));
 	}

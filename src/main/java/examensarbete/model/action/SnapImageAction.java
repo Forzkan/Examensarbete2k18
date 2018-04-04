@@ -1,11 +1,16 @@
 package examensarbete.model.action;
 
 import java.awt.AWTException;
+import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import examensarbete.main.TTMain;
+import examensarbete.model.test.TestImage;
 import examensarbete.model.test.TestImageImpl;
+import examensarbete.model.utility.FileUtility;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
 import javafx.scene.input.MouseEvent;
@@ -17,22 +22,15 @@ import javafx.stage.Screen;
 
 public class SnapImageAction extends ActionBase {
 
-	
-	private TestImageImpl snapImage;
-	private TestImageImpl fullPageImage;
-	
-	public TestImageImpl getSnapImage() {
-		return snapImage;
-	}
-	public void setSnapImage(TestImageImpl snapImage) {
-		this.snapImage = snapImage;
-	}
+	// Also referred to as target image.
+	private TestImage targetImage;
 
-	public TestImageImpl getFullPageImage() {
-		return fullPageImage;
+	public TestImage getTargetImage() {
+		return targetImage;
 	}
-	public void setFullPageImage(TestImageImpl fullPageImage) {
-		this.fullPageImage = fullPageImage;
+	
+	public void setTargetImage(TestImage target) {
+		targetImage = target;
 	}
 
 	@Override
@@ -40,24 +38,37 @@ public class SnapImageAction extends ActionBase {
 		return this.actionType;
 	}
 	
+	// These are only used once when creating the test the first time.
+	@JsonIgnore
+	String testGroup, testName;
 	
+	public SnapImageAction(String testGroup, String testName) throws AWTException {
+		super();
+		this.actionType = EActionType.IMAGESNAP;
+		targetImage = new TestImageImpl();
+		this.testGroup = testGroup;
+		this.testName = testName;
+		System.out.println("Creating new SnapImageAction");
+	}
 	public SnapImageAction() throws AWTException {
 		super();
 		this.actionType = EActionType.IMAGESNAP;
-		snapImage = new TestImageImpl();
+		targetImage = new TestImageImpl();
 	}
+	
+	
 
 	@Override
 	public void actionSetup() {
 		createScreenCoverForSnap();
 	}
 	
-	
 	@Override
 	public boolean performAction() {
 		ClickWithinBoundsAction wBoundsClickAction;
 		try {
-			wBoundsClickAction = new ClickWithinBoundsAction(snapImage.fetchTheBounds());
+			wBoundsClickAction = new ClickWithinBoundsAction(targetImage.getBounds());
+			wBoundsClickAction.actionSetup();
 			wBoundsClickAction.performAction();
 		} catch (AWTException e) {
 			e.printStackTrace();
@@ -77,27 +88,8 @@ public class SnapImageAction extends ActionBase {
 
 
 
-	// ONLY USED FOR WHEN CREATING A NEW SNAPIMAGEACTION... NOT FOR WHEN IT IS LOADED.	
-	private void setCoordinates(int x, int y) {
-		snapImage.setX(x);
-		snapImage.setY(y);
-	}
-	private void setX(int x) {
-		snapImage.setX(x);
-	}
-	private void setY(int y) {
-		snapImage.setY(y);
-	}
-	
-	private void setWidth(int width) {
-		snapImage.setWidth(width);
-	}
-	private void setHeight(int height) {
-		snapImage.setHeight(height);
-	}
-	
-	
-	
+
+
 	
 	private int startX = 0;
 	private int startY = 0;
@@ -146,8 +138,9 @@ public class SnapImageAction extends ActionBase {
 		WeakEventHandler<MouseEvent> weak_event_handler;
 		
 		event_handler = (MouseEvent event) -> {
-			setCoordinates((int)event.getScreenX(), (int)event.getScreenY());
-			System.out.println(toString());
+			System.out.println("MOUSE CLICKED.");
+//			snapImage.setPosition(new Point((int)event.getScreenX(), (int)event.getScreenY()));
+		
 			startX = (int)event.getScreenX();
 			startY = (int)event.getScreenY();
 			Rectangle rectangle = new Rectangle();
@@ -169,14 +162,13 @@ public class SnapImageAction extends ActionBase {
 		WeakEventHandler<MouseEvent> weak_event_handler;
 		
 		event_handler = (MouseEvent event) -> {
+			System.out.println("drag");
 			if(startX > event.getScreenX()) {
 				//meaning we ahve a negative value for the width.. then we should set the new X to be the startX (i.e set it in the action object).
 				snapRectangle.setX((int)event.getScreenX());
 				snapRectangle.setWidth( (int) (startX - event.getScreenX()));
 				
 			}else {
-				System.out.println(snapRectangle);
-				System.out.println(startX);
 				snapRectangle.setWidth((int) (event.getScreenX() - startX));
 			}
 			if(startY > event.getScreenY()) {
@@ -197,32 +189,35 @@ public class SnapImageAction extends ActionBase {
 		WeakEventHandler<MouseEvent> weak_event_handler;
 		
 		event_handler = (MouseEvent event) -> {
-			System.out.println("BEFORE SET - ON RELEASE");
-			System.out.println(toString());
-			System.out.println();
-//			snapImageAction.setCoordinates((int)event.getScreenX(), (int)event.getScreenY());
-
+			System.out.println("MOUSE RELEASED");
 			// If current X / Y is smaller then 0, then that coordinate has to be re-set. 
 			if(startX > event.getScreenX()) {
 				//meaning we ahve a negative value for the width.. then we should set the new X to be the startX (i.e set it in the action object).
-				setX((int)event.getScreenX());
-				setWidth( (int) (startX - event.getScreenX()));
+				snapRectangle.setX((int)event.getScreenX());
+				snapRectangle.setWidth( (int) (startX - event.getScreenX()));
 				
 			}else {
-				setWidth((int) (event.getScreenX() - startX));
+				snapRectangle.setWidth((int) (event.getScreenX() - startX));
 			}
 			if(startY > event.getScreenY()) {
-				setY((int)event.getScreenY());
-				setHeight((int) (startY - event.getScreenY()));
+				snapRectangle.setY((int)event.getScreenY());
+				snapRectangle.setHeight((int) (startY - event.getScreenY()));
 			}else {
 				
-				setHeight((int)event.getScreenY() - startY);
+				snapRectangle.setHeight((int)event.getScreenY() - startY);
 			}
 
 			System.out.println(toString());
 			clearPopups();
-			try {// TODO:: PATH!!
-				this.takeScreenShot("D://", "UserSnappedImage", snapImage.fetchTheBounds());
+			try {
+				java.awt.Rectangle bounds = new java.awt.Rectangle();
+				bounds.setBounds(	(int)snapRectangle.getX(),
+									(int)snapRectangle.getY(), 
+									(int)snapRectangle.getWidth(), 
+									(int)snapRectangle.getHeight());
+				
+				targetImage.setImagePath(this.takeScreenShot(FileUtility.createUniqueSnapImageFilePath(testGroup, testName), bounds));
+				targetImage.setPosition(new Point((int)bounds.getX(), (int)bounds.getY()));
 			} catch (AWTException | IOException e) {
 				System.out.println(e.getMessage());
 			}
@@ -230,6 +225,7 @@ public class SnapImageAction extends ActionBase {
 		weak_event_handler = new WeakEventHandler<>(event_handler);
 		popup.getScene().setOnMouseReleased(weak_event_handler);
 	}
+	
 	
 	
 	

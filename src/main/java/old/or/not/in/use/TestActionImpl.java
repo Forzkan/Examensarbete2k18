@@ -1,4 +1,4 @@
-package examensarbete.model.test;
+package old.or.not.in.use;
 
 public class TestActionImpl implements TestAction{
 

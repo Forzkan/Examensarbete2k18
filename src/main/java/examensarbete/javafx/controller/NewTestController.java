@@ -44,7 +44,7 @@ public class NewTestController {
 		
 						   //TODO :: PERFORM SOM VALIDATION ON THE VALUES.
 		String testName = testNameTextField.getText();
-		TestImpl test = new TestImpl(testName);
+		TestImpl test = new TestImpl(groupName, testName);
 		test.initializeTest();
 		testHandler.saveNewTest(testName, groupName, test);
 		waController.treeViewLoader(); // reload treeview with the new test.

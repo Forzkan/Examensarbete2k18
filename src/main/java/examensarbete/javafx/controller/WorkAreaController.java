@@ -3,23 +3,24 @@ package examensarbete.javafx.controller;
 import java.awt.AWTException;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.kordamp.ikonli.javafx.FontIcon;
 
-import examensarbete.javafx.stage.StageHandler;
+import examensarbete.javafx.stage.StageFactory;
 import examensarbete.javafx.stage.TTStage;
 import examensarbete.model.action.ActionBase;
-import examensarbete.model.action.ChromeWebAction;
+import examensarbete.model.action.AutomaticImageSnapAction;
 import examensarbete.model.action.ClickAction;
-import examensarbete.model.action.IAction;
 import examensarbete.model.action.SnapImageAction;
 import examensarbete.model.action.TextTypeAction;
+import examensarbete.model.properties.PropertiesHandler;
 import examensarbete.model.test.TestGroup;
 import examensarbete.model.test.TestHandler;
-import examensarbete.model.test.TestStepImpl;
-import examensarbete2k18.model.properties.PropertiesHandler;
+import examensarbete.model.test.TestStep;
+import examensarbete.model.utility.FileUtility;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
@@ -38,6 +39,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+
 // TODO:: Handle page loading times:   driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
 public class WorkAreaController {
 
@@ -52,9 +54,13 @@ public class WorkAreaController {
 	@FXML
 	private HBox stepsHBox;
 
-	private StageHandler stageHandler = new StageHandler();
+	private StageFactory stageHandler = new StageFactory();
 	private final TestHandler testHandler = new TestHandler();
 
+	@FXML
+	private ImageView aStepsContextImage, aStepsSnapImage;
+	
+	
 	public WorkAreaController() {
 		PropertiesHandler.InitializePropertiesHandler();
 	}
@@ -68,23 +74,29 @@ public class WorkAreaController {
 
 	@FXML
 	private void openPreferencesWindow() {
-		PreferencesController preferenceController = new PreferencesController();
-		preferencesStage = stageHandler.openStage(TTStage.PREFERENCES, preferenceController);
+		if(preferencesStage == null) {
+			PreferencesController preferenceController = new PreferencesController();
+			preferencesStage = stageHandler.openStage(TTStage.PREFERENCES, preferenceController);	
+		}else if(preferencesStage.isShowing() == false) {
+			preferencesStage.show();
+		}
+		
 	}
 
 	@FXML
 	private void saveSelectedTest() {
 		if(selectedTest != null && isRecording == false) {
-			testHandler.saveTest(selectedTest);
 			System.out.println("Saving selected test.");
+			testHandler.saveTest(selectedTest);
+
 		}
 	}
 	
 	@FXML
 	private void saveAllTests() {
 		if(selectedTest != null && isRecording == false) {
-			testHandler.saveTests();
 			System.out.println("Saving all tests.");
+			testHandler.saveTests();
 		}
 	}
 	
@@ -148,10 +160,11 @@ public class WorkAreaController {
 		if (isRecordingAndTestIsSelected()) { // i.e. we can add actions to a test.
 			SnapImageAction snapAction;
 			try {
-				snapAction = new SnapImageAction();
+				snapAction = new SnapImageAction(selectedTest.getGroupName(), selectedTest.getTestName());
+				addActionToSelectedTest(snapAction);
 				snapAction.actionSetup();
 				
-				addActionToSelectedTest(snapAction);
+
 			} catch (AWTException e) {
 				System.out.println(e.getMessage());
 			}
@@ -201,9 +214,14 @@ public class WorkAreaController {
 
 	@FXML
 	private void createNewTest() {
-		NewTestController ntC = new NewTestController(testHandler, this);
-		newTestStage = stageHandler.openStage(TTStage.NEW_TEST, ntC);
+		if(newTestStage == null) {
+			NewTestController ntC = new NewTestController(testHandler, this);
+			newTestStage = stageHandler.openStage(TTStage.NEW_TEST, ntC);
+		}else if(preferencesStage.isShowing() == false) {
+			preferencesStage.show();
+		}
 	}
+	
 
 	@FXML
 	private Button recordButton;
@@ -220,30 +238,34 @@ public class WorkAreaController {
 			// Check if a test is selected, else we should not start recording.
 			if (!rootIsSelected() && !parentIsSelected() && selectedTest != null) {
 				isRecording = true;
+				testTreeView.setDisable(true);
 				// change logo of the button,
-				recordFontIcon.setIconLiteral("ion-stop");
+				recordFontIcon.setIconLiteral("ion-stop"); // TODO:: Should not be done here.
 				// Running the default step which is present for all tests, which is opening the
 				// browser.
-				selectedTest.getTest().getSteps().get(0).performTestStep();
+				selectedTest.getTest().getTestSteps().get(0).performTestStep();
 			} else {
 				System.out.println("No test have been selected.");
 			}
 		} else {
 			// change back the logo of the button,
 			stopRecording();
+			testHandler.saveTest(selectedTest);
 		}
 	}
 
 	private void stopRecording() {
-		recordFontIcon.setIconLiteral("ion-record");
+		recordFontIcon.setIconLiteral("ion-record");  // TODO:: Should not be done here..
 		isRecording = false;
+		selectedTest.getTest().cleanup();
+		testTreeView.setDisable(false);
 	}
 
 	private ArrayList<TestGroup> getSelectedTestsAndOrGroup() {
 		System.out.println("LOOKING FOR SELECTED TEST");
 		ArrayList<TestGroup> tests = new ArrayList<TestGroup>();
 		try {
-			TreeItem<String> selected = treeView.getSelectionModel().getSelectedItem();
+			TreeItem<String> selected = testTreeView.getSelectionModel().getSelectedItem();
 			if (selected != null) {
 				List<TestGroup> testGroups = testHandler.getTestList();
 				String parentName = selected.getParent().getValue().toString();
@@ -279,14 +301,14 @@ public class WorkAreaController {
 
 	@FXML
 	private AnchorPane treeViewPane;
-	private TreeView<String> treeView;
+	private TreeView<String> testTreeView;
 
 	public void treeViewLoader() {
 		testHandler.loadSavedTests();
 		List<TestGroup> testCollection = testHandler.getTestList();
 		InputStream input = null;
 		try {
-			input = new FileInputStream("src/main/resources/root.png");
+			input = new FileInputStream("src/main/resources/gui_images/root.png");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -294,7 +316,7 @@ public class WorkAreaController {
 
 		InputStream collInput = null;
 		try {
-			collInput = new FileInputStream("src/main/resources/collectionIcon.PNG");
+			collInput = new FileInputStream("src/main/resources/gui_images/collectionIcon.PNG");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -320,17 +342,17 @@ public class WorkAreaController {
 			}
 		}
 
-		treeView = new TreeView<String>(rootNode);
-		treeViewPane.getChildren().add(treeView);
-		treeView.prefHeightProperty().bind(treeViewPane.heightProperty());
-		treeView.prefWidthProperty().bind(treeViewPane.widthProperty());
-		setOnTestSelectedEvent(treeView);
+		testTreeView = new TreeView<String>(rootNode);
+		treeViewPane.getChildren().add(testTreeView);
+		testTreeView.prefHeightProperty().bind(treeViewPane.heightProperty());
+		testTreeView.prefWidthProperty().bind(treeViewPane.widthProperty());
+		setOnTestSelectedEvent(testTreeView);
 	}
 
 	EventHandler<MouseEvent> event_handler;
 	WeakEventHandler<MouseEvent> weak_event_handler;
 
-	// TODO:: CALL THIS ONCE A TEST HAS BEEN CLICKED.
+
 	private void setOnTestSelectedEvent(Node node) {
 
 		event_handler = (MouseEvent event) -> {
@@ -338,11 +360,9 @@ public class WorkAreaController {
 			if (parentIsSelected()) {
 				// Multiple tests "selected" since the parent is selected.
 				selectedTest = null;
-				System.out.println("SELECTED PARENT");
 			} else if (parentIsSelected() == false && rootIsSelected() == false && selectedList.size() >= 1) {
 				selectedTest = selectedList.get(0);
 				updateSelectedTestHBox();
-				System.out.println("SELECTED TEST");
 			} else {
 				// Do we want to do anything if no test is selected? for now, no.
 				// ROOT or nothing selected.
@@ -355,7 +375,7 @@ public class WorkAreaController {
 
 	private boolean rootIsSelected() {
 		try {
-			TreeItem<String> selected = treeView.getSelectionModel().getSelectedItem();
+			TreeItem<String> selected = testTreeView.getSelectionModel().getSelectedItem();
 			if (selected != null) {
 				String selectedName = selected.getValue().toString();
 
@@ -371,7 +391,7 @@ public class WorkAreaController {
 
 	private boolean parentIsSelected() {
 		try {
-			TreeItem<String> selected = treeView.getSelectionModel().getSelectedItem();
+			TreeItem<String> selected = testTreeView.getSelectionModel().getSelectedItem();
 			if (selected != null) {
 				List<TestGroup> testGroups = testHandler.getTestList();
 				String parentName = selected.getParent().getValue().toString();
@@ -405,11 +425,11 @@ public class WorkAreaController {
 	}
 
 	private TestGroup selectedTest;
-
+	
 	private ArrayList<Button> getStepsAsButtonList() {
 		ArrayList<Button> list = new ArrayList<Button>();
 
-		for (TestStepImpl step : selectedTest.getTest().getSteps()) {
+		for (TestStep step : selectedTest.getTest().getTestSteps()) {
 			FontIcon fontIcon = new FontIcon();
 			fontIcon.setIconLiteral(getFontIconLiteralForAction(step.getMainAction()));
 			fontIcon.setIconSize(33);
@@ -417,11 +437,21 @@ public class WorkAreaController {
 			Button btn = new Button();
 			btn.setStyle("-fx-background-color: black;");
 			btn.setGraphic(fontIcon);
+			btn.setOnMouseClicked(event -> {
+				for(int i = 0; i < stepsHBox.getChildren().size(); i++) {
+					if(stepsHBox.getChildren().get(i).equals(btn)) {
+						updateSelectedStepInformation(selectedTest.getTest().getTestSteps().get(i));
+					}
+				}
+			});
 			list.add(btn);
 		}
 		return list;
 	}
 
+	
+	
+	// TODO:: Move to Ikonli Helper class / GUI helper class..
 	private String getFontIconLiteralForAction(ActionBase action) {
 		String literal = "";
 		switch (action.getType()) {
@@ -452,11 +482,42 @@ public class WorkAreaController {
 		}
 		return literal;
 	}
-
-	private void updateSelectedStep() {
-
-	}
 	
+	
+	
+	
+	
+	
+	private void updateSelectedStepInformation(TestStep selectedStep) {
+		if (selectedStep != null) {
+			URL contextURL, snapURL;
+			switch (selectedStep.getMainAction().getType()) {
+			case IMAGESNAP:
+				SnapImageAction snapAction = (SnapImageAction) selectedStep.getMainAction();
+				snapURL = FileUtility.getImageUrlFromPath(snapAction.getTargetImage().getImagePath());
+				contextURL = FileUtility.getImageUrlFromPath(selectedStep.getTestStepContextImage().getImagePath());
+				break;
+			case AUTOIMAGESNAP:
+				AutomaticImageSnapAction aSnapAction = (AutomaticImageSnapAction) selectedStep.getMainAction();
+				snapURL = FileUtility.getImageUrlFromPath(aSnapAction.getSnapImage().getImagePath());//TODO:: Target Image, once im looking into this one..
+				contextURL = FileUtility.getImageUrlFromPath(selectedStep.getTestStepContextImage().getImagePath());
+				break;
+			default:
+				throw new IllegalArgumentException();
+			}
+			
+			try {
+				aStepsSnapImage.setImage(new Image(snapURL.toString()));
+				aStepsContextImage.setImage(new Image(contextURL.toString()));
+				
+			} catch (Exception e) {
+				System.out.println("An error occured when attempting to display user-snapped image and/or the Context (Full Web Page) image."
+									+ " \nError: "+e.getMessage());
+				e.printStackTrace();
+				
+			}
+		}
+	}
 	
 	
 	private void addActionToSelectedTest(ActionBase action) {
