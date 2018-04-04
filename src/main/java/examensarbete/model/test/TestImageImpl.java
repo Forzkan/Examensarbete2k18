@@ -1,8 +1,8 @@
 package examensarbete.model.test;
 
 import java.awt.Image;
-//import java.awt.Point;
-import org.opencv.core.Point;
+import java.awt.Point;
+//import org.opencv.core.Point;
 import java.awt.Rectangle;
 
 public class TestImageImpl implements TestImage{
@@ -90,7 +90,14 @@ public class TestImageImpl implements TestImage{
 	
 	@Override
 	public String toString() {
-		return "sträng";
+		StringBuilder stringBuilder = new StringBuilder();
+		String lineBreak = System.getProperty("line.separator");
+		stringBuilder.append("TestImageImpl" + lineBreak);
+		stringBuilder.append("x:" + coordinates.x + lineBreak);
+		stringBuilder.append("y:" + coordinates.y + lineBreak);
+		stringBuilder.append("width:" + width + lineBreak);
+		stringBuilder.append("height:" + height);
+		return stringBuilder.toString();
 	}
 
 }

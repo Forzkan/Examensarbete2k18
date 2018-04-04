@@ -13,6 +13,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.util.List;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.util.*;
@@ -36,23 +37,30 @@ public class TemplateMatcher implements ChangeListener {
             System.exit(-1);
         }
         //Loopa över matchingMethod 6 ggr och använd countern som match_method
-        TestImage[] matchedImages;
-//        for( int i = 0; i < 5; i++ ) {
-//        	matchedImages[i] = matchingMethod();
-//        }
-        matchingMethod();
+//        TestImage[5] matchedImages = {};
+        List<TestImage> matchedImages = new ArrayList<TestImage>();
+        for( int i = 0; i < 5; i++ ) {
+        	matchedImages.add(matchingMethod(i));
+        	//Gör inte för 2 - TM CCORR, den är dålig
+//        	System.out.println(matchedImages.get(i));
+        }
+        matchingMethod(0);
         createJFrame();
         //Ifall majoriteten av alla matched TestImage har samma position som target image så har vi en match
         //Annars en NEW_LOC_MATCH
         return MatchType.MATCH;
     }
     
-    private void compareMatchImages(TestImage[] matchedImages) {
+    private void compareMatchImages(List<TestImage> matchedImages) {
     	//Sortera efter x & y värden, returnera den TestImage som gäller
     	//return TestImage;
     }
     
-    private TestImage matchingMethod() {
+    /**
+     * Returns where a match was found
+     * @return
+     */
+    private TestImage matchingMethod(int matchMethod) {
     	//TODO: Skriv ut koordinaterna varje gång den matchar något
         Mat result = new Mat();
         Mat img_display = new Mat();
@@ -61,14 +69,14 @@ public class TemplateMatcher implements ChangeListener {
         int result_rows = contextImage.rows() - targetImage.rows() + 1;
         result.create( result_rows, result_cols, CvType.CV_32FC1 );
 
-        Imgproc.matchTemplate( contextImage, targetImage, result, match_method);
+        Imgproc.matchTemplate( contextImage, targetImage, result, matchMethod);
         Core.normalize( result, result, 0, 1, Core.NORM_MINMAX, -1, new Mat() );
         
         Point matchLoc;
         
         Core.MinMaxLocResult mmr = Core.minMaxLoc( result );
         //  For all the other methods, the higher the better
-        if( match_method  == Imgproc.TM_SQDIFF || match_method == Imgproc.TM_SQDIFF_NORMED ){ 
+        if( matchMethod  == Imgproc.TM_SQDIFF || matchMethod == Imgproc.TM_SQDIFF_NORMED ){ 
         	matchLoc = mmr.minLoc; 
     	} else {
     		matchLoc = mmr.maxLoc;
@@ -92,15 +100,16 @@ public class TemplateMatcher implements ChangeListener {
 //        return matToBufferedImage(targetImage);
 
         //Översätt point
-        TestImage matchImage = new TestImageImpl("src/main/resources/tests/test_2/2-part.png", matchLoc, targetImage.rows(), targetImage.cols());
+        java.awt.Point testImagePoint = new java.awt.Point((int)matchLoc.x, (int)matchLoc.y);
+        TestImage matchImage = new TestImageImpl("src/main/resources/tests/test_2/2-part.png", testImagePoint, targetImage.cols(), targetImage.rows());
+        System.out.println(matchImage);
         return matchImage;
     }
     
     public void stateChanged(ChangeEvent e) {
         JSlider source = (JSlider) e.getSource();
         if (!source.getValueIsAdjusting()) {
-            match_method = (int)source.getValue();
-            matchingMethod();
+            matchingMethod((int)source.getValue());
         }
     }
     
