@@ -44,6 +44,7 @@ public class SnapImageAction extends ActionBase {
 	public SnapImageAction() throws AWTException {
 		super();
 		this.actionType = EActionType.IMAGESNAP;
+		snapImage = new TestImageImpl();
 	}
 
 	@Override
@@ -56,7 +57,7 @@ public class SnapImageAction extends ActionBase {
 	public boolean performAction() {
 		ClickWithinBoundsAction wBoundsClickAction;
 		try {
-			wBoundsClickAction = new ClickWithinBoundsAction(snapImage.getBounds());
+			wBoundsClickAction = new ClickWithinBoundsAction(snapImage.fetchTheBounds());
 			wBoundsClickAction.performAction();
 		} catch (AWTException e) {
 			e.printStackTrace();
@@ -106,29 +107,30 @@ public class SnapImageAction extends ActionBase {
 	private ArrayList<WeakEventHandler<MouseEvent>> weakEventHandlers = new ArrayList<WeakEventHandler<MouseEvent>>();
 	
 	
-	
+	// only for the primary screen at this point, just slap on a for loop and call getAllScreens() to do it for all.
+	// it does need some small tweaking because there's something strange happening when snaping images from the other screens.
 	public void createScreenCoverForSnap(){
-		for(Screen screen : getAllScreens())
-		{
-			Rectangle rect = new Rectangle();
-			rect.setWidth(screen.getVisualBounds().getWidth());
-			rect.setHeight(screen.getVisualBounds().getHeight());
-			rect.setFill(Color.WHITE);
-			rect.setStroke(Color.BLACK);
-			
-			Popup popup = new Popup();
-			popup.setWidth(screen.getVisualBounds().getWidth());
-			popup.setHeight(screen.getVisualBounds().getHeight());
-			popup.getContent().add(rect);
-			popup.setX(screen.getVisualBounds().getMinX());
-			popup.setY(screen.getVisualBounds().getMinY());
-			popup.setOpacity(0.08);
-			
-			popup.show(TTMain.primaryStage.getScene().getWindow());
-			
-			popups.add(popup);
-			setSnapClickAndReleasedEvents(popup);
-		}
+		Screen screen = Screen.getPrimary();
+		
+		Rectangle rect = new Rectangle();
+		rect.setWidth(screen.getVisualBounds().getWidth());
+		rect.setHeight(screen.getVisualBounds().getHeight());
+		rect.setFill(Color.WHITE);
+		rect.setStroke(Color.BLACK);
+		
+		Popup popup = new Popup();
+		popup.setWidth(screen.getVisualBounds().getWidth());
+		popup.setHeight(screen.getVisualBounds().getHeight());
+		popup.getContent().add(rect);
+		popup.setX(screen.getVisualBounds().getMinX());
+		popup.setY(screen.getVisualBounds().getMinY());
+		popup.setOpacity(0.08);
+		
+		popup.show(TTMain.primaryStage.getScene().getWindow());
+		
+		popups.add(popup);
+		setSnapClickAndReleasedEvents(popup);
+		
 	}
 	
 	
@@ -173,6 +175,8 @@ public class SnapImageAction extends ActionBase {
 				snapRectangle.setWidth( (int) (startX - event.getScreenX()));
 				
 			}else {
+				System.out.println(snapRectangle);
+				System.out.println(startX);
 				snapRectangle.setWidth((int) (event.getScreenX() - startX));
 			}
 			if(startY > event.getScreenY()) {
@@ -218,7 +222,7 @@ public class SnapImageAction extends ActionBase {
 			System.out.println(toString());
 			clearPopups();
 			try {// TODO:: PATH!!
-				this.takeScreenShot("D://", "UserSnappedImage", snapImage.getBounds());
+				this.takeScreenShot("D://", "UserSnappedImage", snapImage.fetchTheBounds());
 			} catch (AWTException | IOException e) {
 				System.out.println(e.getMessage());
 			}

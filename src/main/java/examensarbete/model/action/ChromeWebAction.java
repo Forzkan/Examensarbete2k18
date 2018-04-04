@@ -36,6 +36,7 @@ public class ChromeWebAction extends ActionBase{
 	public ChromeWebAction() throws AWTException {
 		super();
 		this.actionType = EActionType.CHROMEBROWSER;
+		System.setProperty("webdriver.chrome.driver", PropertiesHandler.properties.getProperty(TTProperties.CHROMEDRIVER_EXE_PATH.toString()));
 	}
 	
 	
@@ -44,7 +45,6 @@ public class ChromeWebAction extends ActionBase{
 	{   
 		try {
 			createTextInputDialog();
-		    System.setProperty("webdriver.chrome.driver", PropertiesHandler.properties.getProperty(TTProperties.CHROMEDRIVER_EXE_PATH.toString()));
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
 		}

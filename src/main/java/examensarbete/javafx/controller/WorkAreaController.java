@@ -38,7 +38,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-
+// TODO:: Handle page loading times:   driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
 public class WorkAreaController {
 
 	@FXML
@@ -51,11 +51,10 @@ public class WorkAreaController {
 	private Text currentXCoordinateText, currentYCoordinateText;
 	@FXML
 	private HBox stepsHBox;
-	
 
 	private StageHandler stageHandler = new StageHandler();
 	private final TestHandler testHandler = new TestHandler();
-	
+
 	public WorkAreaController() {
 		PropertiesHandler.InitializePropertiesHandler();
 	}
@@ -64,86 +63,131 @@ public class WorkAreaController {
 	public void initialize() {
 		treeViewLoader();
 	}
-	
-	
-	
+
 	private Stage preferencesStage;
+
 	@FXML
 	private void openPreferencesWindow() {
 		PreferencesController preferenceController = new PreferencesController();
 		preferencesStage = stageHandler.openStage(TTStage.PREFERENCES, preferenceController);
 	}
 
-	// TODO :: På browserclick så kollar vi vad som är valt i listan av test, 
-	// och om något är valt så hämtar vi gruppnamn och testnamn.
-	// Sedan lägger vi till den action vi har klickat på.
-	
-	// TODO :: CREATE AND SAVE TESTS.
-	// TODO:: FIND OUT A WAY TO SEE IF WEBPAGE HAS LOADED.
+	@FXML
+	private void saveSelectedTest() {
+		if(selectedTest != null && isRecording == false) {
+			testHandler.saveTest(selectedTest);
+			System.out.println("Saving selected test.");
+		}
+	}
 	
 	@FXML
-	private void onBrowserButtonClick() {
+	private void saveAllTests() {
+		if(selectedTest != null && isRecording == false) {
+			testHandler.saveTests();
+			System.out.println("Saving all tests.");
+		}
+	}
+	
+	@FXML
+	private void runSelectedTests() {
+		// TODO:: Do something with the results. (create report)
+		if(rootIsSelected()) {
+			// Run all tests for all groups.
+		}else if(parentIsSelected()) {
+			// Run all tests in group.
+			for(TestGroup tg : getSelectedTestsAndOrGroup()) {
+				tg.getTest().runTest();
+			}
+		}else if(selectedTest != null) {
+			// Run selected test.
+			selectedTest.getTest().runTest();
+			selectedTest.getTest().cleanup();
+		}
 		
-//		BrowserAction browserAction;
-//		try {
-//			browserAction = new BrowserAction();
-//			browserAction.actionSetup();
-//		} catch (AWTException e) {
-//			System.out.println(e.getMessage());
-//		}
+	}
+	
+	// TODO :: På browserclick så kollar vi vad som är valt i listan av test,
+	// och om något är valt så hämtar vi gruppnamn och testnamn.
+	// Sedan lägger vi till den action vi har klickat på.
+
+	// TODO :: CREATE AND SAVE TESTS.
+	// TODO:: FIND OUT A WAY TO SEE IF WEBPAGE HAS LOADED.
+
+	@FXML
+	private void onBrowserButtonClick() {
+
+		// BrowserAction browserAction;
+		// try {
+		// browserAction = new BrowserAction();
+		// browserAction.actionSetup();
+		// } catch (AWTException e) {
+		// System.out.println(e.getMessage());
+		// }
 		// TODO:: Remove this button.
-		//TESTING:
+		// TESTING:
 		getSelectedTestsAndOrGroup();
 	}
 
 	@FXML
 	private void onClickButtonPressed() {
-		ClickAction clickAction;
-		try {
-			clickAction = new ClickAction();
-			clickAction.actionSetup();
 
-		} catch (AWTException e) {
-			System.out.println(e.getMessage());
+		if (isRecordingAndTestIsSelected()) { // i.e. we can add actions to a test.
+			ClickAction clickAction;
+			try {
+				clickAction = new ClickAction();
+				clickAction.actionSetup();
+				addActionToSelectedTest(clickAction);
+			} catch (AWTException e) {
+				System.out.println(e.getMessage());
+			}
 		}
 	}
 
-
-
 	@FXML
 	private void onScreenCropCaptureClicked(ActionEvent event) {
-		SnapImageAction snapAction;
-		try {
-			snapAction = new SnapImageAction();
-			snapAction.actionSetup();
-
-		} catch (AWTException e) {
-			System.out.println(e.getMessage());
+		if (isRecordingAndTestIsSelected()) { // i.e. we can add actions to a test.
+			SnapImageAction snapAction;
+			try {
+				snapAction = new SnapImageAction();
+				snapAction.actionSetup();
+				
+				addActionToSelectedTest(snapAction);
+			} catch (AWTException e) {
+				System.out.println(e.getMessage());
+			}
 		}
 	}
 
 	@FXML
 	private void onTextTypeButtonPressed() {
-		TextTypeAction typeAction;
-		try {
-			typeAction = new TextTypeAction();
-			typeAction.actionSetup();
-
-		} catch (AWTException e) {
-			System.out.println(e.getMessage());
+		if (isRecordingAndTestIsSelected()) { // i.e. we can add actions to a test.
+			TextTypeAction typeAction;
+			try {
+				typeAction = new TextTypeAction();
+				typeAction.actionSetup();
+				addActionToSelectedTest(typeAction);
+			} catch (AWTException e) {
+				System.out.println(e.getMessage());
+			}
 		}
 	}
 
 	@FXML
 	private void snapImageFromBounds() {
-		try {
-			ChromeWebAction cwa = new ChromeWebAction();
-			cwa.actionSetup();
-			cwa.performAction();
-			System.out.println(cwa.takeBrowserScreenshot("aUniqueNameForBrowserScreenshot"));
-		} catch (AWTException e) {
-			System.out.println(e.getMessage());
-		}
+//		if (isRecordingAndTestIsSelected()) { // i.e. we can add actions to a test.
+//			try {
+//				ChromeWebAction cwa = new ChromeWebAction();
+//				cwa.actionSetup();
+//				cwa.performAction();
+//				System.out.println(cwa.takeBrowserScreenshot("aUniqueNameForBrowserScreenshot"));
+//				selectedTest.getTest().addTestStep(cwa);
+//				updateSelectedTestHBox();
+//			} catch (AWTException e) {
+//				System.out.println(e.getMessage());
+//			}
+//		}
+		
+		
 		// AutomaticImageSnap autoSnap;
 		// try {
 		// autoSnap = new AutomaticImageSnap(snapAction.getRectangleBounds());
@@ -153,8 +197,8 @@ public class WorkAreaController {
 		// }
 	}
 
-	
 	private Stage newTestStage;
+
 	@FXML
 	private void createNewTest() {
 		NewTestController ntC = new NewTestController(testHandler, this);
@@ -162,61 +206,88 @@ public class WorkAreaController {
 	}
 
 	@FXML
+	private Button recordButton;
+	@FXML
+	private FontIcon recordFontIcon;
+
+	private boolean isRecording = false;
+
+	@FXML
 	private void startTestRecording() {
-		
+		// Get selected
+		if (isRecording == false) {
+
+			// Check if a test is selected, else we should not start recording.
+			if (!rootIsSelected() && !parentIsSelected() && selectedTest != null) {
+				isRecording = true;
+				// change logo of the button,
+				recordFontIcon.setIconLiteral("ion-stop");
+				// Running the default step which is present for all tests, which is opening the
+				// browser.
+				selectedTest.getTest().getSteps().get(0).performTestStep();
+			} else {
+				System.out.println("No test have been selected.");
+			}
+		} else {
+			// change back the logo of the button,
+			stopRecording();
+		}
 	}
-	
-	
-	
-	
-	 
-	
+
+	private void stopRecording() {
+		recordFontIcon.setIconLiteral("ion-record");
+		isRecording = false;
+	}
+
 	private ArrayList<TestGroup> getSelectedTestsAndOrGroup() {
 		System.out.println("LOOKING FOR SELECTED TEST");
 		ArrayList<TestGroup> tests = new ArrayList<TestGroup>();
 		try {
-			
-		
-		TreeItem<String> selected = treeView.getSelectionModel().getSelectedItem();
-		if (selected != null) {
-			List<TestGroup> testGroups = testHandler.getTestList();
-			String parentName = selected.getParent().getValue().toString();
-			String selectedName = selected.getValue().toString();
+			TreeItem<String> selected = treeView.getSelectionModel().getSelectedItem();
+			if (selected != null) {
+				List<TestGroup> testGroups = testHandler.getTestList();
+				String parentName = selected.getParent().getValue().toString();
+				String selectedName = selected.getValue().toString();
 
-			if (parentName.equals("Test Cases")) {
-				for (TestGroup tg : testGroups) {
-					if (tg.getGroupName().equals(selectedName)) {
-						tests.add(tg);
+				if (parentName.equals("Test Cases")) {
+					for (TestGroup tg : testGroups) {
+						if (tg.getGroupName().equals(selectedName)) {
+							tests.add(tg);
+						}
 					}
-				}
-			} else {
-				for (TestGroup tg : testGroups) {
-					if (selectedName.equals(tg.getTestName()) && parentName.equals(tg.getGroupName())) {
-						tests.add(tg);
-						break;
+				} else {
+					for (TestGroup tg : testGroups) {
+						if (selectedName.equals(tg.getTestName()) && parentName.equals(tg.getGroupName())) {
+							tests.add(tg);
+							break;
+						}
 					}
 				}
 			}
-		}
-		}catch(Exception e) {
+		} catch (Exception e) {
 			System.out.println("Root has been selected.");
 		}
 		return tests;
 	}
-	
-	
-	
+
+	private boolean isRecordingAndTestIsSelected() {
+		if (isRecording && selectedTest != null) {
+			return true;
+		}
+		return false;
+	}
+
 	@FXML
 	private AnchorPane treeViewPane;
 	private TreeView<String> treeView;
-	
+
 	public void treeViewLoader() {
 		testHandler.loadSavedTests();
 		List<TestGroup> testCollection = testHandler.getTestList();
 		InputStream input = null;
 		try {
 			input = new FileInputStream("src/main/resources/root.png");
-		}catch(Exception e) {
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 		Node rootIcon = new ImageView(new Image(input));
@@ -224,7 +295,7 @@ public class WorkAreaController {
 		InputStream collInput = null;
 		try {
 			collInput = new FileInputStream("src/main/resources/collectionIcon.PNG");
-		}catch(Exception e) {
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 		Image collectionIcon = new Image(collInput);
@@ -255,24 +326,24 @@ public class WorkAreaController {
 		treeView.prefWidthProperty().bind(treeViewPane.widthProperty());
 		setOnTestSelectedEvent(treeView);
 	}
-	
+
 	EventHandler<MouseEvent> event_handler;
 	WeakEventHandler<MouseEvent> weak_event_handler;
-	
+
 	// TODO:: CALL THIS ONCE A TEST HAS BEEN CLICKED.
 	private void setOnTestSelectedEvent(Node node) {
-		
+
 		event_handler = (MouseEvent event) -> {
 			ArrayList<TestGroup> selectedList = getSelectedTestsAndOrGroup();
-			if(parentIsSelected()) {
+			if (parentIsSelected()) {
 				// Multiple tests "selected" since the parent is selected.
 				selectedTest = null;
 				System.out.println("SELECTED PARENT");
-			}else if(parentIsSelected() == false && rootIsSelected() == false && selectedList.size() >= 1) {
+			} else if (parentIsSelected() == false && rootIsSelected() == false && selectedList.size() >= 1) {
 				selectedTest = selectedList.get(0);
-				updateSelectedTest();
+				updateSelectedTestHBox();
 				System.out.println("SELECTED TEST");
-			}else {
+			} else {
 				// Do we want to do anything if no test is selected? for now, no.
 				// ROOT or nothing selected.
 			}
@@ -281,7 +352,7 @@ public class WorkAreaController {
 		node.setOnMouseClicked(weak_event_handler);
 
 	}
-	
+
 	private boolean rootIsSelected() {
 		try {
 			TreeItem<String> selected = treeView.getSelectionModel().getSelectedItem();
@@ -290,15 +361,14 @@ public class WorkAreaController {
 
 				if (selectedName.equals("Test Cases")) {
 					return true;
-				} 
+				}
 			}
-		}catch(Exception e) {
+		} catch (Exception e) {
 			System.out.println("Root has been selected.");
 		}
 		return false;
 	}
-	
-	
+
 	private boolean parentIsSelected() {
 		try {
 			TreeItem<String> selected = treeView.getSelectionModel().getSelectedItem();
@@ -313,76 +383,85 @@ public class WorkAreaController {
 							return true;
 						}
 					}
-				} 
+				}
 			}
-		}catch(Exception e) {
+		} catch (Exception e) {
 			System.out.println("Root has been selected.");
 		}
 		return false;
 	}
-	
-	
-	
-	private void updateSelectedTest() {
+
+	private void updateSelectedTestHBox() {
 		stepsHBox.getChildren().clear();
 		try {
-			if(selectedTest != null) {
+			if (selectedTest != null) {
 				ArrayList<Button> testStepsList = getStepsAsButtonList();
 				stepsHBox.getChildren().addAll(testStepsList);
 			}
-		}catch(Exception e) {
+		} catch (Exception e) {
 			System.out.println("Could not load test steps from selected test..");
 		}
 
 	}
-	
+
 	private TestGroup selectedTest;
-	
+
 	private ArrayList<Button> getStepsAsButtonList() {
 		ArrayList<Button> list = new ArrayList<Button>();
-		
-		for(TestStepImpl step : selectedTest.getTest().getSteps()) {
+
+		for (TestStepImpl step : selectedTest.getTest().getSteps()) {
 			FontIcon fontIcon = new FontIcon();
 			fontIcon.setIconLiteral(getFontIconLiteralForAction(step.getMainAction()));
 			fontIcon.setIconSize(33);
 			fontIcon.setIconColor(Paint.valueOf("white"));
 			Button btn = new Button();
-			btn.setStyle("-fx-background-color: black;"); 
+			btn.setStyle("-fx-background-color: black;");
 			btn.setGraphic(fontIcon);
 			list.add(btn);
 		}
 		return list;
 	}
 
-	
 	private String getFontIconLiteralForAction(ActionBase action) {
 		String literal = "";
-		switch(action.getType()) {
-			case CLICK : literal = "ion-mouse";
-				break;
-			case IMAGESNAP : literal = "ion-crop";
-				break;
-			case KEYPRESS : literal = "fas-keyboard";
-				break;
-			case TYPE : literal = "fas-keyboard";
-				break;
-			case BROWSER : literal = "ion-social-chrome";
-				break;
-			case AUTOIMAGESNAP : literal = "ion-crop";
-				break;
-			case CHROMEBROWSER : literal = "ion-social-chrome";
-				break;
-			case AUTOCLICK : literal = "ion-mouse";
-				break;
+		switch (action.getType()) {
+		case CLICK:
+			literal = "ion-mouse";
+			break;
+		case IMAGESNAP:
+			literal = "ion-crop";
+			break;
+		case KEYPRESS:
+			literal = "fas-keyboard";
+			break;
+		case TYPE:
+			literal = "fas-keyboard";
+			break;
+		case BROWSER:
+			literal = "ion-social-chrome";
+			break;
+		case AUTOIMAGESNAP:
+			literal = "ion-crop";
+			break;
+		case CHROMEBROWSER:
+			literal = "ion-social-chrome";
+			break;
+		case AUTOCLICK:
+			literal = "ion-mouse";
+			break;
 		}
 		return literal;
 	}
-	
-	
-	
+
 	private void updateSelectedStep() {
-		
+
 	}
 	
+	
+	
+	private void addActionToSelectedTest(ActionBase action) {
+		selectedTest.getTest().addTestStep(action);
+		updateSelectedTestHBox();
+	}
 
 }
