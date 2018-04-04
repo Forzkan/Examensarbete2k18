@@ -1,7 +1,8 @@
 package examensarbete.model.test;
 
 import java.awt.Image;
-import java.awt.Point;
+//import java.awt.Point;
+import org.opencv.core.Point;
 import java.awt.Rectangle;
 
 public class TestImageImpl implements TestImage{
@@ -11,6 +12,7 @@ public class TestImageImpl implements TestImage{
 	private int y;
 	private int width;
 	private int height;
+	private Point coordinates;
 	
 	public String getPath() {
 		return path;
@@ -33,6 +35,7 @@ public class TestImageImpl implements TestImage{
 		this.y = y;
 	}
 
+	@Override
 	public int getWidth() {
 		return width;
 	}
@@ -40,6 +43,7 @@ public class TestImageImpl implements TestImage{
 		this.width = width;
 	}
 	
+	@Override
 	public int getHeight() {
 		return height;
 	}
@@ -65,37 +69,28 @@ public class TestImageImpl implements TestImage{
 	}
 	
 	
-	public TestImageImpl() {
-		
+	public TestImageImpl(String path, Point coordinates, int width, int height) {
+		this.path = path;
+		this.coordinates = coordinates;
+		this.width = width;
+		this.height = height;
 	}
-	
-	
-	
 	
 	@Override
 	public String pathToImage() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.path;
 	}
 
 	@Override
 	public Image getImage() {
 		// TODO Auto-generated method stub
+		
 		return null;
 	}
-
+	
 	@Override
-	public int getImageHeight() {
-		// TODO Auto-generated method stub
-		return 0;
+	public String toString() {
+		return "sträng";
 	}
-
-	@Override
-	public int getImageWidth() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
 
 }
