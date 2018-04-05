@@ -11,6 +11,7 @@ public interface TestImage {
 	int getImageWidth();
 	int getImageHeight();
 	
+	String toString();
 	String getImagePath();
 	void setImagePath(String imagePath);
 	
