@@ -11,12 +11,16 @@ public interface TestImage {
 	int getImageWidth();
 	int getImageHeight();
 	
-	String toString();
 	String getImagePath();
 	void setImagePath(String imagePath);
 	
-	Point getPosition();
-	void setPosition(Point position);
+	Point getCoordinates();
+	void setCoordinates(Point position);
 	
-	Rectangle getBounds();	
+	Rectangle getBounds();
+
+	int getResolutionX();
+
+	int getResolutionY();	
+	
 }

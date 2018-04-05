@@ -46,8 +46,8 @@ public class AutomaticImageSnapAction extends ActionBase {
 	
 	public AutomaticImageSnapAction(Rectangle imageBounds, String groupName, String testName) throws AWTException {
 		super(EActionType.AUTOIMAGESNAP);
-		snapImage.getPosition().x = imageBounds.x;
-		snapImage.getPosition().y = imageBounds.y;
+		snapImage.getCoordinates().x = imageBounds.x;
+		snapImage.getCoordinates().y = imageBounds.y;
 		this.groupName = groupName;
 		this.testName = testName;
 //		snapImage.setImageWidth(imageBounds.width);

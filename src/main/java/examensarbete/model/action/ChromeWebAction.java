@@ -78,6 +78,15 @@ public class ChromeWebAction extends ActionBase{
 	}
 	
 	
+	/**
+	 * To be used between performing actions.
+	 * @param timeout
+	 */
+	public void waitUntilPageIsLoaded(int timeout) {
+		driver.manage().timeouts().pageLoadTimeout(timeout, TimeUnit.SECONDS);
+	}
+	
+	
 	public String takeBrowserScreenshot(String pathAndFileNameNoEnding) {
 		final File screenShot = new File(pathAndFileNameNoEnding + ".png").getAbsoluteFile();
 

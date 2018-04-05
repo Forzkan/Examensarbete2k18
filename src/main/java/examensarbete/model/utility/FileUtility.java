@@ -83,4 +83,9 @@ public class FileUtility {
     	return false;
     }
     
+    
+    public static String getProjectRoot() {
+    	return System.getProperty("user.dir");
+    }
+    
 }

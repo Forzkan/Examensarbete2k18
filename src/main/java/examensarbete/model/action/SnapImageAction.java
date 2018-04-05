@@ -217,7 +217,7 @@ public class SnapImageAction extends ActionBase {
 									(int)snapRectangle.getHeight());
 				
 				targetImage.setImagePath(this.takeScreenShot(FileUtility.createUniqueSnapImageFilePath(testGroup, testName), bounds));
-				targetImage.setPosition(new Point((int)bounds.getX(), (int)bounds.getY()));
+				targetImage.setCoordinates(new Point((int)bounds.getX(), (int)bounds.getY()));
 			} catch (AWTException | IOException e) {
 				System.out.println(e.getMessage());
 			}
