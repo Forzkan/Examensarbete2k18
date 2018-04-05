@@ -99,5 +99,13 @@ public class TestImageImpl implements TestImage{
 		stringBuilder.append("height:" + height);
 		return stringBuilder.toString();
 	}
+	
+	@Override
+	public boolean compareTestImage(TestImage imageToCompare) {
+		if(x == imageToCompare.getImageCoordinates().x && y == imageToCompare.getImageCoordinates().y && width == imageToCompare.getWidth() && height == imageToCompare.getHeight()) {
+			return true;
+		}
+		return false;
+	}
 
 }

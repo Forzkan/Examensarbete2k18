@@ -12,4 +12,5 @@ public interface TestImage {
 	int getHeight();
 	Point getImageCoordinates();
 	String toString();
+	boolean compareTestImage(TestImage imageToCompare);
 }

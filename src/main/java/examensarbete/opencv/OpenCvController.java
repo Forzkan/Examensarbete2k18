@@ -14,7 +14,8 @@ public class OpenCvController {
 	}
 	
 	public void runComparison(TestImage contextImage, TestImage targetImage) {
-		templateMatcher.run(contextImage, targetImage);
+//		templateMatcher.run(contextImage, targetImage);
+		templateMatcher.findTargetImage(contextImage, targetImage);
 //		MatchType result = templateMatcher.run(testImages);
 		//TODO: Returnera enum med outcome, typ MATCH, NEW_LOC_MATCH, NO_MATCH
 	}
