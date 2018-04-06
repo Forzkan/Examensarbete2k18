@@ -8,9 +8,9 @@ import java.net.URISyntaxException;
 import java.util.Optional;
 
 import javafx.scene.control.TextInputDialog;
-
+	
 public class BrowserAction extends ActionBase{
-
+	
 	private String browserPath = "";
 	
 	// OBSERVE : THIS IS NOT REALLY USED ANYLONGER..

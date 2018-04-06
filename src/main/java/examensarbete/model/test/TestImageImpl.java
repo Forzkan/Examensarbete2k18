@@ -2,110 +2,173 @@ package examensarbete.model.test;
 
 import java.awt.Image;
 import java.awt.Point;
-//import org.opencv.core.Point;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 public class TestImageImpl implements TestImage{
 
-	private String path;
-	private int x;
-	private int y;
-	private int width;
-	private int height;
+	// USED BY JACKSON, AND IS STORED IN JSON.
 	private Point coordinates;
+	private int resolutionX; 
+	private int resolutionY;
+	private String imagePath;
 	
-	public String getPath() {
-		return path;
-	}
-	public void setPath(String path) {
-		this.path = path;
-	}
-
-	public int getX() {
-		return x;
-	}
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getY() {
-		return y;
-	}
-	public void setY(int y) {
-		this.y = y;
-	}
-
+	
+	
+	// GETTERS AND SETTERS, ALSO USED BY JACKSON.
+	/**
+	 * Gets the resolution X which the image was taken in.
+	 */
 	@Override
-	public int getWidth() {
-		return width;
+	public int getResolutionX() {
+		return resolutionX;
 	}
-	public void setWidth(int width) {
-		this.width = width;
+	/**
+	 * Set the resolution X which the image was taken in.
+	 * @param resolutionX
+	 */
+	public void setResolutionX(int resolutionX) {
+		this.resolutionX = resolutionX;
 	}
 	
+	/**
+	 * Set the resolution Y which the image was taken in.
+	 * @param resolutionX
+	 */
 	@Override
-	public int getHeight() {
-		return height;
+	public int getResolutionY() {
+		return resolutionY;
 	}
-	public void setHeight(int height) {
-		this.height = height;
-	}
-	
-	
-	
-	public Rectangle fetchTheBounds() {
-		return new Rectangle(x,y,width,height);
-	}
-	public void setsTheBounds(int x, int y, int width, int height) {
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
+	/**
+	 * Gets the resolution Y which the image was taken in.
+	 */
+	public void setResolutionY(int resolutionY) {
+		this.resolutionY = resolutionY;
 	}
 	
+	/**
+	 * Gets the Image 0,0 position in the Screen coordinates position of the screen, 
+	 * and with the resolution the image was taken in.
+	 */
 	@Override
-	public Point getImageCoordinates() {
-		return new Point(x,y);
+	public Point getCoordinates() {
+		return coordinates;
 	}
-	
-	
-	public TestImageImpl(String path, Point coordinates, int width, int height) {
-		this.path = path;
+	@Override
+	public void setCoordinates(Point coordinates) {
 		this.coordinates = coordinates;
-		this.width = width;
-		this.height = height;
 	}
 	
+	
 	@Override
-	public String pathToImage() {
-		return this.path;
+	public String getImagePath() {
+		return imagePath;
 	}
-
+	@Override
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+		setImage(imagePath);
+	}
+	
+	
+	
+	
+	// OVERWRITTEN METHODS WHICH ARE NOT SAVED AND THEREFORE NOT USED BY JACKSON.	
+	@JsonIgnore 
+	private Image image;
+	
 	@Override
 	public Image getImage() {
-		// TODO Auto-generated method stub
-		
-		return null;
+		if(image == null) {
+			setImage(imagePath);
+		}
+		return (Image)image;
 	}
 	
 	@Override
+	public int getImageWidth() {
+		return ((BufferedImage)image).getWidth();
+	}
+	
+	@Override
+	public int getImageHeight() {
+		return ((BufferedImage)image).getHeight();
+	}
+
+	@JsonIgnore
+	@Override
+	public Rectangle getBounds() {
+		return new Rectangle(coordinates.x, coordinates.y, getImageWidth(), getImageHeight());
+	}
+	
+	
+	
+	
 	public String toString() {
 		StringBuilder stringBuilder = new StringBuilder();
 		String lineBreak = System.getProperty("line.separator");
 		stringBuilder.append("TestImageImpl" + lineBreak);
 		stringBuilder.append("x:" + coordinates.x + lineBreak);
 		stringBuilder.append("y:" + coordinates.y + lineBreak);
-		stringBuilder.append("width:" + width + lineBreak);
-		stringBuilder.append("height:" + height);
+		stringBuilder.append("width:" + getImageWidth() + lineBreak);
+		stringBuilder.append("height:" + getImageHeight());
 		return stringBuilder.toString();
 	}
 	
 	@Override
 	public boolean compareTestImage(TestImage imageToCompare) {
-		if(x == imageToCompare.getImageCoordinates().x && y == imageToCompare.getImageCoordinates().y && width == imageToCompare.getWidth() && height == imageToCompare.getHeight()) {
+		if(this.getCoordinates().x == imageToCompare.getCoordinates().x && this.getCoordinates().y == imageToCompare.getCoordinates().y && this.getImageWidth() == imageToCompare.getImageWidth() && this.getImageHeight() == imageToCompare.getImageHeight()) {
 			return true;
 		}
 		return false;
 	}
+	
+	
+	
+	// PRIVATE HELP METHODS.
+	private void setImage(String imagePath) {
+		try {
+			File img = new File(imagePath);
+			image = ImageIO.read(img);
+		} catch (Exception e) {
+			System.out.println("Error when creating image from path: " + imagePath);
+		}
+	}
+	
+	
+	
+	
+	
+
+	// CONSTRUCTORS
+	public TestImageImpl(String path, Point coordinates, int width, int height) {
+		setImagePath(path);
+		this.coordinates = coordinates;
+//		this.width = width;
+//		this.height = height;
+	}
+	
+	
+	/**
+	 * Accepts a buffered image.
+	 * @param image
+	 * @param coordinates
+	 */
+	public TestImageImpl(BufferedImage image, Point coordinates) {
+		this.image = image;
+		setCoordinates(coordinates);
+	}
+	
+	
+	// Empty Constructor for Jackson.. TODO:: Consider using Lombok.
+	public TestImageImpl() {}
+
+	
+
 
 }

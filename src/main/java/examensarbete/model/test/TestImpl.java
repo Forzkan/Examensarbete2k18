@@ -7,16 +7,15 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 
 import examensarbete.model.action.ActionBase;
 import examensarbete.model.action.ChromeWebAction;
+import examensarbete.model.action.EActionType;
 
 @JsonRootName("Test")
-public class TestImpl {
+public class TestImpl implements Test{
 
-//	@Override
-//	public List<TestStep> getTestSteps() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
+// This is not included in this class because "Test" is the top level object which wraps around everything else when saving to json.
+// Look instead to the "TestHandler" which can save all tests, or a single on. It is not called "Controller" to not confuse it with JavaFX controllers.
+// Could perhaps be renamed to TestSaver or similar.	
+	
 //	@Override
 //	public void saveTest() {
 //		// TODO Auto-generated method stub
@@ -24,44 +23,59 @@ public class TestImpl {
 //	}
 	
 	
+	// VARIABLES
+	private String testName;	
+	private String testGroupName;
+	private ArrayList<TestStep> testSteps = new ArrayList<TestStep>();	
 	
-	private String testName;
+	
+	// GETTERS AND SETTERS FOR SERIALIZABLE VARIABLES (JSON).
+	@Override
+	public String getTestGroupName() {
+		return testGroupName;
+	}
+	
+	@Override
+	public void setTestGroupName(String testGroupName) {
+		this.testGroupName = testGroupName;
+	}
+	
+	
+	@Override
 	public String getTestName() {
 		return testName;
 	}
 
+	@Override
 	public void setTestName(String testName) {
 		this.testName = testName;
 	}
 	
 	
-	private ArrayList<TestStepImpl> steps = new ArrayList<TestStepImpl>();
-	public ArrayList<TestStepImpl> getSteps() {
-		return steps;
+	@Override
+	public ArrayList<TestStep> getTestSteps() {
+		return testSteps;
 	}
 
-	public void setSteps(ArrayList<TestStepImpl> steps) {
-		this.steps = steps;
+	@Override
+	public void setTestSteps(ArrayList<TestStep> steps) {
+		this.testSteps = steps;
 	}
 	
-	public TestImpl(String testName) {
-		this.setTestName(testName);
-	}
+
 	
-	public TestImpl() {
-		
-	}
 	
 	/**
-	 * Not in a constructor for the simple reason of making it easy to convert to and from json.
+	 * All tests have a browser as action 1(index 0) by default.
 	 */
+	@Override
 	public void initializeTest() {
 		ChromeWebAction browser;
 		try {
 			browser = new ChromeWebAction();
 			browser.actionSetup();
 			TestStepImpl firstStep = new TestStepImpl(browser);
-			steps.add(firstStep);
+			testSteps.add(firstStep);
 		} catch (AWTException e) {
 			System.out.println("Error when creating browser action.");
 			System.out.println(e.getMessage());
@@ -69,24 +83,48 @@ public class TestImpl {
 	}
 	
 	
+	@Override
 	public void addTestStep(ActionBase action) {
 		TestStepImpl step = new TestStepImpl(action);
-		steps.add(step);
+		step.takeScreenshot((ChromeWebAction)testSteps.get(0).getMainAction(), testGroupName, testName);
+		testSteps.add(step);
 	}
 
 	
+	@Override
 	public boolean runTest() {
 		boolean passed = true;
-		for(TestStepImpl step : steps) {
-			passed = step.performTestStep(); 
+		for(TestStep step : testSteps) {
+			
+			if(step.getMainAction().getType() == EActionType.IMAGESNAP) {
+				step.takeScreenshot((ChromeWebAction)testSteps.get(0).getMainAction(), testGroupName, testName);
+				// TODO:: do something with the image. // Should we do this for all types of actions?
+				// Maybe take the image at different times depending on what type of action we're dealing with?
+			}
+			passed = step.performTestStep(); 	
+			
+			if(passed == false) {
+				return false;
+			}
 		}
 		return passed;
 	}
 
+	@Override
 	public void cleanup() {
-		ChromeWebAction cwa = (ChromeWebAction)steps.get(0).getMainAction();
+		ChromeWebAction cwa = (ChromeWebAction)testSteps.get(0).getMainAction();
 		cwa.closeBrowser();
 	}
 
+	
+	
+	
+	// CONSTRUCTORS
+	public TestImpl(String testGroup, String testName) {
+		setTestName(testName);
+		setTestGroupName(testGroup);
+	}
+	
+	public TestImpl() {}
 	
 }

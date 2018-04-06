@@ -5,8 +5,8 @@ import java.awt.Rectangle;
 import java.io.IOException;
 
 import examensarbete.model.test.TestImageImpl;
-import examensarbete2k18.model.properties.PropertiesHandler;
-import examensarbete2k18.model.properties.TTProperties;
+import examensarbete.model.utility.FileUtility;
+
 
 public class AutomaticImageSnapAction extends ActionBase {
 
@@ -34,7 +34,7 @@ public class AutomaticImageSnapAction extends ActionBase {
 	}
 
 	public String getSnapImagePath() {
-		return snapImage.getPath();
+		return snapImage.getImagePath();
 	}
 
 	public AutomaticImageSnapAction() {
@@ -42,20 +42,23 @@ public class AutomaticImageSnapAction extends ActionBase {
 		this.actionType = EActionType.AUTOIMAGESNAP;
 	}
 
+	String groupName, testName;
 	
-	public AutomaticImageSnapAction(Rectangle imageBounds) throws AWTException {
+	public AutomaticImageSnapAction(Rectangle imageBounds, String groupName, String testName) throws AWTException {
 		super(EActionType.AUTOIMAGESNAP);
-		snapImage.setX(imageBounds.x);
-		snapImage.setY(imageBounds.y);
-		snapImage.setWidth(imageBounds.width);
-		snapImage.setHeight(imageBounds.height);
+		snapImage.getCoordinates().x = imageBounds.x;
+		snapImage.getCoordinates().y = imageBounds.y;
+		this.groupName = groupName;
+		this.testName = testName;
+//		snapImage.setImageWidth(imageBounds.width);
+//		snapImage.setImageHeight(imageBounds.height);
 	}
 
 	@Override
 	public void actionSetup() {
 		try {																													// TODO:: GIVE PROPER NAME.
-			String imagePath = this.takeScreenShot( PropertiesHandler.properties.getProperty(TTProperties.IMAGE_DIRECTORY.toString()), "AutoSnapImage", snapImage.fetchTheBounds());
-			snapImage.setPath(imagePath);
+			String imagePath = this.takeScreenShot(FileUtility.createUniqueSnapImageFilePath(groupName, testName), snapImage.getBounds());
+			snapImage.setImagePath(imagePath);
 		} catch (AWTException | IOException e) {
 			System.out.println(e.getMessage());
 		}	
@@ -66,7 +69,7 @@ public class AutomaticImageSnapAction extends ActionBase {
 	public boolean performAction() {
 		// With the imageBounds, click the new image.
 		try {
-			ClickWithinBoundsAction clickAction = new ClickWithinBoundsAction(snapImage.fetchTheBounds());
+			ClickWithinBoundsAction clickAction = new ClickWithinBoundsAction(snapImage.getBounds());
 			if(clickAction.performAction()) {
 				return true;
 			}

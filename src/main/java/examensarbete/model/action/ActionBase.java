@@ -49,14 +49,15 @@ public abstract class ActionBase implements IAction{
 	
 	
 	
-	protected String takeScreenShot(String path, String imageName, Rectangle bounds) throws AWTException, IOException {
+	protected String takeScreenShot(String pathAndNameWithNoEnd, Rectangle bounds) throws AWTException, IOException {
 		Robot robot = new Robot();
 		Rectangle area = bounds.getBounds();
 		BufferedImage bufferedImage = robot.createScreenCapture(area);
 		bufferedImage = robot.createScreenCapture(area);
-		String filePathAndName = path+"/"+imageName+".png";
-		ImageIO.write(bufferedImage, "PNG", new File(filePathAndName));
-		return filePathAndName;
+		String filePathAndName = pathAndNameWithNoEnd+".png";
+		File image = new File(filePathAndName);
+		ImageIO.write(bufferedImage, "PNG", image);
+		return image.getAbsolutePath();
 	}
 	
 	
@@ -84,9 +85,6 @@ public abstract class ActionBase implements IAction{
 	}
 
 
-	
-	@Override
-	public abstract EActionType getType();
 
 	@Override
 	public abstract void actionSetup();

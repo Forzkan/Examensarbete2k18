@@ -2,17 +2,20 @@ package examensarbete.javafx.controller;
 
 import java.io.File;
 
-import examensarbete2k18.model.properties.PropertiesHandler;
-import examensarbete2k18.model.properties.TTProperties;
+import examensarbete.model.properties.PropertiesHandler;
+import examensarbete.model.properties.TTProperties;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+
 public class PreferencesController {
 	
-	private Stage stage;
+	@FXML
+	private AnchorPane preferencesWindow;
 	
 	public PreferencesController() {
 	}
@@ -28,7 +31,6 @@ public class PreferencesController {
 	@FXML
 	private void initialize() {
 		try {					
-			System.out.println(PropertiesHandler.properties.getProperty(TTProperties.DEFAULT_SELECT_DIR.toString()));
 			defaultSelectedDir.setText(PropertiesHandler.properties.getProperty(TTProperties.DEFAULT_SELECT_DIR.toString()));
 			installationDir.setText(PropertiesHandler.properties.getProperty(TTProperties.INSTALLATION_DIRECTORY.toString()));
 			chromeDriverExePath.setText(PropertiesHandler.properties.getProperty(TTProperties.CHROMEDRIVER_EXE_PATH.toString()));
@@ -38,10 +40,8 @@ public class PreferencesController {
 			System.out.println("Error when setting properties text to preferences text field.");
 			System.out.println(e.getMessage());
 		}
-		// Set stage.
-		stage = ((Stage) defaultSelectedDir.getScene().getWindow());
-
 	}
+	
 	
 	@FXML
 	private void savePreferences() {
@@ -55,29 +55,36 @@ public class PreferencesController {
 	
     @FXML
     void chromeDriverOpen() {
-    	chromeDriverExePath.setText(selectFile());
+    	setTextFieldTextIfNotNullOrEmpty(chromeDriverExePath,selectFile());
     }
 
     @FXML
     void defaultDirOpen() {
-    	defaultSelectedDir.setText(selectDirectory());
+    	setTextFieldTextIfNotNullOrEmpty(defaultSelectedDir,selectDirectory());
     }
 
     @FXML
     void imageDirOpen() {
-    	imageDirectory.setText(selectDirectory());
+    	setTextFieldTextIfNotNullOrEmpty(imageDirectory,selectDirectory());
     }
 
     @FXML
     void installDirOpen() {
-    	installationDir.setText(selectDirectory());
+    	setTextFieldTextIfNotNullOrEmpty(installationDir, selectDirectory());
     }
 
     @FXML
     void testCaseDirOpen() {
-    	testcaseDir.setText(selectDirectory());
+    	setTextFieldTextIfNotNullOrEmpty(testcaseDir,selectDirectory());
     }
 	
+    
+    private void setTextFieldTextIfNotNullOrEmpty(TextField tf, String text) {
+    	if(text != null && text.equals("") == false) {
+    		tf.setText(text);
+    	}
+    }
+    
     
     private String selectDirectory() {
     	try {
@@ -85,7 +92,7 @@ public class PreferencesController {
 	    	chooser.setTitle("Set Directory");
 	    	File defaultDirectory = new File(System.getProperty("user.dir"));
 	    	chooser.setInitialDirectory(defaultDirectory);
-	    	File selectedDirectory = chooser.showDialog(stage);
+	    	File selectedDirectory = chooser.showDialog( ((Stage) preferencesWindow.getScene().getWindow()));
 	    	if(selectedDirectory != null) {
 	    		return selectedDirectory.getPath();	
 	    	}
@@ -108,7 +115,7 @@ public class PreferencesController {
 	                new FileChooser.ExtensionFilter("EXE files (*.exe)", "*.exe");
 			fileChooser.getExtensionFilters().add(extFilter);
 	
-			File selectedFile= fileChooser.showOpenDialog(stage);
+			File selectedFile= fileChooser.showOpenDialog( ((Stage) preferencesWindow.getScene().getWindow()));
 			if(selectedFile != null) {
 				return selectedFile.getPath();
 			}

@@ -10,11 +10,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class StageHandler {
+public class StageFactory {
 
-	private final static String preferencesFXML = "robert_test/Preferences.fxml";
-	private final static String mainFXML = "robert_test/ActionWorkArea.fxml";
-	private final static String newTestFXML = "robert_test/NewTestDialog.fxml";
+	private final static String preferencesFXML = "fxml/Preferences.fxml";
+	private final static String mainFXML = "fxml/ActionWorkArea.fxml";
+	private final static String newTestFXML = "fxml/NewTestDialog.fxml";
 	
 	public Stage openStage(TTStage tt_stage, Object controller) {
 		switch(tt_stage) {

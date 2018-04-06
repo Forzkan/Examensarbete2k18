@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GoogleCloudVision {
+public class GCVConnector {
 
 	/**
 	 * Detects labels in the specified local image.
@@ -89,6 +89,8 @@ public class GoogleCloudVision {
 		System.out.println("\nEND LABEL DETECTION::\n ");
 	}
 
+	
+	@SuppressWarnings("unused")
 	public void detectWebDetections(String filePath, PrintStream out)
 			throws Exception, IOException {
 		System.out.println("\nSTART WEB DETECTION::\n ");

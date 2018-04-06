@@ -32,8 +32,8 @@ public class TemplateMatcher implements ChangeListener {
 	}
 	
     public MatchType run(TestImage contextImage, TestImage targetImage) {
-        this.contextImage = Imgcodecs.imread( contextImage.pathToImage(), Imgcodecs.IMREAD_COLOR );
-        this.targetImage = Imgcodecs.imread( targetImage.pathToImage(), Imgcodecs.IMREAD_COLOR );
+        this.contextImage = Imgcodecs.imread( contextImage.getImagePath(), Imgcodecs.IMREAD_COLOR );
+        this.targetImage = Imgcodecs.imread( targetImage.getImagePath(), Imgcodecs.IMREAD_COLOR );
         if(this.contextImage.empty() || this.targetImage.empty()) {
             System.out.println("Can't read one of the images");
             System.exit(-1);

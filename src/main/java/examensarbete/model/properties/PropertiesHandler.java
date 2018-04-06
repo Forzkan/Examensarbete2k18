@@ -1,4 +1,4 @@
-package examensarbete2k18.model.properties;
+package examensarbete.model.properties;
 
 import java.io.File;
 import java.io.FileInputStream;

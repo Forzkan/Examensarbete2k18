@@ -10,12 +10,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import examensarbete.google.cloud.vision.GCVImageResult;
+import examensarbete.model.properties.PropertiesHandler;
+import examensarbete.model.properties.TTProperties;
 import examensarbete.model.test.TestImpl;
-import examensarbete2k18.model.properties.PropertiesHandler;
-import examensarbete2k18.model.properties.TTProperties;
 
 
-public class JsonHandler {
+public class JsonMapper {
 
 	public boolean saveGCVImageResult(String dirPath, String fileName, GCVImageResult result) {
 		ObjectMapper mapper = new ObjectMapper();

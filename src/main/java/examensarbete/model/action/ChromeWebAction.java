@@ -4,13 +4,14 @@ import java.awt.AWTException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import examensarbete2k18.model.properties.PropertiesHandler;
-import examensarbete2k18.model.properties.TTProperties;
+import examensarbete.model.properties.PropertiesHandler;
+import examensarbete.model.properties.TTProperties;
 import javafx.scene.control.TextInputDialog;
 
 import org.apache.commons.io.FileUtils;
@@ -62,12 +63,13 @@ public class ChromeWebAction extends ActionBase{
 	@Override
 	public boolean performAction() {
 		try {
+			System.out.println("OPENING CHROME, AND NAVIGATING TO URL: " + url);
 		    driver = new ChromeDriver();
 		    driver.manage().deleteAllCookies();
 		    driver.manage().window().maximize();
 		    driver.navigate().to(url);
-		    System.out.println("DRIVER CAPABILITIES:");
-		    System.out.println(driver.getCapabilities());
+		    driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
+		    return true;
 		}catch(Exception e) {
 			System.out.println("A problem occured when starting up Chrome.");
 			System.out.println(e.getMessage());
@@ -76,8 +78,17 @@ public class ChromeWebAction extends ActionBase{
 	}
 	
 	
-	public String takeBrowserScreenshot(String filename) {
-		final File screenShot = new File(PropertiesHandler.properties.getProperty(TTProperties.IMAGE_DIRECTORY.toString()) + "/" + filename + ".png").getAbsoluteFile();
+	/**
+	 * To be used between performing actions.
+	 * @param timeout
+	 */
+	public void waitUntilPageIsLoaded(int timeout) {
+		driver.manage().timeouts().pageLoadTimeout(timeout, TimeUnit.SECONDS);
+	}
+	
+	
+	public String takeBrowserScreenshot(String pathAndFileNameNoEnding) {
+		final File screenShot = new File(pathAndFileNameNoEnding + ".png").getAbsoluteFile();
 
 		final File outputFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 		try {
@@ -85,7 +96,7 @@ public class ChromeWebAction extends ActionBase{
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
-		return screenShot.getPath();
+		return screenShot.getAbsolutePath();
 	}
 	
 	

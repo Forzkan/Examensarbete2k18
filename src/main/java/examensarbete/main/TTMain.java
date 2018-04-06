@@ -3,7 +3,7 @@ package examensarbete.main;
 
 import examensarbete.javafx.controller.WorkAreaController;
 //import examensarbete.javafx.controller.WorkAreaController;
-import examensarbete.javafx.stage.StageHandler;
+import examensarbete.javafx.stage.StageFactory;
 import examensarbete.javafx.stage.TTStage;
 import javafx.application.Application;
 //import javafx.fxml.FXMLLoader;
@@ -19,7 +19,7 @@ public class TTMain extends Application{
 //	private final String workareaFXML = "robert_test/ActionWorkArea.fxml";
 	
 	public static Stage primaryStage;
-	StageHandler stageHandler = new StageHandler();
+	StageFactory stageHandler = new StageFactory();
 	
 	@SuppressWarnings("static-access")
 	@Override

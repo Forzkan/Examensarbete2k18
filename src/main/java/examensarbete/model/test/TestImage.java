@@ -2,15 +2,29 @@ package examensarbete.model.test;
 
 import java.awt.Image;
 import java.awt.Point;
-//import org.opencv.core.Point;
+import java.awt.Rectangle;
 
 public interface TestImage {
 	
-	String pathToImage();
 	Image getImage();
-	int getWidth();
-	int getHeight();
-	Point getImageCoordinates();
+	
+	int getImageWidth();
+	int getImageHeight();
+	
+	String getImagePath();
+	void setImagePath(String imagePath);
+	
+	Point getCoordinates();
+	void setCoordinates(Point position);
+	
+	Rectangle getBounds();
+
+	int getResolutionX();
+
+	int getResolutionY();
+	
 	String toString();
+	
 	boolean compareTestImage(TestImage imageToCompare);
+	
 }

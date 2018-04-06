@@ -1,6 +1,5 @@
-package examensarbete.main;
+package old.or.not.in.use;
 
-import examensarbete.javafx.controller.RootController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
