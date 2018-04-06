@@ -6,6 +6,7 @@ import examensarbete.javafx.controller.WorkAreaController;
 import examensarbete.javafx.stage.StageFactory;
 import examensarbete.javafx.stage.TTStage;
 import javafx.application.Application;
+import javafx.stage.Screen;
 //import javafx.fxml.FXMLLoader;
 //import javafx.scene.Parent;
 //import javafx.scene.Scene;
@@ -41,6 +42,13 @@ public class TTMain extends Application{
 //			primaryStage.show();
 		WorkAreaController waController = new WorkAreaController();
 		this.primaryStage = stageHandler.openStage(TTStage.MAIN, waController);
+		
+		Screen screen = Screen.getPrimary();
+		if(screen.getBounds().getWidth() <= 1920 || screen.getBounds().getHeight() <= 1080) {
+			this.primaryStage.setMaximized(true);
+		}
+		
+//		
 //			
 //		} catch(Exception e) {
 //			e.printStackTrace();

@@ -1,5 +1,7 @@
 package examensarbete.model.test;
 
+import java.util.ArrayList;
+
 import examensarbete.model.action.ActionBase;
 import examensarbete.model.action.ChromeWebAction;
 
@@ -19,6 +21,7 @@ public interface TestStep {
 	
 	boolean performTestStep();
 	void takeScreenshot(ChromeWebAction chrome, String groupName, String testName);
+	ArrayList<String> getListOfContextInformation();
 	
 
 //	TestImage getTestStepTargetImage();

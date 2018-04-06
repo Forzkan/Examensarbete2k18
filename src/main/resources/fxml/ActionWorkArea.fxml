@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -15,15 +16,15 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1040.0" prefWidth="1920.0" style="-fx-background-color: #181818;" stylesheets="@../fxcss/ApplicationRootStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <top>
-      <AnchorPane fx:id="headerPane" prefHeight="40.0" prefWidth="1366.0" style="-fx-background-color: #303030; -fx-border-color: black;" BorderPane.alignment="CENTER">
+      <AnchorPane fx:id="headerPane" prefHeight="40.0" prefWidth="1894.0" style="-fx-background-color: #303030; -fx-border-color: #181818; -fx-border-width: 5;" BorderPane.alignment="CENTER">
          <children>
-            <HBox prefHeight="40.0" prefWidth="1366.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox layoutX="10.0" layoutY="10.0" prefHeight="47.0" prefWidth="1910.0" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                <children>
                   <Button mnemonicParsing="false" prefHeight="40.0" style="-fx-background-color: red; -fx-border-insets: 0;" textFill="WHITE">
                      <graphic>
-                        <FontIcon iconColor="WHITE" iconLiteral="ion-bug" iconSize="28" />
+                        <FontIcon iconColor="WHITE" iconLiteral="ion-bug" iconSize="24" />
                      </graphic>
                      <HBox.margin>
                         <Insets left="1.0" />
@@ -31,7 +32,7 @@
                   </Button>
                   <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="TESTING TOOL" wrappingWidth="838.7439994812012">
                      <font>
-                        <Font name="Aileron Heavy" size="24.0" />
+                        <Font name="System Bold" size="26.0" />
                      </font>
                      <HBox.margin>
                         <Insets left="10.0" top="5.0" />
@@ -65,147 +66,105 @@
                </children>
             </HBox>
          </children>
+         <BorderPane.margin>
+            <Insets right="6.0" />
+         </BorderPane.margin>
       </AnchorPane>
    </top>
    <left>
-      <AnchorPane fx:id="toolBarPane" prefHeight="728.0" prefWidth="40.0" style="-fx-background-color: #181818;" BorderPane.alignment="CENTER">
+      <AnchorPane fx:id="toolBarPane" prefHeight="728.0" prefWidth="40.0" style="-fx-background-color: #181818; -fx-border-width: 5; -fx-border-color: #181818;" BorderPane.alignment="CENTER">
          <children>
-            <VBox minWidth="42.0" prefHeight="728.0" prefWidth="42.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox layoutX="5.0" layoutY="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Button fx:id="playButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#runSelectedTests" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
-                     <graphic>
-                        <FontIcon iconColor="#00ff15" iconLiteral="ion-play" iconSize="26" />
-                     </graphic>
-                     <VBox.margin>
-                        <Insets left="1.0" top="2.0" />
-                     </VBox.margin>
-                     <tooltip>
-                        <Tooltip text="Run selected Test(s)" />
-                     </tooltip>
-                  </Button>
-                  <Button fx:id="openBrowserButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#onBrowserButtonClick" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
-                     <graphic>
-                        <FontIcon iconColor="WHITE" iconLiteral="ion-social-chrome" iconSize="26" />
-                     </graphic>
-                     <VBox.margin>
-                        <Insets left="1.0" top="20.0" />
-                     </VBox.margin>
-                     <tooltip>
-                        <Tooltip text="Open web page" />
-                     </tooltip>
-                  </Button>
-                  <Button fx:id="mouseClickAction" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#onClickButtonPressed" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
-                     <graphic>
-                        <FontIcon iconColor="WHITE" iconLiteral="ion-mouse" iconSize="26" />
-                     </graphic>
-                     <VBox.margin>
-                        <Insets left="1.0" top="5.0" />
-                     </VBox.margin>
-                     <tooltip>
-                        <Tooltip text="Setup mouse click" />
-                     </tooltip>
-                  </Button>
-                  <Button fx:id="snipImageButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#onScreenCropCaptureClicked" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
-                     <graphic>
-                        <FontIcon iconColor="WHITE" iconLiteral="ion-crop" iconSize="26" />
-                     </graphic>
-                     <VBox.margin>
-                        <Insets left="1.0" top="5.0" />
-                     </VBox.margin>
-                     <tooltip>
-                        <Tooltip text="Snap and setup image to be clicked on" />
-                     </tooltip>
-                  </Button>
-                  <Button fx:id="textTypeButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#onTextTypeButtonPressed" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
-                     <graphic>
-                        <FontIcon iconColor="WHITE" iconLiteral="fas-keyboard" iconSize="22" />
-                     </graphic>
-                     <VBox.margin>
-                        <Insets left="1.0" top="5.0" />
-                     </VBox.margin>
-                     <tooltip>
-                        <Tooltip text="Setup string to be typed" />
-                     </tooltip>
-                  </Button>
-                  <Button maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#createNewTest" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
-                     <graphic>
-                        <FontIcon iconColor="WHITE" iconLiteral="ion-android-folder" iconSize="22" />
-                     </graphic>
-                     <tooltip>
-                        <Tooltip text="Add Test" />
-                     </tooltip>
-                     <VBox.margin>
-                        <Insets left="1.0" top="15.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
-                     <graphic>
-                        <FontIcon iconColor="WHITE" iconLiteral="ion-filing" iconSize="26" />
-                     </graphic>
-                     <tooltip>
-                        <Tooltip text="Add new Test Group" />
-                     </tooltip>
-                     <VBox.margin>
-                        <Insets left="1.0" top="5.0" />
-                     </VBox.margin>
+                  <VBox minWidth="42.0" prefHeight="871.0" prefWidth="42.0" spacing="10.0">
+                     <children>
+                        <Button fx:id="mouseClickAction" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#onClickButtonPressed" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                           <graphic>
+                              <FontIcon iconColor="WHITE" iconLiteral="ion-mouse" iconSize="26" />
+                           </graphic>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <tooltip>
+                              <Tooltip text="Setup mouse click" />
+                           </tooltip>
+                        </Button>
+                        <Button fx:id="snipImageButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#onScreenCropCaptureClicked" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                           <graphic>
+                              <FontIcon iconColor="WHITE" iconLiteral="ion-crop" iconSize="26" />
+                           </graphic>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <tooltip>
+                              <Tooltip text="Snap and setup image to be clicked on" />
+                           </tooltip>
+                        </Button>
+                        <Button fx:id="textTypeButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#onTextTypeButtonPressed" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                           <graphic>
+                              <FontIcon iconColor="WHITE" iconLiteral="fas-keyboard" iconSize="22" />
+                           </graphic>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <tooltip>
+                              <Tooltip text="Setup string to be typed" />
+                           </tooltip>
+                        </Button>
+                        <Button fx:id="openBrowserButton" disable="true" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#onBrowserButtonClick" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                           <graphic>
+                              <FontIcon iconColor="WHITE" iconLiteral="ion-social-chrome" iconSize="26" />
+                           </graphic>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <tooltip>
+                              <Tooltip text="Open web page" />
+                           </tooltip>
+                        </Button>
+                     </children>
                      <padding>
-                        <Insets left="1.0" />
+                        <Insets top="10.0" />
                      </padding>
-                  </Button>
-                  <Button fx:id="recordButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#startTestRecording" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
-                     <graphic>
-                        <FontIcon fx:id="recordFontIcon" iconColor="WHITE" iconLiteral="ion-record" iconSize="26" />
-                     </graphic>
-                     <tooltip>
-                        <Tooltip text="Record a test" />
-                     </tooltip>
-                     <padding>
-                        <Insets left="1.0" />
-                     </padding>
-                     <VBox.margin>
-                        <Insets left="1.0" top="15.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button mnemonicParsing="false" onAction="#openPreferencesWindow" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
-                     <graphic>
-                        <FontIcon iconColor="WHITE" iconLiteral="ion-android-settings" iconSize="28" />
-                     </graphic>
-                     <tooltip>
-                        <Tooltip text="Information about TT" />
-                     </tooltip>
-                     <VBox.margin>
-                        <Insets left="1.0" top="248.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
-                     <graphic>
-                        <FontIcon iconColor="WHITE" iconLiteral="ion-information-circled" iconSize="26" />
-                     </graphic>
-                     <VBox.margin>
-                        <Insets left="1.0" top="5.0" />
-                     </VBox.margin>
-                     <tooltip>
-                        <Tooltip text="Information about TT" />
-                     </tooltip>
-                  </Button>
+                  </VBox>
+                  <VBox prefHeight="98.0" prefWidth="42.0" spacing="5.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#openPreferencesWindow" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                           <graphic>
+                              <FontIcon iconColor="WHITE" iconLiteral="ion-android-settings" iconSize="28" />
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Information about TT" />
+                           </tooltip>
+                        </Button>
+                        <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                           <graphic>
+                              <FontIcon iconColor="WHITE" iconLiteral="ion-information-circled" iconSize="26" />
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Information about TT" />
+                           </tooltip>
+                        </Button>
+                     </children>
+                  </VBox>
                </children>
+               <padding>
+                  <Insets left="2.0" />
+               </padding>
             </VBox>
          </children>
       </AnchorPane>
    </left>
    <center>
-      <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #707070;" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
+      <ScrollPane fx:id="centerScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #181818;" styleClass="mainViewScrollPane" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
          <content>
-            <AnchorPane fx:id="workAreaPane" prefHeight="726.0" prefWidth="1323.0" style="-fx-background-color: #c2d4dd;">
-               <opaqueInsets>
-                  <Insets bottom="1.0" right="1.0" top="1.0" />
-               </opaqueInsets>
+            <HBox fx:id="centerMainHBox" prefHeight="775.0" prefWidth="1385.0" style="-fx-background-color: #181818;">
                <children>
-                  <VBox>
+                  <VBox prefHeight="1000.0" prefWidth="300.0" style="-fx-background-color: #181818;">
                      <children>
-                        <AnchorPane prefHeight="31.0" prefWidth="300.0" style="-fx-background-color: white; -fx-border-color: black;">
+                        <AnchorPane maxHeight="50.0" prefHeight="50.0" prefWidth="300.0" style="-fx-background-color: #222521; -fx-border-color: #181818; -fx-border-width: 5;">
                            <children>
-                              <HBox layoutX="181.0" layoutY="5.0" prefHeight="42.0" prefWidth="116.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="180.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
+                              <HBox fillHeight="false" maxHeight="50.0" maxWidth="125.0" prefHeight="50.0" prefWidth="125.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <Button fx:id="saveSelectedTestButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#saveSelectedTest" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
                                        <graphic>
@@ -218,7 +177,7 @@
                                           <Insets />
                                        </HBox.margin>
                                     </Button>
-                                    <Button fx:id="saveAllTestsButton" maxHeight="40.0" maxWidth="70.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#saveAllTests" prefHeight="40.0" prefWidth="70.0" style="-fx-background-color: #404040;" text=" All" textFill="WHITE">
+                                    <Button fx:id="saveAllTestsButton" maxHeight="40.0" maxWidth="70.0" minHeight="40.0" minWidth="70.0" mnemonicParsing="false" onAction="#saveAllTests" prefHeight="40.0" prefWidth="70.0" style="-fx-background-color: #404040;" text=" All" textFill="WHITE">
                                        <graphic>
                                           <FontIcon fx:id="recordFontIcon11" iconColor="WHITE" iconLiteral="far-save" iconSize="26" />
                                        </graphic>
@@ -229,51 +188,182 @@
                                           <Font name="System Bold" size="14.0" />
                                        </font>
                                        <HBox.margin>
-                                          <Insets left="5.0" />
+                                          <Insets />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#createNewTest" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                                       <graphic>
+                                          <FontIcon iconColor="WHITE" iconLiteral="ion-android-folder" iconSize="22" />
+                                       </graphic>
+                                       <tooltip>
+                                          <Tooltip text="Add Test" />
+                                       </tooltip>
+                                    </Button>
+                                    <Button fx:id="recordButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#startTestRecording" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                                       <graphic>
+                                          <FontIcon fx:id="recordFontIcon" iconColor="#fc0000" iconLiteral="ion-record" iconSize="26" />
+                                       </graphic>
+                                       <tooltip>
+                                          <Tooltip text="Record a test" />
+                                       </tooltip>
+                                       <padding>
+                                          <Insets left="1.0" />
+                                       </padding>
+                                       <HBox.margin>
+                                          <Insets left="75.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="playButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#runSelectedTests" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                                       <graphic>
+                                          <FontIcon iconColor="#00ff15" iconLiteral="ion-play" iconSize="26" />
+                                       </graphic>
+                                       <tooltip>
+                                          <Tooltip text="Run selected Test(s)" />
+                                       </tooltip>
+                                       <HBox.margin>
+                                          <Insets />
                                        </HBox.margin>
                                     </Button>
                                  </children>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
                               </HBox>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="treeViewPane" prefHeight="684.0" prefWidth="193.0" style="-fx-background-color: white; -fx-border-color: black;" />
-                     </children>
-                  </VBox>
-                  <AnchorPane layoutX="300.0" layoutY="-1.0" prefHeight="728.0" prefWidth="1023.0" style="-fx-background-color: #ffe2e2;">
-                     <children>
-                        <VBox layoutX="300.0" layoutY="256.0" prefHeight="727.0" prefWidth="1022.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #222521; -fx-border-color: #181818; -fx-border-width: 5;">
                            <children>
-                              <ScrollPane prefHeight="46.0" prefWidth="1022.0" vbarPolicy="NEVER">
-                                <content>
-                                    <HBox fx:id="stepsHBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="44.0" prefWidth="1020.0" style="-fx-border-color: black;" />
-                                </content>
-                              </ScrollPane>
-                              <AnchorPane prefHeight="683.0" prefWidth="1022.0" style="-fx-background-color: white;">
+                              <VBox layoutX="10.0" layoutY="8.0" prefHeight="192.0" prefWidth="335.0" spacing="5.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="3.0">
                                  <children>
-                                    <Label layoutX="14.0" layoutY="14.0" text="STEP TYPE :">
-                                       <font>
-                                          <Font name="System Bold" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <Label fx:id="stepTypeLabel" layoutX="94.0" layoutY="14.0" text="xyz">
+                                    <HBox>
+                                       <children>
+                                          <Label text="Last test run" textFill="WHITE">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Button mnemonicParsing="false" style="-fx-background-color: #404040;" text="Test Report" textFill="WHITE">
+                                             <HBox.margin>
+                                                <Insets left="140.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                    <Label text="Number of tests" textFill="WHITE">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
-                                    <HBox layoutX="56.0" layoutY="284.0" prefHeight="360.0" prefWidth="900.0" style="-fx-border-color: black;">
+                                    <Label text="0" textFill="WHITE">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Passed" textFill="WHITE">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="0" textFill="WHITE">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Passed with change(s) detected" textFill="WHITE">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="0" textFill="WHITE">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                        <ScrollPane fx:id="treeViewScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="705.0" maxWidth="345.0" prefHeight="705.0" prefWidth="345.0">
+                           <content>
+                              <AnchorPane fx:id="treeViewPane" maxHeight="-Infinity" maxWidth="343.0" prefHeight="700.0" prefWidth="343.0" style="-fx-background-color: #303030; -fx-border-color: #181818; -fx-border-width: 5;" />
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </VBox>
+                  <AnchorPane prefHeight="1007.0" prefWidth="1525.0" style="-fx-background-color: #ffe2e2; -fx-border-color: #181818; -fx-border-width: 5;">
+                     <children>
+                        <HBox layoutX="15.0" layoutY="10.0" prefHeight="1000.0" prefWidth="1493.0" spacing="5.0" style="-fx-background-color: #181818;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <ScrollPane hbarPolicy="NEVER" maxHeight="952.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="950.0" prefWidth="60.0">
+                                 <content>
+                                    <VBox fx:id="stepsVBox" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="949.0" prefWidth="60.0" spacing="10.0" style="-fx-border-color: #181818; -fx-border-width: 0; -fx-background-color: #303030;">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                    </VBox>
+                                 </content>
+                              </ScrollPane>
+                              <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="950.0" prefWidth="1160.0" style="-fx-background-color: #222521;">
+                                 <children>
+                                    <HBox layoutX="14.0" layoutY="14.0" spacing="5.0">
                                        <children>
-                                          <ImageView fx:id="aStepsContextImage" fitHeight="360.0" fitWidth="450.0" pickOnBounds="true" preserveRatio="true" />
-                                          <ImageView fx:id="aStepsSnapImage" fitHeight="360.0" fitWidth="450.0" pickOnBounds="true" preserveRatio="true" />
+                                          <Label text="STEP NUMBER :" textFill="WHITE">
+                                             <font>
+                                                <Font name="System Bold" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="stepTypeLabel" text="xyz" textFill="WHITE">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="STEP TYPE :" textFill="WHITE">
+                                             <font>
+                                                <Font name="System Bold" size="24.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="135.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <Label fx:id="stepTypeLabel1" text="xyz" textFill="WHITE">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                          </Label>
                                        </children>
                                     </HBox>
+                                    <AnchorPane layoutX="373.0" layoutY="544.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="392.0" prefWidth="696.0" style="-fx-border-color: black; -fx-background-color: #181818; -fx-border-width: 5;">
+                                       <children>
+                                          <ImageView fx:id="aStepsContextImage" fitHeight="385.0" fitWidth="685.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane layoutX="373.0" layoutY="92.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="392.0" prefWidth="696.0" style="-fx-border-color: black; -fx-background-color: #181818; -fx-border-width: 5;">
+                                       <children>
+                                          <ImageView fx:id="aStepsSnapImage" fitHeight="385.0" fitWidth="685.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <viewport>
+                                                <Rectangle2D />
+                                             </viewport>
+                                          </ImageView>
+                                       </children>
+                                    </AnchorPane>
+                                    <VBox fx:id="targetInfoVBox" layoutX="14.0" layoutY="92.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="392.0" prefWidth="338.0" style="-fx-border-color: #181818; -fx-border-width: 5;" />
+                                    <VBox fx:id="contextInfoVBox" layoutX="14.0" layoutY="544.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="392.0" prefWidth="338.0" style="-fx-border-color: #181818; -fx-border-width: 5;" />
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane maxHeight="-Infinity" prefHeight="950.0" prefWidth="423.0" style="-fx-background-color: black; -fx-border-width: 5;">
+                                 <children>
+                                    <VBox layoutX="32.0" layoutY="5.0" maxHeight="-Infinity" prefHeight="950.0" prefWidth="391.0" style="-fx-border-color: #222521; -fx-background-color: #181818; -fx-border-width: 5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                            </children>
-                        </VBox>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
                      </children>
                   </AnchorPane>
                </children>
-            </AnchorPane>
+            </HBox>
          </content>
       </ScrollPane>
    </center>

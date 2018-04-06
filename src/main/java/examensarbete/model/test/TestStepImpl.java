@@ -1,5 +1,7 @@
 package examensarbete.model.test;
 
+import java.util.ArrayList;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import examensarbete.model.action.ActionBase;
@@ -77,6 +79,26 @@ public class TestStepImpl implements TestStep{
 		String path = chrome.takeBrowserScreenshot(FileUtility.createUniqueContextImageFilePath(groupName, testName));		
 		testStepContextImage = new TestImageImpl();
 		testStepContextImage.setImagePath(path);
+	}
+	
+	
+	
+	@JsonIgnore
+	public ArrayList<String> getListOfContextInformation(){
+		ArrayList<String> ret = new ArrayList<String>();
+		if(testStepContextImage != null) {
+			ret.add("Context Image: " + testStepContextImage.getImagePath());
+			if(testStepContextImage.getCoordinates() != null) {
+				ret.add("X Coordinate: " + testStepContextImage.getCoordinates().x);
+				ret.add("Y Coordinate: " + testStepContextImage.getCoordinates().y);
+			}else {
+				ret.add("X Coordinate: N/A");
+				ret.add("Y Coordinate: N/A");
+			}
+			ret.add("Image Width: " + testStepContextImage.getImageWidth());
+			ret.add("Image Height: " + testStepContextImage.getImageHeight());
+		}
+		return ret;
 	}
 	
 

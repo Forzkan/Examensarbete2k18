@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Popup;
 import javafx.stage.Screen;
+import javafx.stage.Stage;
 
 
 public class SnapImageAction extends ActionBase {
@@ -218,6 +219,7 @@ public class SnapImageAction extends ActionBase {
 				
 				targetImage.setImagePath(this.takeScreenShot(FileUtility.createUniqueSnapImageFilePath(testGroup, testName), bounds));
 				targetImage.setCoordinates(new Point((int)bounds.getX(), (int)bounds.getY()));
+				displayWindow();
 			} catch (AWTException | IOException e) {
 				System.out.println(e.getMessage());
 			}
@@ -237,8 +239,39 @@ public class SnapImageAction extends ActionBase {
 		eventHandlers.clear();
 		weakEventHandlers.clear();
 	}
+
+	// Used to display the stage again after the clicks are done..
+	@JsonIgnore
+	private Stage stage;
 	
+	@JsonIgnore
+	public void setStage(Stage stage) {
+		this.stage = stage;
+	}
 	
+	public void displayWindow() {
+		stage.setIconified(false);
+		stage.show();
+	}
+	
+	@JsonIgnore
+	public ArrayList<String> getListOfActionInformation(){
+		ArrayList<String> ret = new ArrayList<String>();
+		if(targetImage != null) {
+			ret.add("Target Image: " + targetImage.getImagePath());
+			if(targetImage.getCoordinates() != null) {
+				ret.add("X Coordinate: " + targetImage.getCoordinates().x);
+				ret.add("Y Coordinate: " + targetImage.getCoordinates().y);
+			}else {
+				ret.add("X Coordinate: N/A");
+				ret.add("Y Coordinate: N/A");
+			}
+			ret.add("Image Width: " + targetImage.getImageWidth());
+			ret.add("Image Height: " + targetImage.getImageHeight());
+			ret.add("Image taken on screen with resolution: " + targetImage.getResolutionX() + "x" + targetImage.getResolutionY());
+		}
+		return ret;
+	}
 	
 	
 	

@@ -3,6 +3,7 @@ package examensarbete.model.test;
 import java.awt.AWTException;
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import examensarbete.model.action.ActionBase;
@@ -97,12 +98,17 @@ public class TestImpl implements Test{
 		for(TestStep step : testSteps) {
 			
 			if(step.getMainAction().getType() == EActionType.IMAGESNAP) {
-				step.takeScreenshot((ChromeWebAction)testSteps.get(0).getMainAction(), testGroupName, testName);
+				//step.takeScreenshot((ChromeWebAction)testSteps.get(0).getMainAction(), testGroupName, testName);
 				// TODO:: do something with the image. // Should we do this for all types of actions?
 				// Maybe take the image at different times depending on what type of action we're dealing with?
 			}
-			passed = step.performTestStep(); 	
-			
+			passed = step.performTestStep(); 
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				System.out.println(e.getMessage());
+			}
+
 			if(passed == false) {
 				return false;
 			}
@@ -116,8 +122,10 @@ public class TestImpl implements Test{
 		cwa.closeBrowser();
 	}
 
-	
-	
+	@JsonIgnore
+	private ChromeWebAction getChromeWebAction() {
+		return (ChromeWebAction)testSteps.get(0).getMainAction();
+	}
 	
 	// CONSTRUCTORS
 	public TestImpl(String testGroup, String testName) {

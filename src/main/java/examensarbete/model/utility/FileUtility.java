@@ -9,6 +9,10 @@ import examensarbete.model.properties.TTProperties;
 public class FileUtility {
 	
 	
+	private static final String imageExt = ".png";
+	private static final String jsonExt = ".json";
+	
+	
     public static String getFileExtension(File file) {
         String fileName = file.getName();
         if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
@@ -19,11 +23,11 @@ public class FileUtility {
     }
     
     public static String getNameWithoutJsonEnd(File file) {
-    	return file.getName().replaceAll(".json", "");
+    	return file.getName().replaceAll(jsonExt, "");
     }
     
     public static String getNameWithoutPngEnd(File file) {
-    	return file.getName().replaceAll(".png", "");
+    	return file.getName().replaceAll(imageExt, "");
     }
     
     public static URL getImageUrlFromPath(String path) {
@@ -38,12 +42,12 @@ public class FileUtility {
     
     public static String createUniqueSnapImageFilePath(String groupName, String testName) {
     	String fullDirPath = createFilePathAndNeededDirs(groupName, testName);
+    	System.out.println("FULL DIRR PATH: " + fullDirPath);
     	String fullFilePath = fullDirPath + "\\" + getUniqueImageName(fullDirPath, testName + "_SI"); // SI for Snap Image.
     	return fullFilePath;
     }
     
     public static String createUniqueContextImageFilePath(String groupName, String testName) {
-    	System.out.println(groupName + " - - - " + testName);
     	String fullDirPath = createFilePathAndNeededDirs(groupName, testName);
     	String fullFilePath = fullDirPath + "\\" + getUniqueImageName(fullDirPath, testName + "_CI"); // CI for Context Image.
     	return fullFilePath;
@@ -53,7 +57,7 @@ public class FileUtility {
     private static String createFilePathAndNeededDirs(String groupName, String testName) {
     	String testCaseDir =  PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString());
     	System.out.println(testCaseDir);
-    	String fullDirPath = testCaseDir + "\\" + groupName + "\\images";
+    	String fullDirPath = testCaseDir + "\\" + groupName + "\\" + testName + "\\images";
     	if(!new File(fullDirPath).exists()) {
     		File dir = new File(fullDirPath);
     		dir.mkdirs();
@@ -62,6 +66,7 @@ public class FileUtility {
     }
     
     private static String getUniqueImageName(String dirPath, String defaultImageName) {
+    	System.out.println("THE NAME WE CHECK IF ALREADY EXISTS: " + defaultImageName);
     	String ret = defaultImageName;
     	int counter = 1;
     	
@@ -75,8 +80,11 @@ public class FileUtility {
     
     private static boolean nameAlreadyExist(String dirPath, String name) {
     	File dir = new File(dirPath);
+    	System.out.println("LIST OF FILES \n"+dir.listFiles());
     	for(File f : dir.listFiles()) {
-    		if(f.getName().replaceAll(getFileExtension(f), "").equals(name)) {
+    		System.out.println(f.getAbsolutePath());
+    		System.out.println(f.getName());
+    		if(f.getName().replaceAll(imageExt, "").equals(name)) {
     			return true;
     		}
     	}

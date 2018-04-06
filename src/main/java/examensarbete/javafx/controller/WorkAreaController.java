@@ -27,6 +27,8 @@ import javafx.event.WeakEventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
@@ -35,6 +37,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -52,7 +55,7 @@ public class WorkAreaController {
 	@FXML
 	private Text currentXCoordinateText, currentYCoordinateText;
 	@FXML
-	private HBox stepsHBox;
+	private VBox stepsVBox, targetInfoVBox, contextInfoVBox;
 
 	private StageFactory stageHandler = new StageFactory();
 	private final TestHandler testHandler = new TestHandler();
@@ -60,6 +63,8 @@ public class WorkAreaController {
 	@FXML
 	private ImageView aStepsContextImage, aStepsSnapImage;
 	
+	@FXML
+	private ScrollPane treeViewScrollPane;
 	
 	public WorkAreaController() {
 		PropertiesHandler.InitializePropertiesHandler();
@@ -68,6 +73,15 @@ public class WorkAreaController {
 	@FXML
 	public void initialize() {
 		treeViewLoader();
+		
+	}
+	
+	private void minimizeMainStage() {
+		((Stage)toolBarPane.getScene().getWindow()).setIconified(true);
+	}
+	private void displayMainStage() {
+		((Stage)toolBarPane.getScene().getWindow()).setIconified(false);
+		((Stage)toolBarPane.getScene().getWindow()).show();
 	}
 
 	private Stage preferencesStage;
@@ -144,6 +158,7 @@ public class WorkAreaController {
 	private void onClickButtonPressed() {
 
 		if (isRecordingAndTestIsSelected()) { // i.e. we can add actions to a test.
+			minimizeMainStage();
 			ClickAction clickAction;
 			try {
 				clickAction = new ClickAction();
@@ -152,19 +167,20 @@ public class WorkAreaController {
 			} catch (AWTException e) {
 				System.out.println(e.getMessage());
 			}
+			displayMainStage();
 		}
 	}
 
 	@FXML
 	private void onScreenCropCaptureClicked(ActionEvent event) {
 		if (isRecordingAndTestIsSelected()) { // i.e. we can add actions to a test.
+			minimizeMainStage();
 			SnapImageAction snapAction;
 			try {
 				snapAction = new SnapImageAction(selectedTest.getGroupName(), selectedTest.getTestName());
+				snapAction.setStage(((Stage)toolBarPane.getScene().getWindow()));
 				addActionToSelectedTest(snapAction);
 				snapAction.actionSetup();
-				
-
 			} catch (AWTException e) {
 				System.out.println(e.getMessage());
 			}
@@ -174,6 +190,7 @@ public class WorkAreaController {
 	@FXML
 	private void onTextTypeButtonPressed() {
 		if (isRecordingAndTestIsSelected()) { // i.e. we can add actions to a test.
+			minimizeMainStage();
 			TextTypeAction typeAction;
 			try {
 				typeAction = new TextTypeAction();
@@ -182,6 +199,7 @@ public class WorkAreaController {
 			} catch (AWTException e) {
 				System.out.println(e.getMessage());
 			}
+			displayMainStage();
 		}
 	}
 
@@ -217,7 +235,7 @@ public class WorkAreaController {
 		if(newTestStage == null) {
 			NewTestController ntC = new NewTestController(testHandler, this);
 			newTestStage = stageHandler.openStage(TTStage.NEW_TEST, ntC);
-		}else if(preferencesStage.isShowing() == false) {
+		}else if(newTestStage.isShowing() == false) {
 			preferencesStage.show();
 		}
 	}
@@ -247,10 +265,10 @@ public class WorkAreaController {
 			} else {
 				System.out.println("No test have been selected.");
 			}
+			displayMainStage();
 		} else {
 			// change back the logo of the button,
 			stopRecording();
-			testHandler.saveTest(selectedTest);
 		}
 	}
 
@@ -259,6 +277,7 @@ public class WorkAreaController {
 		isRecording = false;
 		selectedTest.getTest().cleanup();
 		testTreeView.setDisable(false);
+		testHandler.saveTest(selectedTest);
 	}
 
 	private ArrayList<TestGroup> getSelectedTestsAndOrGroup() {
@@ -343,9 +362,10 @@ public class WorkAreaController {
 		}
 
 		testTreeView = new TreeView<String>(rootNode);
+		testTreeView.getStyleClass().add("testTree");
 		treeViewPane.getChildren().add(testTreeView);
-		testTreeView.prefHeightProperty().bind(treeViewPane.heightProperty());
-		testTreeView.prefWidthProperty().bind(treeViewPane.widthProperty());
+		testTreeView.prefHeightProperty().bind(treeViewScrollPane.heightProperty());
+		testTreeView.prefWidthProperty().bind(treeViewScrollPane.widthProperty());
 		setOnTestSelectedEvent(testTreeView);
 	}
 
@@ -360,12 +380,18 @@ public class WorkAreaController {
 			if (parentIsSelected()) {
 				// Multiple tests "selected" since the parent is selected.
 				selectedTest = null;
+				updateSelectedTestHBox();
+				targetInfoVBox.getChildren().clear();
+				contextInfoVBox.getChildren().clear();
 			} else if (parentIsSelected() == false && rootIsSelected() == false && selectedList.size() >= 1) {
 				selectedTest = selectedList.get(0);
 				updateSelectedTestHBox();
 			} else {
 				// Do we want to do anything if no test is selected? for now, no.
 				// ROOT or nothing selected.
+				updateSelectedTestHBox();
+				targetInfoVBox.getChildren().clear();
+				contextInfoVBox.getChildren().clear();
 			}
 		};
 		weak_event_handler = new WeakEventHandler<>(event_handler);
@@ -412,11 +438,11 @@ public class WorkAreaController {
 	}
 
 	private void updateSelectedTestHBox() {
-		stepsHBox.getChildren().clear();
+		stepsVBox.getChildren().clear();
 		try {
 			if (selectedTest != null) {
 				ArrayList<Button> testStepsList = getStepsAsButtonList();
-				stepsHBox.getChildren().addAll(testStepsList);
+				stepsVBox.getChildren().addAll(testStepsList);
 			}
 		} catch (Exception e) {
 			System.out.println("Could not load test steps from selected test..");
@@ -438,12 +464,17 @@ public class WorkAreaController {
 			btn.setStyle("-fx-background-color: black;");
 			btn.setGraphic(fontIcon);
 			btn.setOnMouseClicked(event -> {
-				for(int i = 0; i < stepsHBox.getChildren().size(); i++) {
-					if(stepsHBox.getChildren().get(i).equals(btn)) {
+				for(int i = 0; i < stepsVBox.getChildren().size(); i++) {
+					if(stepsVBox.getChildren().get(i).equals(btn)) {
 						updateSelectedStepInformation(selectedTest.getTest().getTestSteps().get(i));
 					}
 				}
 			});
+			btn.setPrefWidth(stepsVBox.getPrefWidth() - 8);
+			btn.setPrefHeight(stepsVBox.getPrefWidth() - 8);
+			btn.setMinWidth(stepsVBox.getPrefWidth() - 8);
+			btn.setMinHeight(stepsVBox.getPrefWidth() - 8);
+			
 			list.add(btn);
 		}
 		return list;
@@ -490,12 +521,17 @@ public class WorkAreaController {
 	
 	private void updateSelectedStepInformation(TestStep selectedStep) {
 		if (selectedStep != null) {
+			targetInfoVBox.getChildren().clear();
+			contextInfoVBox.getChildren().clear();
 			URL contextURL, snapURL;
 			switch (selectedStep.getMainAction().getType()) {
 			case IMAGESNAP:
 				SnapImageAction snapAction = (SnapImageAction) selectedStep.getMainAction();
 				snapURL = FileUtility.getImageUrlFromPath(snapAction.getTargetImage().getImagePath());
 				contextURL = FileUtility.getImageUrlFromPath(selectedStep.getTestStepContextImage().getImagePath());
+				for(String info : snapAction.getListOfActionInformation()) {
+					targetInfoVBox.getChildren().add(new Label(info));
+				}
 				break;
 			case AUTOIMAGESNAP:
 				AutomaticImageSnapAction aSnapAction = (AutomaticImageSnapAction) selectedStep.getMainAction();
@@ -513,8 +549,12 @@ public class WorkAreaController {
 			} catch (Exception e) {
 				System.out.println("An error occured when attempting to display user-snapped image and/or the Context (Full Web Page) image."
 									+ " \nError: "+e.getMessage());
-				e.printStackTrace();
-				
+			}
+//			 targetInfoVBox, contextInfoVBox;
+			if(selectedStep.getTestStepContextImage() != null) {
+				for(String info : selectedStep.getListOfContextInformation()) {
+					contextInfoVBox.getChildren().add(new Label(info));
+				}
 			}
 		}
 	}
