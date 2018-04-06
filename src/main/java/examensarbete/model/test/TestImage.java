@@ -21,6 +21,10 @@ public interface TestImage {
 
 	int getResolutionX();
 
-	int getResolutionY();	
+	int getResolutionY();
+	
+	String toString();
+	
+	boolean compareTestImage(TestImage imageToCompare);
 	
 }

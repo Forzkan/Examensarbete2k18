@@ -120,6 +120,13 @@ public class TestImageImpl implements TestImage{
 		return stringBuilder.toString();
 	}
 	
+	@Override
+	public boolean compareTestImage(TestImage imageToCompare) {
+		if(this.getCoordinates().x == imageToCompare.getCoordinates().x && this.getCoordinates().y == imageToCompare.getCoordinates().y && this.getImageWidth() == imageToCompare.getImageWidth() && this.getImageHeight() == imageToCompare.getImageHeight()) {
+			return true;
+		}
+		return false;
+	}
 	
 	
 	
