@@ -31,64 +31,66 @@ public class TemplateMatcher implements ChangeListener {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	}
 	
-    public MatchType run(TestImage contextImage, TestImage targetImage) {
-        this.contextImage = Imgcodecs.imread( contextImage.getImagePath(), Imgcodecs.IMREAD_COLOR );
+    public MatchType runVisualComparison(TestImage contextImage, TestImage targetImage) {
+        setupTestImages(contextImage, targetImage);
+        
+        List<TestImage> matchedImages = new ArrayList<TestImage>();
+//        for( int i = 0; i < 5; i++ ) {
+//        	matchedImages.add(matchingMethod(i));
+//        	//Gör inte för 2 - TM CCORR, den är dålig
+////        	System.out.println(matchedImages.get(i));
+//        }
+        matchingMethod(0, true);
+        createJFrame();
+        
+        return MatchType.MATCH;
+    }
+    
+    public MatchType findTargetImage(TestImage contextImage, TestImage targetImage) {
+        setupTestImages(contextImage, targetImage);
+        
+    	List<TestImage> matchedImages = new ArrayList<TestImage>();
+    	matchedImages.add(matchingMethod(0, false));
+    	matchedImages.add(matchingMethod(1, false));
+    	//Skipping matching method 2 - TM CCORR since it has proven to give bad results for our use.
+    	matchedImages.add(matchingMethod(3, false));
+    	matchedImages.add(matchingMethod(4, false));
+    	matchedImages.add(matchingMethod(5, false));
+    	
+    	for( int i = 1; i < 5; i++ ) {
+//        	System.out.println("jämför");
+        	if(!matchedImages.get(0).compareTestImage(matchedImages.get(i))) {
+//        		System.out.println("no match");
+        		return MatchType.NO_MATCH;
+        	}
+        }
+    	//TODO: Ifall det är olika kooridinator på testResultImage så returnera NEW_LOC_MATCH istället
+    	if(false) {
+    		
+    	}
+    	testResultImage = matchedImages.get(0);
+    	return MatchType.MATCH;
+    }
+    
+    private void setupTestImages(TestImage contextImage, TestImage targetImage) {
+    	this.contextImage = Imgcodecs.imread( contextImage.getImagePath(), Imgcodecs.IMREAD_COLOR );
         this.targetImage = Imgcodecs.imread( targetImage.getImagePath(), Imgcodecs.IMREAD_COLOR );
         if(this.contextImage.empty() || this.targetImage.empty()) {
             System.out.println("Can't read one of the images");
             System.exit(-1);
         }
-        //Loopa över matchingMethod 6 ggr och använd countern som match_method
-//        TestImage[5] matchedImages = {};
-        List<TestImage> matchedImages = new ArrayList<TestImage>();
-        for( int i = 0; i < 5; i++ ) {
-        	matchedImages.add(matchingMethod(i));
-        	//Gör inte för 2 - TM CCORR, den är dålig
-//        	System.out.println(matchedImages.get(i));
-        }
-        matchingMethod(0);
-        createJFrame();
-        //Ifall majoriteten av alla matched TestImage har samma position som target image så har vi en match
-        //Annars en NEW_LOC_MATCH
-        return MatchType.MATCH;
     }
     
-    public MatchType findTargetImage(TestImage contextImage, TestImage targetImage) {
-    	this.contextImage = Imgcodecs.imread( contextImage.pathToImage(), Imgcodecs.IMREAD_COLOR );
-        this.targetImage = Imgcodecs.imread( targetImage.pathToImage(), Imgcodecs.IMREAD_COLOR );
-        if(this.contextImage.empty() || this.targetImage.empty()) {
-            System.out.println("Can't read one of the images");
-            System.exit(-1);
-        }
-    	
-    	List<TestImage> matchedImages = new ArrayList<TestImage>();
-    	matchedImages.add(matchingMethod(0));
-    	matchedImages.add(matchingMethod(1));
-    	matchedImages.add(matchingMethod(3));
-    	matchedImages.add(matchingMethod(4));
-    	matchedImages.add(matchingMethod(5));
-    	//Loopa över alla TM metoder förutom TM CCORR, det verkar som att om den inte kan hitta en bra match så ger alla olika resultat.
-    	for( int i = 1; i < 5; i++ ) {
-        	System.out.println("jämför");
-        	if(!matchedImages.get(0).compareTestImage(matchedImages.get(i))) {
-        		System.out.println("no match");
-        		return MatchType.NO_MATCH;
-        	}
-        }
-    	return MatchType.MATCH;
-    }
-    
-    private void compareMatchImages(List<TestImage> matchedImages) {
-    	//Sortera efter x & y värden, returnera den TestImage som gäller
-    	//return TestImage;
-    }
+//    private void compareMatchImages(List<TestImage> matchedImages) {
+//    	//Sortera efter x & y värden, returnera den TestImage som gäller
+//    	//return TestImage;
+//    }
     
     /**
      * Returns where a match was found
      * @return
      */
-    private TestImage matchingMethod(int matchMethod) {
-    	//TODO: Skriv ut koordinaterna varje gång den matchar något
+    private TestImage matchingMethod(int matchMethod, boolean showResult) {
         Mat result = new Mat();
         Mat img_display = new Mat();
         contextImage.copyTo( img_display );
@@ -124,19 +126,16 @@ public class TemplateMatcher implements ChangeListener {
         icon = new ImageIcon(tmpImg);
         resultDisplay.setIcon(icon);
         
-//        return matToBufferedImage(targetImage);
 
-        //Översätt point
         java.awt.Point testImagePoint = new java.awt.Point((int)matchLoc.x, (int)matchLoc.y);
         TestImage matchImage = new TestImageImpl("src/main/resources/tests/test_2/2-part.png", testImagePoint, targetImage.cols(), targetImage.rows());
-//        System.out.println(matchImage);
         return matchImage;
     }
     
     public void stateChanged(ChangeEvent e) {
         JSlider source = (JSlider) e.getSource();
         if (!source.getValueIsAdjusting()) {
-            matchingMethod((int)source.getValue());
+            matchingMethod((int)source.getValue(), true);
         }
     }
     

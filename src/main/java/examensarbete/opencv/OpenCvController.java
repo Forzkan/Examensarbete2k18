@@ -3,6 +3,7 @@ package examensarbete.opencv;
 import org.opencv.core.Core;
 
 import examensarbete.model.test.TestImage;
+import examensarbete.opencv.TemplateMatcher.MatchType;
 
 public class OpenCvController {
 
@@ -13,10 +14,13 @@ public class OpenCvController {
 		templateMatcher = new TemplateMatcher();
 	}
 	
-	public void runComparison(TestImage contextImage, TestImage targetImage) {
-//		templateMatcher.run(contextImage, targetImage);
-		templateMatcher.findTargetImage(contextImage, targetImage);
+	public MatchType runComparison(TestImage contextImage, TestImage targetImage) {
+//		return templateMatcher.runVisualComparison(contextImage, targetImage);
+//		templateMatcher.findTargetImage(contextImage, targetImage);
 //		MatchType result = templateMatcher.run(testImages);
+		
 		//TODO: Returnera enum med outcome, typ MATCH, NEW_LOC_MATCH, NO_MATCH
+		
+		return templateMatcher.findTargetImage(contextImage, targetImage);
 	}
 }
