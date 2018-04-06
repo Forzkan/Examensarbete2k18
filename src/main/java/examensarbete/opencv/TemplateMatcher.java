@@ -25,10 +25,14 @@ public class TemplateMatcher implements ChangeListener {
     int match_method;
     JLabel imgDisplay = new JLabel(), resultDisplay = new JLabel();
 	
-    TestImage testResultImage;
+    private TestImage testResultImage;
     
 	public TemplateMatcher() {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+	}
+	
+	public TestImage getResultTestImage() {
+		return testResultImage;
 	}
 	
     public MatchType runVisualComparison(TestImage contextImage, TestImage targetImage) {
