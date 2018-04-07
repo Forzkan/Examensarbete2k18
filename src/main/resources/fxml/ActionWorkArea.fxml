@@ -312,7 +312,7 @@
                                                 <Font name="System Bold" size="24.0" />
                                              </font>
                                           </Label>
-                                          <Label fx:id="stepTypeLabel" text="xyz" textFill="WHITE">
+                                          <Label fx:id="stepNumberLabel" text="xyz" textFill="WHITE">
                                              <font>
                                                 <Font size="24.0" />
                                              </font>
@@ -325,7 +325,7 @@
                                                 <Insets left="135.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <Label fx:id="stepTypeLabel1" text="xyz" textFill="WHITE">
+                                          <Label fx:id="stepTypeLabel" text="xyz" textFill="WHITE">
                                              <font>
                                                 <Font size="24.0" />
                                              </font>

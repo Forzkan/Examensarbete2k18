@@ -139,9 +139,6 @@ public class SnapImageAction extends ActionBase {
 		WeakEventHandler<MouseEvent> weak_event_handler;
 		
 		event_handler = (MouseEvent event) -> {
-			System.out.println("MOUSE CLICKED.");
-//			snapImage.setPosition(new Point((int)event.getScreenX(), (int)event.getScreenY()));
-		
 			startX = (int)event.getScreenX();
 			startY = (int)event.getScreenY();
 			Rectangle rectangle = new Rectangle();
@@ -163,7 +160,6 @@ public class SnapImageAction extends ActionBase {
 		WeakEventHandler<MouseEvent> weak_event_handler;
 		
 		event_handler = (MouseEvent event) -> {
-			System.out.println("drag");
 			if(startX > event.getScreenX()) {
 				//meaning we ahve a negative value for the width.. then we should set the new X to be the startX (i.e set it in the action object).
 				snapRectangle.setX((int)event.getScreenX());
@@ -190,7 +186,6 @@ public class SnapImageAction extends ActionBase {
 		WeakEventHandler<MouseEvent> weak_event_handler;
 		
 		event_handler = (MouseEvent event) -> {
-			System.out.println("MOUSE RELEASED");
 			// If current X / Y is smaller then 0, then that coordinate has to be re-set. 
 			if(startX > event.getScreenX()) {
 				//meaning we ahve a negative value for the width.. then we should set the new X to be the startX (i.e set it in the action object).
