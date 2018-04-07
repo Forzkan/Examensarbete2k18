@@ -7,10 +7,13 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import examensarbete.google.cloud.vision.GCVConnector;
+import examensarbete.google.cloud.vision.GCVImageResult;
 import examensarbete.main.TTMain;
 import examensarbete.model.test.TestImage;
 import examensarbete.model.test.TestImageImpl;
 import examensarbete.model.utility.FileUtility;
+import examensarbete.model.utility.WaitHandler;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
 import javafx.scene.input.MouseEvent;
@@ -35,7 +38,7 @@ public class SnapImageAction extends ActionBase {
 	}
 
 	@Override
-	public EActionType getType() {
+	public EActionType getActionType() {
 		return this.actionType;
 	}
 	
@@ -214,6 +217,9 @@ public class SnapImageAction extends ActionBase {
 				
 				targetImage.setImagePath(this.takeScreenShot(FileUtility.createUniqueSnapImageFilePath(testGroup, testName), bounds));
 				targetImage.setCoordinates(new Point((int)bounds.getX(), (int)bounds.getY()));
+				WaitHandler.waitForMilliseconds(200);
+				performAction();
+				targetImage.setImageGCVResults(getGCVImageResult(targetImage.getImagePath()));
 				displayWindow();
 			} catch (AWTException | IOException e) {
 				System.out.println(e.getMessage());
@@ -223,6 +229,24 @@ public class SnapImageAction extends ActionBase {
 		popup.getScene().setOnMouseReleased(weak_event_handler);
 	}
 	
+	
+	public GCVImageResult getGCVImageResult(String path) {
+		GCVImageResult result = new GCVImageResult();
+		result.setImagePath(path);
+		try{
+			// Connect, fetch and store all GCVResults in the GCVImageResult.
+			//GCVConnector.detectCropHints(path,result);
+			GCVConnector.detectLogos(path,result);
+			GCVConnector.detectProperties(path,result);
+			GCVConnector.detectText(path,result);
+			GCVConnector.detectWebEntities(path,result);
+			GCVConnector.detectLabels(path,result);
+		}catch(Exception e) {
+			System.out.println("SOMETHING WENT WRONG WITH THE CLOUD VISION API.");
+			System.out.println(e.getMessage());
+		}
+		return result;
+	}
 	
 	
 	
@@ -247,6 +271,7 @@ public class SnapImageAction extends ActionBase {
 	public void displayWindow() {
 		stage.setIconified(false);
 		stage.show();
+//		stage.setAlwaysOnTop(true);
 	}
 	
 	@JsonIgnore

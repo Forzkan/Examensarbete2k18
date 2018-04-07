@@ -208,6 +208,11 @@ public class TestController {
 		}
 	}
 	
+	
+	
+
+	
+	
 	@FXML
 	private void runButtonPressed() {
 		GCVImageResult result = new GCVImageResult();

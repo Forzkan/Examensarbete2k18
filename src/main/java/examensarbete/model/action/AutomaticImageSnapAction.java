@@ -29,7 +29,7 @@ public class AutomaticImageSnapAction extends ActionBase {
 	}
 	
 	@Override
-	public EActionType getType() {
+	public EActionType getActionType() {
 		return this.actionType;
 	}
 

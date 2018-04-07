@@ -36,14 +36,14 @@ public abstract class ActionBase implements IAction{
 		}
 	}
 
-	public ActionBase(EActionType actionType) throws AWTException {
+	public ActionBase(EActionType actionType) {
 		try {
 			robot = new Robot();
 			this.actionType = actionType;
 		} catch (AWTException e) {
 			System.out.println("Could not initialize ClickRobot");
 			System.out.println(e.getMessage());
-			throw new AWTException(e.getMessage());
+//			throw new AWTException(e.getMessage());
 		}
 	}
 	

@@ -1,14 +1,19 @@
 package examensarbete.model.action;
 
 import java.awt.AWTException;
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.chrome.ChromeDriver;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import examensarbete.model.properties.PropertiesHandler;
 import examensarbete.model.properties.TTProperties;
@@ -30,7 +35,7 @@ public class ChromeWebAction extends ActionBase{
 	}
 
 	@Override
-	public EActionType getType() {
+	public EActionType getActionType() {
 		return this.actionType;
 	}
 	
@@ -77,6 +82,16 @@ public class ChromeWebAction extends ActionBase{
 		return false;
 	}
 	
+	
+	@JsonIgnore
+	public Rectangle getBrowserBounds() {
+		
+		Point coordinates = driver.manage().window().getPosition();
+		Dimension size = driver.manage().window().getSize();
+		
+		return new Rectangle(coordinates.x, coordinates.y, size.width, size.height);
+	}
+
 	
 	/**
 	 * To be used between performing actions.

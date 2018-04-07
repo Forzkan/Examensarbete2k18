@@ -22,7 +22,7 @@ public class BrowserAction extends ActionBase{
 	
 	
 	@Override
-	public EActionType getType() {
+	public EActionType getActionType() {
 		return this.actionType;
 	}
 

@@ -4,12 +4,18 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import examensarbete.google.cloud.vision.GCVImageResult;
+
 public interface TestImage {
 	
 	Image getImage();
 	
 	int getImageWidth();
 	int getImageHeight();
+	
+	GCVImageResult getImageGCVResults();
+	void setImageGCVResults(GCVImageResult imageGCVResults);
+	
 	
 	String getImagePath();
 	void setImagePath(String imagePath);
@@ -26,5 +32,7 @@ public interface TestImage {
 	String toString();
 	
 	boolean compareTestImage(TestImage imageToCompare);
+	
+	
 	
 }
