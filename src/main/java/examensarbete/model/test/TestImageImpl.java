@@ -18,9 +18,26 @@ public class TestImageImpl implements TestImage{
 	private int resolutionY;
 	private String imagePath;
 	
+	// CONSTRUCTORS
+	public TestImageImpl(String path, Point coordinates, int width, int height) {
+		setImagePath(path);
+		this.coordinates = coordinates;
+//		this.width = width;
+//		this.height = height;
+	}
 	
+	/**
+	 * Accepts a buffered image.
+	 * @param image
+	 * @param coordinates
+	 */
+	public TestImageImpl(BufferedImage image, Point coordinates) {
+		this.image = image;
+		setCoordinates(coordinates);
+	}
 	
 	// GETTERS AND SETTERS, ALSO USED BY JACKSON.
+	
 	/**
 	 * Gets the resolution X which the image was taken in.
 	 */
@@ -28,6 +45,7 @@ public class TestImageImpl implements TestImage{
 	public int getResolutionX() {
 		return resolutionX;
 	}
+	
 	/**
 	 * Set the resolution X which the image was taken in.
 	 * @param resolutionX
@@ -44,6 +62,7 @@ public class TestImageImpl implements TestImage{
 	public int getResolutionY() {
 		return resolutionY;
 	}
+	
 	/**
 	 * Gets the resolution Y which the image was taken in.
 	 */
@@ -59,24 +78,22 @@ public class TestImageImpl implements TestImage{
 	public Point getCoordinates() {
 		return coordinates;
 	}
+	
 	@Override
 	public void setCoordinates(Point coordinates) {
 		this.coordinates = coordinates;
 	}
 	
-	
 	@Override
 	public String getImagePath() {
 		return imagePath;
 	}
+
 	@Override
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
 		setImage(imagePath);
 	}
-	
-	
-	
 	
 	// OVERWRITTEN METHODS WHICH ARE NOT SAVED AND THEREFORE NOT USED BY JACKSON.	
 	@JsonIgnore 
@@ -106,20 +123,6 @@ public class TestImageImpl implements TestImage{
 		return new Rectangle(coordinates.x, coordinates.y, getImageWidth(), getImageHeight());
 	}
 	
-	
-	
-	
-	public String toString() {
-		StringBuilder stringBuilder = new StringBuilder();
-		String lineBreak = System.getProperty("line.separator");
-		stringBuilder.append("TestImageImpl" + lineBreak);
-		stringBuilder.append("x:" + coordinates.x + lineBreak);
-		stringBuilder.append("y:" + coordinates.y + lineBreak);
-		stringBuilder.append("width:" + getImageWidth() + lineBreak);
-		stringBuilder.append("height:" + getImageHeight());
-		return stringBuilder.toString();
-	}
-	
 	@Override
 	public boolean compareTestImage(TestImage imageToCompare) {
 		if(this.getCoordinates().x == imageToCompare.getCoordinates().x && this.getCoordinates().y == imageToCompare.getCoordinates().y && this.getImageWidth() == imageToCompare.getImageWidth() && this.getImageHeight() == imageToCompare.getImageHeight()) {
@@ -127,8 +130,6 @@ public class TestImageImpl implements TestImage{
 		}
 		return false;
 	}
-	
-	
 	
 	// PRIVATE HELP METHODS.
 	private void setImage(String imagePath) {
@@ -140,35 +141,17 @@ public class TestImageImpl implements TestImage{
 		}
 	}
 	
-	
-	
-	
-	
+	public String toString() {
+		StringBuilder stringBuilder = new StringBuilder();
+		String lineBreak = System.getProperty("line.separator");
+		stringBuilder.append("TestImageImpl" + lineBreak);
+		stringBuilder.append("x:" + coordinates.x + lineBreak);
+		stringBuilder.append("y:" + coordinates.y + lineBreak);
+		stringBuilder.append("width:" + getImageWidth() + lineBreak);
+		stringBuilder.append("height:" + getImageHeight());
+		return stringBuilder.toString();
+	}
 
-	// CONSTRUCTORS
-	public TestImageImpl(String path, Point coordinates, int width, int height) {
-		setImagePath(path);
-		this.coordinates = coordinates;
-//		this.width = width;
-//		this.height = height;
-	}
-	
-	
-	/**
-	 * Accepts a buffered image.
-	 * @param image
-	 * @param coordinates
-	 */
-	public TestImageImpl(BufferedImage image, Point coordinates) {
-		this.image = image;
-		setCoordinates(coordinates);
-	}
-	
-	
 	// Empty Constructor for Jackson.. TODO:: Consider using Lombok.
 	public TestImageImpl() {}
-
-	
-
-
 }
