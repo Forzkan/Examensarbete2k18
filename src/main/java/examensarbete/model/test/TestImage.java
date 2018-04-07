@@ -20,8 +20,10 @@ public interface TestImage {
 	Rectangle getBounds();
 
 	int getResolutionX();
-
+	void setResolutionX(int resolutionX);
+	
 	int getResolutionY();
+	void setResolutionY(int resolutionY);
 	
 	String toString();
 	

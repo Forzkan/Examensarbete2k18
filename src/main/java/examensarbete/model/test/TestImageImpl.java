@@ -50,6 +50,7 @@ public class TestImageImpl implements TestImage{
 	 * Set the resolution X which the image was taken in.
 	 * @param resolutionX
 	 */
+	@Override
 	public void setResolutionX(int resolutionX) {
 		this.resolutionX = resolutionX;
 	}
@@ -66,6 +67,7 @@ public class TestImageImpl implements TestImage{
 	/**
 	 * Gets the resolution Y which the image was taken in.
 	 */
+	@Override
 	public void setResolutionY(int resolutionY) {
 		this.resolutionY = resolutionY;
 	}
@@ -141,6 +143,7 @@ public class TestImageImpl implements TestImage{
 		}
 	}
 	
+	@Override
 	public String toString() {
 		StringBuilder stringBuilder = new StringBuilder();
 		String lineBreak = System.getProperty("line.separator");
