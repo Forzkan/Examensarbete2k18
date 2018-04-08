@@ -128,6 +128,7 @@ public class ChromeWebAction extends ActionBase{
 		}
 	}
 	
+	@JsonIgnore
 	public TestImage getNewContextImage() throws IOException {
 		final File outputFile = new File(takeBrowserScreenshot(FileUtility.getProjectRoot() + "\\tempContextImage"));
 		BufferedImage contextScreenshot = ImageIO.read(outputFile);

@@ -22,6 +22,8 @@ public class TestStepImpl implements TestStep{
 
 	private TestImage testStepContextImage;
 	private ActionBase mainAction;
+	
+	@JsonIgnore
 	private ChromeWebAction chrome;
 	
 
@@ -135,11 +137,13 @@ public class TestStepImpl implements TestStep{
 		this.setMainAction(action);
 	}
 
+	@JsonIgnore
 	@Override
 	public ChromeWebAction getChrome() {
 		return chrome;
 	}
 
+	@JsonIgnore
 	@Override
 	public void setChrome(ChromeWebAction chrome) {
 		this.chrome = chrome;

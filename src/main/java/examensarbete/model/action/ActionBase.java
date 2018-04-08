@@ -75,6 +75,7 @@ public abstract class ActionBase implements IAction{
 	}
 
 	protected void performClick(int x, int y) {
+		System.out.println("Click on position x: " + x + " y: " + y);
 		robot.mouseMove(x, y);
 		robot.mousePress(InputEvent.BUTTON1_MASK);
 		robot.mouseRelease(InputEvent.BUTTON1_MASK);

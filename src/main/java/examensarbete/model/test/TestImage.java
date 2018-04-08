@@ -34,6 +34,10 @@ public interface TestImage {
 	String toString();
 	
 	boolean compareTestImage(TestImage imageToCompare);
+
+	void setClickCoordinates(Point clickCoordinates);
+
+	Point getClickCoordinates();
 	
 	
 	

@@ -20,7 +20,7 @@ public class TestImageImpl implements TestImage{
 	private int resolutionY;
 	private String imagePath;
 	private GCVImageResult imageGCVResults;
-	
+	private Point clickCoordinates;
 	
 	// OVERWRITTEN METHODS WHICH ARE NOT SAVED AND THEREFORE NOT USED BY JACKSON.	
 	@JsonIgnore 
@@ -175,5 +175,17 @@ public class TestImageImpl implements TestImage{
 
 	// Empty Constructor for Jackson.. TODO:: Consider using Lombok.
 	public TestImageImpl() {}
+
+	
+	
+	@Override
+	public Point getClickCoordinates() {
+		return clickCoordinates;
+	}
+
+	@Override
+	public void setClickCoordinates(Point clickCoordinates) {
+		this.clickCoordinates = clickCoordinates;
+	}
 
 }

@@ -1,4 +1,4 @@
-package examensarbete.google.cloud.vision;
+package examensarbete.javafx.controller;
 
 import java.awt.Point;
 import java.net.URL;
@@ -8,6 +8,7 @@ import examensarbete.model.utility.FileUtility;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
@@ -17,12 +18,13 @@ public class ImageViewerController {
 	// FXML VARIABLES.
 	// Using a Pane because it does not layout its children.
 	@FXML
-	private Pane rootPane, imagePane;
+	private AnchorPane rootPane;
+	@FXML
+	private Pane imagePane;
 	@FXML
 	private ImageView imageView;
 	
 	// The image to be displayed.
-	private Stage stage;
 	private TestImage image;
 	private Point newCoordinates;
 	private Circle circle;
@@ -59,34 +61,41 @@ public class ImageViewerController {
 		int y = image.getImageHeight() / 2;
 		circle.setCenterX(x);
 		circle.setCenterY(y);
-		
+		newCoordinates = new Point();
+		newCoordinates.setLocation(image.getCoordinates().getX() + (image.getImageWidth() / 2),
+									image.getCoordinates().getY() + (image.getImageHeight() / 2));
 		imagePane.getChildren().add(circle);
+		imageView.setOnMouseMoved(event -> {
+			System.out.println(event.getX() + " || " + event.getY());
+			System.out.println(image.getCoordinates().getX() + event.getX() + " || " +image.getCoordinates().getY() + event.getY());
+		});
 		
 		// Add OnClick Listener to the image view.
 		imageView.setOnMouseClicked(event -> {
 			// Update circle position.
 			circle.setCenterX(event.getX());
 			circle.setCenterY(event.getY());
+			newCoordinates.setLocation((int)image.getCoordinates().getX() + event.getX(), (int)image.getCoordinates().getY() + event.getY());
+			System.out.println("test");
 		});
 	}
 	
-	public ImageViewerController(Stage stage, TestImage image) {
-		this.stage = stage;
+	public ImageViewerController(TestImage image) {
 		this.image = image;
 	}
 	
 	
 	@FXML
 	private void onOKButton() {
-		image.setCoordinates(newCoordinates);
-		stage.close();
+		image.setClickCoordinates(newCoordinates);
+		((Stage) rootPane.getScene().getWindow()).close();
 	}
 	
 	@FXML
 	private void onCancelButton() {
 		// Close the window, and let the existing (default - center of image) coordinates be set.
 		// pretty much do nothing.
-		// 
+		((Stage) rootPane.getScene().getWindow()).close();
 	}
 	
 }

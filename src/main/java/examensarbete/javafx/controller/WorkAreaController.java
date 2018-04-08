@@ -62,7 +62,7 @@ public class WorkAreaController {
 	@FXML
 	private Label stepNumberLabel, stepTypeLabel;
 
-	private StageFactory stageHandler = new StageFactory();
+	private StageFactory stageFactory = new StageFactory();
 	private final TestHandler testHandler = new TestHandler();
 
 	@FXML
@@ -107,7 +107,7 @@ public class WorkAreaController {
 	private void openPreferencesWindow() {
 		if (preferencesStage == null) {
 			PreferencesController preferenceController = new PreferencesController();
-			preferencesStage = stageHandler.openStage(TTStage.PREFERENCES, preferenceController);
+			preferencesStage = stageFactory.openStage(TTStage.PREFERENCES, preferenceController);
 		} else if (preferencesStage.isShowing() == false) {
 			preferencesStage.show();
 		}
@@ -283,7 +283,7 @@ public class WorkAreaController {
 	private void createNewTest() {
 		if (newTestStage == null) {
 			NewTestController ntC = new NewTestController(testHandler, this);
-			newTestStage = stageHandler.openStage(TTStage.NEW_TEST, ntC);
+			newTestStage = stageFactory.openStage(TTStage.NEW_TEST, ntC);
 		} else if (newTestStage.isShowing() == false) {
 			newTestStage.show();
 		}
