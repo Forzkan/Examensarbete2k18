@@ -219,8 +219,10 @@ public class SnapImageAction extends ActionBase {
 				targetImage.setCoordinates(new Point((int)bounds.getX(), (int)bounds.getY()));
 				WaitHandler.waitForMilliseconds(200);
 				performAction();
-				targetImage.setImageGCVResults(getGCVImageResult(targetImage.getImagePath()));
+				targetImage.setImageGCVResults(GCVConnector.getGCVImageResult(targetImage.getImagePath()));
 				displayWindow();
+				
+				// Create popup with the image to allow for the user to set their own OnClick position.
 			} catch (AWTException | IOException e) {
 				System.out.println(e.getMessage());
 			}
@@ -230,23 +232,7 @@ public class SnapImageAction extends ActionBase {
 	}
 	
 	
-	public GCVImageResult getGCVImageResult(String path) {
-		GCVImageResult result = new GCVImageResult();
-		result.setImagePath(path);
-		try{
-			// Connect, fetch and store all GCVResults in the GCVImageResult.
-			//GCVConnector.detectCropHints(path,result);
-			GCVConnector.detectLogos(path,result);
-			GCVConnector.detectProperties(path,result);
-			GCVConnector.detectText(path,result);
-			GCVConnector.detectWebEntities(path,result);
-			GCVConnector.detectLabels(path,result);
-		}catch(Exception e) {
-			System.out.println("SOMETHING WENT WRONG WITH THE CLOUD VISION API.");
-			System.out.println(e.getMessage());
-		}
-		return result;
-	}
+
 	
 	
 	

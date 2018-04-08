@@ -40,6 +40,27 @@ import java.util.List;
 
 public class GCVConnector {
 
+	
+	
+	public static GCVImageResult getGCVImageResult(String path) {
+		GCVImageResult result = new GCVImageResult();
+		result.setImagePath(path);
+		try{
+			// Connect, fetch and store all GCVResults in the GCVImageResult.
+			//GCVConnector.detectCropHints(path,result);
+			detectLogos(path,result);
+			detectProperties(path,result);
+			detectText(path,result);
+			detectWebEntities(path,result);
+			detectLabels(path,result);
+		}catch(Exception e) {
+			System.out.println("SOMETHING WENT WRONG WITH THE CLOUD VISION API.");
+			System.out.println(e.getMessage());
+		}
+		return result;
+	}
+	
+	
 	/**
 	 * Detects labels in the specified local image.
 	 *

@@ -303,7 +303,7 @@ public class WorkAreaController {
 			// Check if a test is selected, else we should not start recording.
 			if (!rootIsSelected() && !parentIsSelected() && selectedTest != null) {
 				isRecording = true;
-				testTreeView.setDisable(true);
+				setTestListDisabled(true);
 				// change logo of the button,
 				recordFontIcon.setIconLiteral("ion-stop"); // TODO:: Should not be done here.
 				// Running the default step which is present for all tests, which is opening the
@@ -322,11 +322,19 @@ public class WorkAreaController {
 	private void stopRecording() {
 		recordFontIcon.setIconLiteral("ion-record"); // TODO:: Should not be done here..
 		isRecording = false;
+		setTestListDisabled(false);
 		selectedTest.getTest().cleanup();
-		testTreeView.setDisable(false);
 		testHandler.saveTest(selectedTest);
 	}
 
+	
+	private void setTestListDisabled(boolean disabled){
+		testTreeView.setDisable(disabled);
+		treeViewPane.setDisable(disabled);
+		treeViewScrollPane.setDisable(disabled);
+	}
+	
+	
 	private ArrayList<TestGroup> getSelectedTestsAndOrGroup() {
 		ArrayList<TestGroup> tests = new ArrayList<TestGroup>();
 		try {
