@@ -1,5 +1,6 @@
 package examensarbete.model.test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import examensarbete.model.action.ActionBase;
@@ -19,9 +20,11 @@ public interface TestStep {
 	void setTestStepTargetImage(TestImage testStepTargetImage);
 
 	
-	boolean performTestStep();
-	void takeScreenshot(ChromeWebAction chrome, String groupName, String testName);
+	boolean performTestStep() throws IOException;
+	void takeScreenshot(String groupName, String testName);
 	ArrayList<String> getListOfContextInformation();
+	void setChrome(ChromeWebAction chrome);
+	ChromeWebAction getChrome();
 	
 
 //	TestImage getTestStepTargetImage();

@@ -26,4 +26,20 @@ public class OpenCvController {
 		return result;
 //		return MatchType.NO_MATCH;
 	}
+	
+	public void runVisualComparison(TestImage contextImage, TestImage targetImage) {
+		templateMatcher.runVisualComparison(contextImage, targetImage);
+//		MatchType result = templateMatcher.findTargetImage(contextImage, targetImage);
+		
+		TestImage resultImage = templateMatcher.getResultTestImage();
+		
+		System.out.println(targetImage);
+		System.out.println(resultImage);
+		
+//		return result;
+	}
+	
+	public TestImage getResultTestImage() {
+		return templateMatcher.getResultTestImage();
+	}
 }
