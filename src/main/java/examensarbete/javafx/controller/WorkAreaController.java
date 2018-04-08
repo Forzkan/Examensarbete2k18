@@ -3,6 +3,7 @@ package examensarbete.javafx.controller;
 import java.awt.AWTException;
 import java.awt.Rectangle;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -308,7 +309,12 @@ public class WorkAreaController {
 				recordFontIcon.setIconLiteral("ion-stop"); // TODO:: Should not be done here.
 				// Running the default step which is present for all tests, which is opening the
 				// browser.
-				selectedTest.getTest().getTestSteps().get(0).performTestStep();
+				try {
+					selectedTest.getTest().getTestSteps().get(0).performTestStep();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			} else {
 				System.out.println("No test have been selected.");
 			}
