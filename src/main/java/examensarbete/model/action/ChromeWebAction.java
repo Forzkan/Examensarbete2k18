@@ -2,10 +2,13 @@ package examensarbete.model.action;
 
 import java.awt.AWTException;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+
+import javax.imageio.ImageIO;
 
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
@@ -17,6 +20,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import examensarbete.model.properties.PropertiesHandler;
 import examensarbete.model.properties.TTProperties;
+import examensarbete.model.test.TestImage;
+import examensarbete.model.test.TestImageImpl;
+import examensarbete.model.utility.FileUtility;
 import javafx.scene.control.TextInputDialog;
 
 import org.apache.commons.io.FileUtils;
@@ -122,7 +128,11 @@ public class ChromeWebAction extends ActionBase{
 		}
 	}
 	
-	
+	public TestImage getNewContextImage() throws IOException {
+		final File outputFile = new File(takeBrowserScreenshot(FileUtility.getProjectRoot() + "\\tempContextImage"));
+		BufferedImage contextScreenshot = ImageIO.read(outputFile);
+		return new TestImageImpl(outputFile.getAbsolutePath(), new java.awt.Point(0,0), contextScreenshot.getWidth(), contextScreenshot.getHeight());
+	}
 	
 	
 }

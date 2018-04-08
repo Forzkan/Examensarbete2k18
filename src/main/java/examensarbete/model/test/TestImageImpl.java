@@ -41,6 +41,7 @@ public class TestImageImpl implements TestImage{
 	 */
 	public TestImageImpl(BufferedImage image, Point coordinates) {
 		this.image = image;
+		
 		setCoordinates(coordinates);
 	}
 	

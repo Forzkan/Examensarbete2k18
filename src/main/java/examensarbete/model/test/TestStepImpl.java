@@ -1,6 +1,9 @@
 package examensarbete.model.test;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import org.opencv.core.Core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -9,12 +12,16 @@ import examensarbete.model.action.ChromeWebAction;
 import examensarbete.model.action.EActionType;
 import examensarbete.model.action.SnapImageAction;
 import examensarbete.model.utility.FileUtility;
+import examensarbete.opencv.OpenCvController;
+import examensarbete.opencv.TemplateMatcher;
+import examensarbete.opencv.TemplateMatcher.MatchType;
 
 
 public class TestStepImpl implements TestStep{
 
 	private TestImage testStepContextImage;
 	private ActionBase mainAction;
+	private ChromeWebAction chrome;
 	
 
 	@Override
@@ -59,11 +66,22 @@ public class TestStepImpl implements TestStep{
 	
 	
 	@Override
-	public boolean performTestStep() {
+	public boolean performTestStep() throws IOException {
 		// TODO:: PERFORM THE MAIN ACTION, AND HANDLE THE OUTCOME OF IT.
-		
-		if(mainAction.getActionType() == EActionType.IMAGESNAP) {		}
-		
+		if(mainAction.getActionType() == EActionType.IMAGESNAP) {
+			SnapImageAction snapImageAction = (SnapImageAction)mainAction;
+			OpenCvController openCvController = new OpenCvController();
+			MatchType matchResult = MatchType.NO_MATCH;
+			matchResult = openCvController.runComparison(chrome.getNewContextImage(), snapImageAction.getTargetImage());
+			if(matchResult == MatchType.MATCH) {
+				return mainAction.performAction();
+			} else if(matchResult == MatchType.NEW_LOC_MATCH) {
+				TestImage newLocationTestImage = openCvController.getResultTestImage();
+				snapImageAction.setTargetImage(newLocationTestImage);
+				return snapImageAction.performAction();
+			} else {
+				
+			}
 			// DO TEMPLATE,
 				// IF TEMPLATE OK AND IN SAME PLACE, GO ON LIKE NOTHING EEELSE MATTEEEEEEERS
 			
@@ -74,16 +92,15 @@ public class TestStepImpl implements TestStep{
 						// STORE THE NEW IMAGE IN SOME TEST RESULTS (?),
 						// CLICK ON THE PREVIOUS USER-DEFINED CLICK-COORDINATES AND CONTINUE.
 					// ELSE IF INVALID CHANGE, RETURN FALSE.
-					
 		
-			
-
+		}
+		
 		return mainAction.performAction();
 	}
 	
 	
 	@Override
-	public void takeScreenshot(ChromeWebAction chrome, String groupName, String testName) {
+	public void takeScreenshot(String groupName, String testName) {
 		String path = chrome.takeBrowserScreenshot(FileUtility.createUniqueContextImageFilePath(groupName, testName));		
 		testStepContextImage = new TestImageImpl();
 		testStepContextImage.setImagePath(path);
@@ -115,6 +132,16 @@ public class TestStepImpl implements TestStep{
 	
 	public TestStepImpl(ActionBase action) {
 		this.setMainAction(action);
+	}
+
+	@Override
+	public ChromeWebAction getChrome() {
+		return chrome;
+	}
+
+	@Override
+	public void setChrome(ChromeWebAction chrome) {
+		this.chrome = chrome;
 	}
 
 }

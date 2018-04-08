@@ -1,6 +1,7 @@
 package examensarbete.model.test;
 
 import java.awt.AWTException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -90,7 +91,8 @@ public class TestImpl implements Test{
 	@Override
 	public void addTestStep(ActionBase action) {
 		TestStepImpl step = new TestStepImpl(action);
-		step.takeScreenshot((ChromeWebAction)testSteps.get(0).getMainAction(), testGroupName, testName);
+		step.setChrome((ChromeWebAction)testSteps.get(0).getMainAction());
+		step.takeScreenshot(testGroupName, testName);
 		testSteps.add(step);
 	}
 
@@ -105,7 +107,14 @@ public class TestImpl implements Test{
 				// TODO:: do something with the image. // Should we do this for all types of actions?
 				// Maybe take the image at different times depending on what type of action we're dealing with?
 			}
-			passed = step.performTestStep(); 
+			try {
+				step.setChrome((ChromeWebAction)testSteps.get(0).getMainAction());
+				passed = step.performTestStep();
+			} catch (IOException e) {
+				// TODO SKRIV UT VAD SOM GICK FEL I DIALOG
+				e.printStackTrace();
+				return false;
+			}
 			WaitHandler.waitForMilliseconds(waitTimeBetweenSteps);
 
 			if(passed == false) {
