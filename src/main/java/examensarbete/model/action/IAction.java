@@ -5,5 +5,5 @@ public interface IAction {
 
 	public void actionSetup();
 	public boolean performAction();
-	public EActionType getType();
+	public EActionType getActionType();
 }

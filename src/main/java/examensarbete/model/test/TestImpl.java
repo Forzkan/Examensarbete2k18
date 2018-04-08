@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import examensarbete.model.action.ActionBase;
 import examensarbete.model.action.ChromeWebAction;
 import examensarbete.model.action.EActionType;
+import examensarbete.model.utility.WaitHandler;
 
 @JsonRootName("Test")
 public class TestImpl implements Test{
@@ -28,6 +29,8 @@ public class TestImpl implements Test{
 	private String testName;	
 	private String testGroupName;
 	private ArrayList<TestStep> testSteps = new ArrayList<TestStep>();	
+	
+	private final int waitTimeBetweenSteps = 1000;
 	
 	
 	// GETTERS AND SETTERS FOR SERIALIZABLE VARIABLES (JSON).
@@ -97,17 +100,13 @@ public class TestImpl implements Test{
 		boolean passed = true;
 		for(TestStep step : testSteps) {
 			
-			if(step.getMainAction().getType() == EActionType.IMAGESNAP) {
+			if(step.getMainAction().getActionType() == EActionType.IMAGESNAP) {
 				//step.takeScreenshot((ChromeWebAction)testSteps.get(0).getMainAction(), testGroupName, testName);
 				// TODO:: do something with the image. // Should we do this for all types of actions?
 				// Maybe take the image at different times depending on what type of action we're dealing with?
 			}
 			passed = step.performTestStep(); 
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				System.out.println(e.getMessage());
-			}
+			WaitHandler.waitForMilliseconds(waitTimeBetweenSteps);
 
 			if(passed == false) {
 				return false;
@@ -123,7 +122,7 @@ public class TestImpl implements Test{
 	}
 
 	@JsonIgnore
-	private ChromeWebAction getChromeWebAction() {
+	public ChromeWebAction getChromeWebAction() {
 		return (ChromeWebAction)testSteps.get(0).getMainAction();
 	}
 	

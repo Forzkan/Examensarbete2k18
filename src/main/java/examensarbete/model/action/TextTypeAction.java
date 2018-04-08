@@ -4,6 +4,7 @@ import java.awt.AWTException;
 import java.awt.event.KeyEvent;
 import java.util.Optional;
 
+import examensarbete.model.utility.WaitHandler;
 import javafx.scene.control.TextInputDialog;
 
 public class TextTypeAction extends ActionBase{
@@ -47,10 +48,11 @@ public class TextTypeAction extends ActionBase{
 		dialog.setContentText("");
 		Optional<String> result = dialog.showAndWait();
 		result.ifPresent(name -> text = name);
+		WaitHandler.waitForMilliseconds(500);
 	}
 	
 	@Override
-	public EActionType getType() {
+	public EActionType getActionType() {
 		return this.actionType;
 	}
 

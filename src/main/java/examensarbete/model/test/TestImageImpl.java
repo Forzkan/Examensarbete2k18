@@ -9,6 +9,8 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import examensarbete.google.cloud.vision.GCVImageResult;
+
 
 public class TestImageImpl implements TestImage{
 
@@ -17,6 +19,8 @@ public class TestImageImpl implements TestImage{
 	private int resolutionX; 
 	private int resolutionY;
 	private String imagePath;
+	private GCVImageResult imageGCVResults;
+	
 	
 	// OVERWRITTEN METHODS WHICH ARE NOT SAVED AND THEREFORE NOT USED BY JACKSON.	
 	@JsonIgnore 
@@ -40,8 +44,18 @@ public class TestImageImpl implements TestImage{
 		setCoordinates(coordinates);
 	}
 	
-	// GETTERS AND SETTERS, ALSO USED BY JACKSON.
+	// GETTERS AND SETTERS, ALSO USED BY JACKSON.	
+	@Override
+	public GCVImageResult getImageGCVResults() {
+		return imageGCVResults;
+	}
 	
+	@Override
+	public void setImageGCVResults(GCVImageResult imageGCVResults) {
+		this.imageGCVResults = imageGCVResults;
+	}
+	
+
 	/**
 	 * Gets the resolution X which the image was taken in.
 	 */
@@ -160,4 +174,5 @@ public class TestImageImpl implements TestImage{
 
 	// Empty Constructor for Jackson.. TODO:: Consider using Lombok.
 	public TestImageImpl() {}
+
 }

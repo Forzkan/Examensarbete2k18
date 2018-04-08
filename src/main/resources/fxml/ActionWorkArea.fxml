@@ -111,6 +111,22 @@
                               <Tooltip text="Setup string to be typed" />
                            </tooltip>
                         </Button>
+                        <Button fx:id="timerActionButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#onTimerActionButtonPressed" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                           <graphic>
+                              <FontIcon iconColor="WHITE" iconLiteral="ion-android-alarm-clock" iconSize="26" />
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Add a wait timer." />
+                           </tooltip>
+                        </Button>
+                        <Button fx:id="scrollActionButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#onScrollActionButtonPressed" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                           <graphic>
+                              <FontIcon iconColor="WHITE" iconLiteral="ws-sort" iconSize="30" />
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Move up/down in the browser" />
+                           </tooltip>
+                        </Button>
                         <Button fx:id="openBrowserButton" disable="true" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#onBrowserButtonClick" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
                            <graphic>
                               <FontIcon iconColor="WHITE" iconLiteral="ion-social-chrome" iconSize="26" />
@@ -166,7 +182,15 @@
                            <children>
                               <HBox fillHeight="false" maxHeight="50.0" maxWidth="125.0" prefHeight="50.0" prefWidth="125.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <Button fx:id="saveSelectedTestButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#saveSelectedTest" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                                    <Button maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#createNewTest" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
+                                       <graphic>
+                                          <FontIcon iconColor="WHITE" iconLiteral="ion-android-folder" iconSize="22" />
+                                       </graphic>
+                                       <tooltip>
+                                          <Tooltip text="Add Test" />
+                                       </tooltip>
+                                    </Button>
+                                    <Button fx:id="saveSelectedTestButton" disable="true" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#saveSelectedTest" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;" visible="false">
                                        <graphic>
                                           <FontIcon fx:id="recordFontIcon1" iconColor="WHITE" iconLiteral="fas-save" iconSize="26" />
                                        </graphic>
@@ -177,7 +201,7 @@
                                           <Insets />
                                        </HBox.margin>
                                     </Button>
-                                    <Button fx:id="saveAllTestsButton" maxHeight="40.0" maxWidth="70.0" minHeight="40.0" minWidth="70.0" mnemonicParsing="false" onAction="#saveAllTests" prefHeight="40.0" prefWidth="70.0" style="-fx-background-color: #404040;" text=" All" textFill="WHITE">
+                                    <Button fx:id="saveAllTestsButton" disable="true" maxHeight="40.0" maxWidth="70.0" minHeight="40.0" minWidth="70.0" mnemonicParsing="false" onAction="#saveAllTests" prefHeight="40.0" prefWidth="70.0" style="-fx-background-color: #404040;" text=" All" textFill="WHITE" visible="false">
                                        <graphic>
                                           <FontIcon fx:id="recordFontIcon11" iconColor="WHITE" iconLiteral="far-save" iconSize="26" />
                                        </graphic>
@@ -190,14 +214,6 @@
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
-                                    </Button>
-                                    <Button maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#createNewTest" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
-                                       <graphic>
-                                          <FontIcon iconColor="WHITE" iconLiteral="ion-android-folder" iconSize="22" />
-                                       </graphic>
-                                       <tooltip>
-                                          <Tooltip text="Add Test" />
-                                       </tooltip>
                                     </Button>
                                     <Button fx:id="recordButton" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#startTestRecording" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
                                        <graphic>
@@ -346,8 +362,8 @@
                                           </ImageView>
                                        </children>
                                     </AnchorPane>
-                                    <VBox fx:id="targetInfoVBox" layoutX="14.0" layoutY="92.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="392.0" prefWidth="338.0" style="-fx-border-color: #181818; -fx-border-width: 5;" />
-                                    <VBox fx:id="contextInfoVBox" layoutX="14.0" layoutY="544.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="392.0" prefWidth="338.0" style="-fx-border-color: #181818; -fx-border-width: 5;" />
+                                    <VBox fx:id="targetInfoVBox" layoutX="14.0" layoutY="92.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="392.0" prefWidth="338.0" spacing="5.0" style="-fx-border-color: #181818; -fx-border-width: 5;" />
+                                    <VBox fx:id="contextInfoVBox" layoutX="14.0" layoutY="544.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="392.0" prefWidth="338.0" spacing="5.0" style="-fx-border-color: #181818; -fx-border-width: 5;" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane maxHeight="-Infinity" prefHeight="950.0" prefWidth="423.0" style="-fx-background-color: black; -fx-border-width: 5;">

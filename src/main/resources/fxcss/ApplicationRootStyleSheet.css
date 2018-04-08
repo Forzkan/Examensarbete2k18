@@ -49,8 +49,6 @@
     -fx-text-fill: #ffffff ;
     -fx-font-weight: bold;
 }
-.testTree .tree-cell:hover {
-    -fx-background-color:  ##585858;
-    -fx-text-fill: #ffffff ;
-    -fx-font-weight: bold;
-}
+
+
+

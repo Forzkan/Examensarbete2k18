@@ -14,7 +14,7 @@ public class KeyPressAction extends ActionBase{
 	}
 	
 	@Override
-	public EActionType getType() {
+	public EActionType getActionType() {
 		return this.actionType;
 	}
 //	private String 

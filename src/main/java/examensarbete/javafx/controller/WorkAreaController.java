@@ -1,6 +1,7 @@
 package examensarbete.javafx.controller;
 
 import java.awt.AWTException;
+import java.awt.Rectangle;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
@@ -16,11 +17,13 @@ import examensarbete.model.action.AutomaticImageSnapAction;
 import examensarbete.model.action.ClickAction;
 import examensarbete.model.action.SnapImageAction;
 import examensarbete.model.action.TextTypeAction;
+import examensarbete.model.action.TimerAction;
 import examensarbete.model.properties.PropertiesHandler;
 import examensarbete.model.test.TestGroup;
 import examensarbete.model.test.TestHandler;
 import examensarbete.model.test.TestStep;
 import examensarbete.model.utility.FileUtility;
+import examensarbete.model.utility.WaitHandler;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
@@ -43,7 +46,7 @@ import javafx.stage.Stage;
 
 // TODO:: Handle page loading times:   driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
 public class WorkAreaController {
-
+	// TODO:: SORT.
 	@FXML
 	private AnchorPane headerPane, toolBarPane, workAreaPane;
 	@FXML
@@ -82,18 +85,22 @@ public class WorkAreaController {
 		stepTypeLabel.setText("");
 		targetInfoVBox.getChildren().clear();
 		contextInfoVBox.getChildren().clear();
+		aStepsContextImage.setImage(null);
+		aStepsSnapImage.setImage(null);
 	}
 
 	private void minimizeMainStage() {
 		((Stage) toolBarPane.getScene().getWindow()).setIconified(true);
+		((Stage) toolBarPane.getScene().getWindow()).setAlwaysOnTop(false);
 	}
 
 	private void displayMainStage() {
 		((Stage) toolBarPane.getScene().getWindow()).setIconified(false);
 		((Stage) toolBarPane.getScene().getWindow()).show();
+		// ((Stage) toolBarPane.getScene().getWindow()).setAlwaysOnTop(true);
 	}
 
-	private Stage preferencesStage;
+	private Stage preferencesStage; // TODO:: Move to a Stage handler? Same with New Test.
 
 	@FXML
 	private void openPreferencesWindow() {
@@ -132,6 +139,7 @@ public class WorkAreaController {
 			// Run all tests in group.
 			for (TestGroup tg : getSelectedTestsAndOrGroup()) {
 				tg.getTest().runTest();
+				tg.getTest().cleanup();
 			}
 		} else if (selectedTest != null) {
 			// Run selected test.
@@ -204,10 +212,42 @@ public class WorkAreaController {
 			try {
 				typeAction = new TextTypeAction();
 				typeAction.actionSetup();
+
+				// Make sure that the browser window if in focus.
+				try {
+					Rectangle browserBounds = selectedTest.getTest().getChromeWebAction().getBrowserBounds();
+					int x = (int) browserBounds.getX();
+					int y = (int) browserBounds.getY();
+					ClickAction clickAction = new ClickAction();
+					clickAction.setCoordinates(x + (browserBounds.getWidth() / 2), y);
+					clickAction.performAction();
+				} catch (AWTException e) {
+					System.out.println(e.getMessage());
+				}
+				WaitHandler.waitForMilliseconds(1000);
+				typeAction.performAction();
 				addActionToSelectedTest(typeAction);
 			} catch (AWTException e) {
 				System.out.println(e.getMessage());
 			}
+			displayMainStage();
+		}
+	}
+
+	@FXML
+	private void onTimerActionButtonPressed() {
+		if (isRecordingAndTestIsSelected()) { // i.e. we can add actions to a test.
+			ActionBase timerAction = new TimerAction();
+			timerAction.actionSetup();
+			addActionToSelectedTest(timerAction);
+		}
+	}
+
+	@FXML
+	private void onScrollActionButtonPressed() {
+		if (isRecordingAndTestIsSelected()) { // i.e. we can add actions to a test.
+			minimizeMainStage();
+			// ToBeImplemented
 			displayMainStage();
 		}
 	}
@@ -244,7 +284,7 @@ public class WorkAreaController {
 			NewTestController ntC = new NewTestController(testHandler, this);
 			newTestStage = stageHandler.openStage(TTStage.NEW_TEST, ntC);
 		} else if (newTestStage.isShowing() == false) {
-			preferencesStage.show();
+			newTestStage.show();
 		}
 	}
 
@@ -492,7 +532,7 @@ public class WorkAreaController {
 	// TODO:: Move to Ikonli Helper class / GUI helper class..
 	private String getFontIconLiteralForAction(ActionBase action) {
 		String literal = "";
-		switch (action.getType()) {
+		switch (action.getActionType()) {
 		case CLICK:
 			literal = "ion-mouse";
 			break;
@@ -517,6 +557,8 @@ public class WorkAreaController {
 		case AUTOCLICK:
 			literal = "ion-mouse";
 			break;
+		default:
+			break;
 		}
 		return literal;
 	}
@@ -525,13 +567,18 @@ public class WorkAreaController {
 		if (selectedStep != null) {
 			clearStepInfo();
 			URL contextURL = null, snapURL = null;
-			switch (selectedStep.getMainAction().getType()) {
+			switch (selectedStep.getMainAction().getActionType()) {
 			case IMAGESNAP:
 				SnapImageAction snapAction = (SnapImageAction) selectedStep.getMainAction();
 				snapURL = FileUtility.getImageUrlFromPath(snapAction.getTargetImage().getImagePath());
 				contextURL = FileUtility.getImageUrlFromPath(selectedStep.getTestStepContextImage().getImagePath());
 				for (String info : snapAction.getListOfActionInformation()) {
-					targetInfoVBox.getChildren().add(new Label(info));
+					Label l = new Label(info);
+					l.setStyle("-fx-font-size: 18px;");
+					l.setStyle("-fx-text-fill: white;");
+					l.setWrapText(true);
+					targetInfoVBox.getChildren().add(l);
+
 				}
 				break;
 			case AUTOIMAGESNAP:
@@ -552,16 +599,19 @@ public class WorkAreaController {
 				aStepsContextImage.setImage(new Image(contextURL.toString()));
 
 			} catch (Exception e) {
-				System.out.println(
-						"An error occured when attempting to display user-snapped image and/or the Context (Full Web Page) image."
-								+ " \nError: " + e.getMessage());
+				System.out.println("Could not display Step image(s)." + " \nError: " + e.getMessage());
 			}
 			// targetInfoVBox, contextInfoVBox;
 			stepNumberLabel.setText("N/A");
-			stepTypeLabel.setText(selectedStep.getMainAction().getType().name().toUpperCase());
+			stepTypeLabel.setText(selectedStep.getMainAction().getActionType().name().toUpperCase());
+
 			if (selectedStep.getTestStepContextImage() != null) {
 				for (String info : selectedStep.getListOfContextInformation()) {
-					contextInfoVBox.getChildren().add(new Label(info));
+					Label l = new Label(info);
+					l.setStyle("-fx-font-size: 18px;");
+					l.setStyle("-fx-text-fill: white;");
+					l.setWrapText(true);
+					contextInfoVBox.getChildren().add(l);
 				}
 			}
 		}

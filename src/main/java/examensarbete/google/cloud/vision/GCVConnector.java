@@ -5,8 +5,8 @@ import com.google.cloud.vision.v1.AnnotateImageResponse;
 import com.google.cloud.vision.v1.BatchAnnotateImagesResponse;
 //import com.google.cloud.vision.v1.Block;
 import com.google.cloud.vision.v1.ColorInfo;
-import com.google.cloud.vision.v1.CropHint;
-import com.google.cloud.vision.v1.CropHintsAnnotation;
+//import com.google.cloud.vision.v1.CropHint;
+//import com.google.cloud.vision.v1.CropHintsAnnotation;
 import com.google.cloud.vision.v1.DominantColorsAnnotation;
 import com.google.cloud.vision.v1.EntityAnnotation;
 //import com.google.cloud.vision.v1.FaceAnnotation;
@@ -52,7 +52,7 @@ public class GCVConnector {
 	 * @throws IOException
 	 *             on Input/Output errors.
 	 */
-	public void detectLabels(String filePath, PrintStream out, GCVImageResult result) throws Exception, IOException {
+	public static void detectLabels(String filePath, GCVImageResult result) throws Exception, IOException {
 		System.out.println("\nSTART LABEL DETECTION::\n ");
 
 		List<AnnotateImageRequest> requests = new ArrayList<>();
@@ -70,13 +70,13 @@ public class GCVConnector {
 
 			for (AnnotateImageResponse res : responses) {
 				if (res.hasError()) {
-					out.printf("Error: %s\n", res.getError().getMessage());
+//					out.printf("Error: %s\n", res.getError().getMessage());
 					return;
 				}
 
 				// For full list of available annotations, see http://g.co/cloud/vision/docs
 				for (EntityAnnotation annotation : res.getLabelAnnotationsList()) {
-					annotation.getAllFields().forEach((k, v) -> out.printf("%s : %s\n", k, v.toString()));
+//					annotation.getAllFields().forEach((k, v) -> out.printf("%s : %s\n", k, v.toString()));
 					GCVResult gcvResult = new GCVResult();
 					gcvResult.setScore(annotation.getScore());
 					gcvResult.setConfident(annotation.getConfidence());
@@ -153,7 +153,7 @@ public class GCVConnector {
 	 * @throws IOException
 	 *             on Input/Output errors.
 	 */
-	public void detectText(String filePath, PrintStream out, GCVImageResult result) throws Exception, IOException {
+	public static void detectText(String filePath, GCVImageResult result) throws Exception, IOException {
 		System.out.println("\nSTART TEXT DETECTION::\n ");
 		List<AnnotateImageRequest> requests = new ArrayList<>();
 
@@ -171,7 +171,7 @@ public class GCVConnector {
 
 			for (AnnotateImageResponse res : responses) {
 				if (res.hasError()) {
-					out.printf("Error: %s\n", res.getError().getMessage());
+//					out.printf("Error: %s\n", res.getError().getMessage());
 					return;
 				}
 
@@ -207,7 +207,7 @@ public class GCVConnector {
 	 * @throws IOException
 	 *             on Input/Output errors.
 	 */
-	public void detectLogos(String filePath, PrintStream out, GCVImageResult result) throws Exception, IOException {
+	public static void detectLogos(String filePath, GCVImageResult result) throws Exception, IOException {
 		System.out.println("\nSTART LOGOS DETECTION::\n ");
 		List<AnnotateImageRequest> requests = new ArrayList<>();
 
@@ -224,7 +224,7 @@ public class GCVConnector {
 
 			for (AnnotateImageResponse res : responses) {
 				if (res.hasError()) {
-					out.printf("Error: %s\n", res.getError().getMessage());
+//					out.printf("Error: %s\n", res.getError().getMessage());
 					return;
 				}
 
@@ -256,7 +256,7 @@ public class GCVConnector {
 	 * @throws IOException
 	 *             on Input/Output errors.
 	 */
-	public void detectProperties(String filePath, PrintStream out, GCVImageResult result)
+	public static void detectProperties(String filePath, GCVImageResult result)
 			throws Exception, IOException {
 		System.out.println("\nSTART PROPERTIES DETECTION::\n ");
 		List<AnnotateImageRequest> requests = new ArrayList<>();
@@ -274,7 +274,7 @@ public class GCVConnector {
 
 			for (AnnotateImageResponse res : responses) {
 				if (res.hasError()) {
-					out.printf("Error: %s\n", res.getError().getMessage());
+//					out.printf("Error: %s\n", res.getError().getMessage());
 					return;
 				}
 				int counter = 1;
@@ -392,7 +392,7 @@ public class GCVConnector {
 	 * @throws IOException
 	 *             on Input/Output errors.
 	 */
-	public void detectCropHints(String filePath, PrintStream out, GCVImageResult result) throws Exception, IOException {
+	public static void detectCropHints(String filePath, GCVImageResult result) throws Exception, IOException {
 
 		System.out.println("\nSTART CROP HINTS DETECTION::\n ");
 		List<AnnotateImageRequest> requests = new ArrayList<>();
@@ -410,15 +410,15 @@ public class GCVConnector {
 
 			for (AnnotateImageResponse res : responses) {
 				if (res.hasError()) {
-					out.printf("Error: %s\n", res.getError().getMessage());
+//					out.printf("Error: %s\n", res.getError().getMessage());
 					return;
 				}
 
 				// For full list of available annotations, see http://g.co/cloud/vision/docs
-				CropHintsAnnotation annotation = res.getCropHintsAnnotation();
-				for (CropHint hint : annotation.getCropHintsList()) {
-					out.println(hint.getBoundingPoly());
-				}
+//				CropHintsAnnotation annotation = res.getCropHintsAnnotation();
+//				for (CropHint hint : annotation.getCropHintsList()) {
+//					out.println(hint.getBoundingPoly());
+//				}
 			}
 		}
 		System.out.println("\nEND CROP HINTS DETECTION::\n ");
@@ -436,7 +436,7 @@ public class GCVConnector {
 	 * @throws IOException
 	 *             on Input/Output errors.
 	 */
-	public void detectWebEntities(String filePath, PrintStream out, GCVImageResult result)
+	public static void detectWebEntities(String filePath, GCVImageResult result)
 			throws Exception, IOException {
 		System.out.println("\nSTART WEB ENTITIES DETECTION::\n ");
 		// Instantiates a client

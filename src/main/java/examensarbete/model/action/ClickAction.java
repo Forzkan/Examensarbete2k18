@@ -56,7 +56,7 @@ public class ClickAction extends ActionBase{
 	}
 
 	@Override
-	public EActionType getType() {
+	public EActionType getActionType() {
 		return this.actionType;
 	}
 
@@ -121,6 +121,7 @@ public class ClickAction extends ActionBase{
 			setCoordinates(event.getScreenX(), event.getScreenY());
 			System.out.println(toString());
 			clearPopups();
+			performAction();
 		};
 		weak_event_handler = new WeakEventHandler<>(event_handler);
 		popup.getScene().setOnMouseClicked(weak_event_handler);
