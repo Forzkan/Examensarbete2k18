@@ -22,6 +22,10 @@ public class TestImageImpl implements TestImage{
 	private GCVImageResult imageGCVResults;
 	
 	
+	// OVERWRITTEN METHODS WHICH ARE NOT SAVED AND THEREFORE NOT USED BY JACKSON.	
+	@JsonIgnore 
+	private Image image;
+	
 	// CONSTRUCTORS
 	public TestImageImpl(String path, Point coordinates, int width, int height) {
 		setImagePath(path);
@@ -111,10 +115,6 @@ public class TestImageImpl implements TestImage{
 		setImage(imagePath);
 	}
 	
-	// OVERWRITTEN METHODS WHICH ARE NOT SAVED AND THEREFORE NOT USED BY JACKSON.	
-	@JsonIgnore 
-	private Image image;
-	
 	@Override
 	public Image getImage() {
 		if(image == null) {
@@ -139,6 +139,9 @@ public class TestImageImpl implements TestImage{
 		return new Rectangle(coordinates.x, coordinates.y, getImageWidth(), getImageHeight());
 	}
 	
+	/**
+	 * @return boolean - True if the images have identical dimensions and location 
+	 */
 	@Override
 	public boolean compareTestImage(TestImage imageToCompare) {
 		if(this.getCoordinates().x == imageToCompare.getCoordinates().x && this.getCoordinates().y == imageToCompare.getCoordinates().y && this.getImageWidth() == imageToCompare.getImageWidth() && this.getImageHeight() == imageToCompare.getImageHeight()) {

@@ -15,12 +15,15 @@ public class OpenCvController {
 	}
 	
 	public MatchType runComparison(TestImage contextImage, TestImage targetImage) {
-//		return templateMatcher.runVisualComparison(contextImage, targetImage);
-//		templateMatcher.findTargetImage(contextImage, targetImage);
-//		MatchType result = templateMatcher.run(testImages);
+//		templateMatcher.runVisualComparison(contextImage, targetImage);
+		MatchType result = templateMatcher.findTargetImage(contextImage, targetImage);
 		
-		//TODO: Returnera enum med outcome, typ MATCH, NEW_LOC_MATCH, NO_MATCH
+		TestImage resultImage = templateMatcher.getResultTestImage();
 		
-		return templateMatcher.findTargetImage(contextImage, targetImage);
+		System.out.println(targetImage);
+		System.out.println(resultImage);
+		
+		return result;
+//		return MatchType.NO_MATCH;
 	}
 }

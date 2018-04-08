@@ -23,7 +23,7 @@ public class TemplateMatcher implements ChangeListener {
 	Boolean use_mask = false;
     Mat contextImage = new Mat(), targetImage = new Mat();
     int match_method;
-    JLabel imgDisplay = new JLabel(), resultDisplay = new JLabel();
+    JLabel templateMatchResultDisplay = new JLabel();
 	
     private TestImage testResultImage;
     
@@ -35,45 +35,38 @@ public class TemplateMatcher implements ChangeListener {
 		return testResultImage;
 	}
 	
-    public MatchType runVisualComparison(TestImage contextImage, TestImage targetImage) {
+    public void runVisualComparison(TestImage contextImage, TestImage targetImage) {
         setupTestImages(contextImage, targetImage);
-        
-        List<TestImage> matchedImages = new ArrayList<TestImage>();
-//        for( int i = 0; i < 5; i++ ) {
-//        	matchedImages.add(matchingMethod(i));
-//        	//Gör inte för 2 - TM CCORR, den är dålig
-////        	System.out.println(matchedImages.get(i));
-//        }
-        matchingMethod(0, true);
+        matchingMethod(0);
         createJFrame();
-        
-        return MatchType.MATCH;
     }
     
     public MatchType findTargetImage(TestImage contextImage, TestImage targetImage) {
         setupTestImages(contextImage, targetImage);
         
     	List<TestImage> matchedImages = new ArrayList<TestImage>();
-    	matchedImages.add(matchingMethod(0, false));
-    	matchedImages.add(matchingMethod(1, false));
+    	matchedImages.add(matchingMethod(0));
+    	matchedImages.add(matchingMethod(1));
     	//Skipping matching method 2 - TM CCORR since it has proven to give bad results for our use.
-    	matchedImages.add(matchingMethod(3, false));
-    	matchedImages.add(matchingMethod(4, false));
-    	matchedImages.add(matchingMethod(5, false));
+    	matchedImages.add(matchingMethod(3));
+    	matchedImages.add(matchingMethod(4));
+    	matchedImages.add(matchingMethod(5));
     	
+    	MatchType result = MatchType.MATCH;
+    	
+    	//If there is any disparity in the images resulting from the different matching methods we deem it to be a failure to find the targetImage
     	for( int i = 1; i < 5; i++ ) {
-//        	System.out.println("jämför");
         	if(!matchedImages.get(0).compareTestImage(matchedImages.get(i))) {
-//        		System.out.println("no match");
-        		return MatchType.NO_MATCH;
+//        		return MatchType.NO_MATCH;
+        		result = MatchType.NO_MATCH;
+        		break;
         	}
         }
-    	//TODO: Ifall det är olika kooridinator på testResultImage så returnera NEW_LOC_MATCH istället
-    	if(false) {
-    		
+    	if(result == MatchType.MATCH && !targetImage.compareTestImage(matchedImages.get(0))) {
+    		result = MatchType.NEW_LOC_MATCH;
     	}
     	testResultImage = matchedImages.get(0);
-    	return MatchType.MATCH;
+    	return result;
     }
     
     private void setupTestImages(TestImage contextImage, TestImage targetImage) {
@@ -94,7 +87,7 @@ public class TemplateMatcher implements ChangeListener {
      * Returns where a match was found
      * @return
      */
-    private TestImage matchingMethod(int matchMethod, boolean showResult) {
+    private TestImage matchingMethod(int matchMethod) {
         Mat result = new Mat();
         Mat img_display = new Mat();
         contextImage.copyTo( img_display );
@@ -117,29 +110,26 @@ public class TemplateMatcher implements ChangeListener {
         
         Imgproc.rectangle(img_display, matchLoc, new Point(matchLoc.x + targetImage.cols(),
                 matchLoc.y + targetImage.rows()), new Scalar(0, 0, 0), 2, 8, 0);
-        Imgproc.rectangle(result, matchLoc, new Point(matchLoc.x + targetImage.cols(),
-                matchLoc.y + targetImage.rows()), new Scalar(0, 0, 0), 2, 8, 0);
+//        Imgproc.rectangle(result, matchLoc, new Point(matchLoc.x + targetImage.cols(),
+//                matchLoc.y + targetImage.rows()), new Scalar(0, 0, 0), 2, 8, 0);
         
-        Image tmpImg = matToBufferedImage(img_display);
+        BufferedImage tmpImg = matToBufferedImage(img_display);
         ImageIcon icon = new ImageIcon(tmpImg);
-        imgDisplay.setIcon(icon);
-        result.convertTo(result, CvType.CV_8UC1, 255.0);
-        tmpImg = matToBufferedImage(result);
+        templateMatchResultDisplay.setIcon(icon);
         
+//        result.convertTo(result, CvType.CV_8UC1, 255.0);
+//        tmpImg = matToBufferedImage(result);
         
-        icon = new ImageIcon(tmpImg);
-        resultDisplay.setIcon(icon);
-        
-
-        java.awt.Point testImagePoint = new java.awt.Point((int)matchLoc.x, (int)matchLoc.y);
-        TestImage matchImage = new TestImageImpl("src/main/resources/tests/test_2/2-part.png", testImagePoint, targetImage.cols(), targetImage.rows());
+        java.awt.Point matchImagePoint = new java.awt.Point((int)matchLoc.x, (int)matchLoc.y);
+//        TestImage matchImage = new TestImageImpl("src/main/resources/tests/test_2/2-part.png", matchImagePoint, targetImage.cols(), targetImage.rows());
+        TestImage matchImage = new TestImageImpl(matToBufferedImage(targetImage), matchImagePoint);
         return matchImage;
     }
     
     public void stateChanged(ChangeEvent e) {
         JSlider source = (JSlider) e.getSource();
         if (!source.getValueIsAdjusting()) {
-            matchingMethod((int)source.getValue(), true);
+            matchingMethod((int)source.getValue());
         }
     }
     
@@ -149,7 +139,7 @@ public class TemplateMatcher implements ChangeListener {
      * @param m - Matrix representation of image
      * @return Image
      */
-    public Image matToBufferedImage(Mat m) {
+    public BufferedImage matToBufferedImage(Mat m) {
         int type = BufferedImage.TYPE_BYTE_GRAY;
         if ( m.channels() > 1 ) {
             type = BufferedImage.TYPE_3BYTE_BGR;
@@ -167,7 +157,7 @@ public class TemplateMatcher implements ChangeListener {
         String title = "Source image; Control; Result image";
         JFrame frame = new JFrame(title);
         frame.setLayout(new GridLayout(2, 2));
-        frame.add(imgDisplay);
+        frame.add(templateMatchResultDisplay);
         int min = 0, max = 5;
         JSlider slider = new JSlider(JSlider.VERTICAL, min, max, match_method);
         slider.setPaintTicks(true);
@@ -185,7 +175,6 @@ public class TemplateMatcher implements ChangeListener {
         slider.setLabelTable( labelTable );
         slider.addChangeListener(this);
         frame.add(slider);
-        frame.add(resultDisplay);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
