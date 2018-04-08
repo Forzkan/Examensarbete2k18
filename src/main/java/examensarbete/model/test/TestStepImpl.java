@@ -1,5 +1,6 @@
 package examensarbete.model.test;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -76,7 +77,7 @@ public class TestStepImpl implements TestStep{
 					// ELSE IF INVALID CHANGE, RETURN FALSE.
 					
 		
-			
+		
 
 		return mainAction.performAction();
 	}
