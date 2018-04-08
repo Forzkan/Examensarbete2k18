@@ -156,7 +156,8 @@ public class TemplateMatcher implements ChangeListener {
     private void createJFrame() {
         String title = "Source image; Control; Result image";
         JFrame frame = new JFrame(title);
-        frame.setLayout(new GridLayout(2, 2));
+//        frame.setLayout(new GridLayout(2, 2));
+        frame.setLayout(new FlowLayout());
         frame.add(templateMatchResultDisplay);
         int min = 0, max = 5;
         JSlider slider = new JSlider(JSlider.VERTICAL, min, max, match_method);
