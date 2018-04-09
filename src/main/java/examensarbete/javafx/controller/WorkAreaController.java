@@ -134,20 +134,21 @@ public class WorkAreaController {
 	@FXML
 	private void runSelectedTests() {
 		// TODO:: Do something with the results. (create report)
-		if (rootIsSelected()) {
-			// Run all tests for all groups.
-		} else if (parentIsSelected()) {
-			// Run all tests in group.
-			for (TestGroup tg : getSelectedTestsAndOrGroup()) {
-				tg.getTest().runTest();
-				tg.getTest().cleanup();
+		if (!isRecording) {
+			if (rootIsSelected()) {
+				// Run all tests for all groups.
+			} else if (parentIsSelected()) {
+				// Run all tests in group.
+				for (TestGroup tg : getSelectedTestsAndOrGroup()) {
+					tg.getTest().runTest();
+					tg.getTest().cleanup();
+				}
+			} else if (selectedTest != null) {
+				// Run selected test.
+				selectedTest.getTest().runTest();
+				selectedTest.getTest().cleanup();
 			}
-		} else if (selectedTest != null) {
-			// Run selected test.
-			selectedTest.getTest().runTest();
-			selectedTest.getTest().cleanup();
 		}
-
 	}
 
 	// TODO :: På browserclick så kollar vi vad som är valt i listan av test,
@@ -333,14 +334,12 @@ public class WorkAreaController {
 		testHandler.saveTest(selectedTest);
 	}
 
-	
-	private void setTestListDisabled(boolean disabled){
+	private void setTestListDisabled(boolean disabled) {
 		testTreeView.setDisable(disabled);
 		treeViewPane.setDisable(disabled);
 		treeViewScrollPane.setDisable(disabled);
 	}
-	
-	
+
 	private ArrayList<TestGroup> getSelectedTestsAndOrGroup() {
 		ArrayList<TestGroup> tests = new ArrayList<TestGroup>();
 		try {

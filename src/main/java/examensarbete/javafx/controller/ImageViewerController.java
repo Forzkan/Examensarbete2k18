@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
@@ -19,6 +20,8 @@ public class ImageViewerController {
 	// Using a Pane because it does not layout its children.
 	@FXML
 	private AnchorPane rootPane;
+	@FXML
+	private AnchorPane buttonPane;
 	@FXML
 	private Pane imagePane;
 	@FXML
@@ -36,6 +39,7 @@ public class ImageViewerController {
 		// Add image to imageview, with proper sizes.
 		URL imageURL = FileUtility.getImageUrlFromPath(image.getImagePath());
 		imageView.setImage(new Image(imageURL.toString()));
+		
 		imageView.setFitWidth(image.getImageWidth());
 		imageView.setFitHeight(image.getImageHeight());
 		
@@ -48,13 +52,20 @@ public class ImageViewerController {
 		imagePane.setPrefHeight(image.getImageHeight());
 		imagePane.setMaxHeight(image.getImageHeight());
 		
+		rootPane.setMinWidth(image.getImageWidth());
+		rootPane.setPrefWidth(image.getImageWidth());
+		rootPane.setMaxWidth(image.getImageWidth());
+		System.out.println(buttonPane.getWidth() + " | " + 50);
+		rootPane.setMinHeight(image.getImageHeight() + 50);
+		rootPane.setPrefHeight(image.getImageHeight() + 50);
+		
 		
 		// draw the current click position.
 		circle = new Circle();
-		circle.setRadius(10);
-		circle.setStyle("-fx-background-color : transparent;");
-		circle.setStyle("-fx-border-color : red;");
-		circle.setStyle("-fx-border-width : 3;");
+		circle.setRadius(6);
+		circle.setStrokeWidth(2);
+		circle.setStroke(Paint.valueOf("red"));
+		circle.setFill(Paint.valueOf("#1e92ff00"));
 		
 		// Create coordinates to place it.
 		int x = image.getImageWidth() / 2;
