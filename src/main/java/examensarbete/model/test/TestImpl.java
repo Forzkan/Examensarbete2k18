@@ -1,16 +1,20 @@
 package examensarbete.model.test;
 
 import java.awt.AWTException;
+import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.sun.javafx.geom.Rectangle;
 
 import examensarbete.model.action.ActionBase;
 import examensarbete.model.action.ChromeWebAction;
 import examensarbete.model.action.EActionType;
+import examensarbete.model.utility.FileUtility;
 import examensarbete.model.utility.WaitHandler;
+import javafx.stage.Screen;
 
 @JsonRootName("Test")
 public class TestImpl implements Test{
@@ -93,6 +97,21 @@ public class TestImpl implements Test{
 		TestStepImpl step = new TestStepImpl(action);
 		step.setChrome((ChromeWebAction)testSteps.get(0).getMainAction());
 		step.takeScreenshot(testGroupName, testName);
+
+		try {
+			int width = (int) Screen.getPrimary().getBounds().getWidth();
+			int height = (int) Screen.getPrimary().getBounds().getHeight();
+			String pathToTmpFullscreen = action.takeScreenShot(FileUtility.getProjectRoot() + "\\tmpFullscreenImg", new java.awt.Rectangle(0,0,width,height));
+			TestImage fullscreenImg = new TestImageImpl();
+			fullscreenImg.setImagePath(pathToTmpFullscreen);
+			// TODO:: Set the coordinates of the Step Context image by doing a template match with the context image as target,
+			// and the FullScreen image as context.
+			//step.getTestStepContextImage()
+		} catch (AWTException e) {
+			System.out.println(e.getMessage());
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
 		testSteps.add(step);
 	}
 
