@@ -49,7 +49,7 @@ public abstract class ActionBase implements IAction{
 	
 	
 	
-	protected String takeScreenShot(String pathAndNameWithNoEnd, Rectangle bounds) throws AWTException, IOException {
+	public String takeScreenShot(String pathAndNameWithNoEnd, Rectangle bounds) throws AWTException, IOException {
 		Robot robot = new Robot();
 		Rectangle area = bounds.getBounds();
 		BufferedImage bufferedImage = robot.createScreenCapture(area);
