@@ -1,14 +1,11 @@
 package examensarbete.model.test;
 
 import java.awt.AWTException;
-import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.sun.javafx.geom.Rectangle;
-
 import examensarbete.model.action.ActionBase;
 import examensarbete.model.action.ChromeWebAction;
 import examensarbete.model.action.EActionType;
@@ -131,6 +128,10 @@ public class TestImpl implements Test{
 				passed = step.performTestStep();
 			} catch (IOException e) {
 				// TODO SKRIV UT VAD SOM GICK FEL I DIALOG
+				e.printStackTrace();
+				return false;
+			} catch (AWTException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return false;
 			}

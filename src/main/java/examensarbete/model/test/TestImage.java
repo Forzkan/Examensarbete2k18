@@ -23,6 +23,14 @@ public interface TestImage {
 	Point getCoordinates();
 	void setCoordinates(Point position);
 	
+	Point getClickOffset();
+	void setClickOffset(Point clickOffset);
+
+	Point getCoordinateOffset();
+	void setCoordinateOffset(Point coordinateOffset);
+	
+	
+	
 	Rectangle getBounds();
 
 	int getResolutionX();
@@ -35,9 +43,12 @@ public interface TestImage {
 	
 	boolean compareTestImage(TestImage imageToCompare);
 
-	void setClickCoordinates(Point clickCoordinates);
-
 	Point getClickCoordinates();
+
+	Point getImageScreenCoordinates();
+
+
+
 	
 	
 	

@@ -2,10 +2,7 @@ package examensarbete.javafx.stage;
 
 import java.io.IOException;
 
-import examensarbete.javafx.controller.ImageViewerController;
-//import examensarbete.javafx.controller.NewTestController;
-//import examensarbete.javafx.controller.PreferencesController;
-//import examensarbete.javafx.controller.WorkAreaController;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

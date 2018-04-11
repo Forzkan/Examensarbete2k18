@@ -1,5 +1,8 @@
 package examensarbete.google.cloud.vision;
 
+import java.awt.Point;
+import java.util.ArrayList;
+
 
 public class GCVResult {
 	private String description;
@@ -9,6 +12,7 @@ public class GCVResult {
 	private float confident;
 	private float topicality;
 	
+	private ArrayList<Point> verticesPoints = new ArrayList<Point>();
 	
 	public String getDescription() {
 		return description;
@@ -50,5 +54,19 @@ public class GCVResult {
 		this.topicality = topicallity;
 	}
 
+	
+	public ArrayList<Point> getVerticesPoints() {
+		return verticesPoints;
+	}
 
+	public void setVerticesPoints(ArrayList<Point> verticesPoints) {
+		this.verticesPoints = verticesPoints;
+	}
+
+	public void addVerticesAsPoints(Point point) {
+		verticesPoints.add(point);
+	}
+
+	
+	
 }

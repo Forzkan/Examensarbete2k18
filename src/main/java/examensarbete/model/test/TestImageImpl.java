@@ -20,7 +20,8 @@ public class TestImageImpl implements TestImage{
 	private int resolutionY;
 	private String imagePath;
 	private GCVImageResult imageGCVResults;
-	private Point clickCoordinates;
+	private Point clickOffset;
+	private Point coordinateOffset;
 	
 	// OVERWRITTEN METHODS WHICH ARE NOT SAVED AND THEREFORE NOT USED BY JACKSON.	
 	@JsonIgnore 
@@ -32,6 +33,7 @@ public class TestImageImpl implements TestImage{
 		this.coordinates = coordinates;
 //		this.width = width;
 //		this.height = height;
+		initializePoints();
 	}
 	
 	/**
@@ -43,6 +45,7 @@ public class TestImageImpl implements TestImage{
 		this.image = image;
 		
 		setCoordinates(coordinates);
+		initializePoints();
 	}
 	
 	// GETTERS AND SETTERS, ALSO USED BY JACKSON.	
@@ -105,6 +108,30 @@ public class TestImageImpl implements TestImage{
 		this.coordinates = coordinates;
 	}
 	
+	
+	
+	@Override
+	public Point getClickOffset() {
+		return clickOffset;
+	}
+
+	@Override
+	public void setClickOffset(Point clickOffset) {
+		this.clickOffset = clickOffset;
+	}
+	
+	@Override
+	public Point getCoordinateOffset() {
+		return coordinateOffset;
+	}
+
+	@Override
+	public void setCoordinateOffset(Point coordinateOffset) {
+		this.coordinateOffset = coordinateOffset;
+	}
+	
+	
+	
 	@Override
 	public String getImagePath() {
 		return imagePath;
@@ -134,18 +161,49 @@ public class TestImageImpl implements TestImage{
 		return ((BufferedImage)image).getHeight();
 	}
 
+
+	/**
+	 * Returns the bounds including a potential offset which is used for images not manually 'snapped'.
+	 */
 	@JsonIgnore
 	@Override
 	public Rectangle getBounds() {
-		return new Rectangle(coordinates.x, coordinates.y, getImageWidth(), getImageHeight());
+		return new Rectangle((int)(coordinates.getX() + coordinateOffset.getX()), 
+				             (int)(coordinates.getY() + coordinateOffset.getY()), 
+				             getImageWidth(), 
+				             getImageHeight());
 	}
+	
+	
+	@JsonIgnore
+	@Override
+	public Point getClickCoordinates() {
+		Point p = new Point();
+		p.setLocation(coordinates.getX() + coordinateOffset.getX() + clickOffset.getX(),
+					  coordinates.getY() + coordinateOffset.getY() + clickOffset.getY());
+		return p;
+	}
+	
+	
+	@JsonIgnore
+	@Override
+	public Point getImageScreenCoordinates() {
+		Point p = new Point();
+		p.setLocation(coordinates.getX() + coordinateOffset.getX(),
+					  coordinates.getY() + coordinateOffset.getY());
+		return p;
+	}
+	
 	
 	/**
 	 * @return boolean - True if the images have identical dimensions and location 
 	 */
 	@Override
 	public boolean compareTestImage(TestImage imageToCompare) {
-		if(this.getCoordinates().x == imageToCompare.getCoordinates().x && this.getCoordinates().y == imageToCompare.getCoordinates().y && this.getImageWidth() == imageToCompare.getImageWidth() && this.getImageHeight() == imageToCompare.getImageHeight()) {
+		if(this.getImageScreenCoordinates().x == imageToCompare.getImageScreenCoordinates().x && 
+			this.getImageScreenCoordinates().y == imageToCompare.getImageScreenCoordinates().y && 
+			this.getImageWidth() == imageToCompare.getImageWidth() && 
+			this.getImageHeight() == imageToCompare.getImageHeight()) {
 			return true;
 		}
 		return false;
@@ -174,18 +232,20 @@ public class TestImageImpl implements TestImage{
 	}
 
 	// Empty Constructor for Jackson.. TODO:: Consider using Lombok.
-	public TestImageImpl() {}
+	public TestImageImpl() {initializePoints();}
 
 	
-	
-	@Override
-	public Point getClickCoordinates() {
-		return clickCoordinates;
+	private void initializePoints() {
+		if(clickOffset == null) {
+			clickOffset = new Point(0,0);
+		}
+		if(coordinateOffset == null) {
+			coordinateOffset = new Point(0,0);
+		}
+		if(coordinates == null) {
+			coordinates = new Point(0,0);
+		}
 	}
 
-	@Override
-	public void setClickCoordinates(Point clickCoordinates) {
-		this.clickCoordinates = clickCoordinates;
-	}
 
 }

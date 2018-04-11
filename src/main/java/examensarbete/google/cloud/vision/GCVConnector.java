@@ -14,6 +14,7 @@ import com.google.cloud.vision.v1.Feature;
 import com.google.cloud.vision.v1.Feature.Type;
 import com.google.cloud.vision.v1.Image;
 import com.google.cloud.vision.v1.ImageAnnotatorClient;
+import com.google.cloud.vision.v1.Vertex;
 //import com.google.cloud.vision.v1.ImageContext;
 //import com.google.cloud.vision.v1.ImageSource;
 //import com.google.cloud.vision.v1.LocationInfo;
@@ -31,6 +32,7 @@ import com.google.cloud.vision.v1.WebDetection.WebPage;
 
 import com.google.protobuf.ByteString;
 
+import java.awt.Point;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -207,6 +209,16 @@ public class GCVConnector {
 					gcvResult.setScore(annotation.getScore());
 					gcvResult.setConfident(annotation.getConfidence());
 					gcvResult.setDescription(annotation.getDescription());
+//					gcvResult.setBoundingPoly(annotation.getBoundingPoly().getAllFields().values()); //TODO::
+
+					for(Vertex v : annotation.getBoundingPoly().getVerticesList()) {
+						gcvResult.addVerticesAsPoints(new Point(v.getX(), v.getY()));
+					}
+//					annotation.getBoundingPoly().getVerticesList().get(0).getX();
+//					Iterator iterator = annotation.getBoundingPoly().getAllFields().values().iterator();
+//					while(iterator.hasNext()){
+//						System.out.println("THE ITERATOR VALUE : " + iterator.next().toString());
+//					}
 					gcvResult.setTopicality(annotation.getTopicality());
 					textResults.add(gcvResult);
 				}
@@ -311,7 +323,7 @@ public class GCVConnector {
 					if (counter == 1) {
 						result.setDominantColor(c);
 					} else if (counter == 2) {
-						result.setSecondayColor(c);
+						result.setSecondaryColor(c);
 					} else if (counter == 3) {
 						result.setThirdColor(c);
 					} else {

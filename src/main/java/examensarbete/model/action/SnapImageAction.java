@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import examensarbete.google.cloud.vision.GCVConnector;
-import examensarbete.google.cloud.vision.GCVImageResult;
 import examensarbete.javafx.controller.ImageViewerController;
 import examensarbete.javafx.stage.StageFactory;
 import examensarbete.javafx.stage.TTStage;
@@ -259,9 +258,9 @@ public class SnapImageAction extends ActionBase {
 		ArrayList<String> ret = new ArrayList<String>();
 		if (targetImage != null) {
 			ret.add("Target Image: " + targetImage.getImagePath());
-			if (targetImage.getCoordinates() != null) {
-				ret.add("X Coordinate: " + targetImage.getCoordinates().x);
-				ret.add("Y Coordinate: " + targetImage.getCoordinates().y);
+			if (targetImage.getImageScreenCoordinates() != null) {
+				ret.add("X Coordinate: " + targetImage.getImageScreenCoordinates().x);
+				ret.add("Y Coordinate: " + targetImage.getImageScreenCoordinates().y);
 			} else {
 				ret.add("X Coordinate: N/A");
 				ret.add("Y Coordinate: N/A");

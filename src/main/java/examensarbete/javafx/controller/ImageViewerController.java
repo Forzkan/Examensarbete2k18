@@ -73,12 +73,12 @@ public class ImageViewerController {
 		circle.setCenterX(x);
 		circle.setCenterY(y);
 		newCoordinates = new Point();
-		newCoordinates.setLocation(image.getCoordinates().getX() + (image.getImageWidth() / 2),
-									image.getCoordinates().getY() + (image.getImageHeight() / 2));
+		newCoordinates.setLocation(image.getImageScreenCoordinates().getX() + (image.getImageWidth() / 2),
+									image.getImageScreenCoordinates().getY() + (image.getImageHeight() / 2));
 		imagePane.getChildren().add(circle);
 		imageView.setOnMouseMoved(event -> {
-			System.out.println(event.getX() + " || " + event.getY());
-			System.out.println(image.getCoordinates().getX() + event.getX() + " || " +image.getCoordinates().getY() + event.getY());
+//			System.out.println(event.getX() + " || " + event.getY());
+//			System.out.println(image.getCoordinates().getX() + event.getX() + " || " +image.getCoordinates().getY() + event.getY());
 		});
 		
 		// Add OnClick Listener to the image view.
@@ -86,8 +86,9 @@ public class ImageViewerController {
 			// Update circle position.
 			circle.setCenterX(event.getX());
 			circle.setCenterY(event.getY());
-			newCoordinates.setLocation((int)image.getCoordinates().getX() + event.getX(), (int)image.getCoordinates().getY() + event.getY());
-			System.out.println("test");
+//			newCoordinates.setLocation((int)image.getCoordinates().getX() + event.getX(), (int)image.getCoordinates().getY() + event.getY());
+			newCoordinates.setLocation(event.getX(), event.getY()); // We are only after the offset for now.
+			
 		});
 	}
 	
@@ -98,7 +99,7 @@ public class ImageViewerController {
 	
 	@FXML
 	private void onOKButton() {
-		image.setClickCoordinates(newCoordinates);
+		image.setClickOffset(newCoordinates);
 		((Stage) rootPane.getScene().getWindow()).close();
 	}
 	

@@ -1,0 +1,11 @@
+# Ignore Gradle and proguard temp files
+bin/
+build/
+proguard/
+.gradle/
+
+# Eclipse project files
+.classpath
+.project
+.settings/
+*.class

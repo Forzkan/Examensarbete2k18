@@ -1,6 +1,7 @@
 package examensarbete.model.action;
 
 import java.awt.AWTException;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.IOException;
 
@@ -46,8 +47,7 @@ public class AutomaticImageSnapAction extends ActionBase {
 	
 	public AutomaticImageSnapAction(Rectangle imageBounds, String groupName, String testName) throws AWTException {
 		super(EActionType.AUTOIMAGESNAP);
-		snapImage.getCoordinates().x = imageBounds.x;
-		snapImage.getCoordinates().y = imageBounds.y;
+		snapImage.setCoordinates(new Point((int)imageBounds.getX(), (int)imageBounds.getY()));
 		this.groupName = groupName;
 		this.testName = testName;
 //		snapImage.setImageWidth(imageBounds.width);

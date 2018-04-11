@@ -1,5 +1,6 @@
 package examensarbete.model.test;
 
+import java.awt.AWTException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -20,7 +21,7 @@ public interface TestStep {
 	void setTestStepTargetImage(TestImage testStepTargetImage);
 
 	
-	boolean performTestStep() throws IOException;
+	boolean performTestStep() throws IOException, AWTException;
 	void takeScreenshot(String groupName, String testName);
 	ArrayList<String> getListOfContextInformation();
 	void setChrome(ChromeWebAction chrome);

@@ -315,6 +315,9 @@ public class WorkAreaController {
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				} catch (AWTException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			} else {
 				System.out.println("No test have been selected.");

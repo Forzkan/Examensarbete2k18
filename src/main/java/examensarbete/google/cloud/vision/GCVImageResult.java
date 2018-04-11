@@ -9,7 +9,7 @@ public class GCVImageResult {
 	
 	private OpenCVShape openCVShape;
 	private DominantGCVColor dominantColor;
-	private DominantGCVColor secondayColor;
+	private DominantGCVColor secondaryColor;
 	private DominantGCVColor thirdColor;
 	
 	private ArrayList<GCVResult> labelResults;
@@ -37,11 +37,11 @@ public class GCVImageResult {
 	public void setDominantColor(DominantGCVColor dominantColor) {
 		this.dominantColor = dominantColor;
 	}
-	public DominantGCVColor getSecondayColor() {
-		return secondayColor;
+	public DominantGCVColor getSecondaryColor() {
+		return secondaryColor;
 	}
-	public void setSecondayColor(DominantGCVColor secondayColor) {
-		this.secondayColor = secondayColor;
+	public void setSecondaryColor(DominantGCVColor secondaryColor) {
+		this.secondaryColor = secondaryColor;
 	}
 	public DominantGCVColor getThirdColor() {
 		return thirdColor;
