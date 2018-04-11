@@ -14,16 +14,17 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.List;
+import java.util.Map.Entry;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.util.*;
 
 public class TemplateMatcher implements ChangeListener {
 
-	Boolean use_mask = false;
     Mat contextImage = new Mat(), targetImage = new Mat();
     int match_method;
     JLabel templateMatchResultDisplay = new JLabel();
+    private static final int MATCHING_METHODS_IN_USE = 6;
 	
     private TestImage testResultImage;
     
@@ -48,25 +49,119 @@ public class TemplateMatcher implements ChangeListener {
     	matchedImages.add(matchingMethod(0));
     	matchedImages.add(matchingMethod(1));
     	//Skipping matching method 2 - TM CCORR since it has proven to give bad results for our use.
+    	//With the new sorting we'll run TM CORR anyway
+    	matchedImages.add(matchingMethod(2));
     	matchedImages.add(matchingMethod(3));
     	matchedImages.add(matchingMethod(4));
     	matchedImages.add(matchingMethod(5));
     	
-    	MatchType result = MatchType.MATCH;
+//    	matchedImages = sortMatchedImages(matchedImages);
+    	
+    	MatchType result = MatchType.NO_MATCH;
     	
     	//If there is any disparity in the images resulting from the different matching methods we deem it to be a failure to find the targetImage
-    	for( int i = 1; i < 5; i++ ) {
-        	if(!matchedImages.get(0).compareTestImage(matchedImages.get(i))) {
-//        		return MatchType.NO_MATCH;
-        		result = MatchType.NO_MATCH;
-        		break;
-        	}
-        }
+//    	for( int i = 1; i < 5; i++ ) {
+//        	if(!matchedImages.get(0).compareTestImage(matchedImages.get(i))) {
+//        		result = MatchType.NO_MATCH;
+//        		break;
+//        	}
+//        }
+    	
+//    	int identicalMatches = getIdenticalImages(matchedImages);
+//    	if(identicalMatches >= 3) {
+//    		result = MatchType.MATCH;
+//    	}
+    	
+    	if(sortMatchedImages(matchedImages).get(0).identicalImages >= 3) {
+    		result = MatchType.MATCH;
+    	}
+    	
     	if(result == MatchType.MATCH && !targetImage.compareTestImage(matchedImages.get(0))) {
     		result = MatchType.NEW_LOC_MATCH;
     	}
     	testResultImage = matchedImages.get(0);
     	return result;
+    }
+    
+    /**
+     * 
+     * @param matchedImages
+     * @return Returns an int representing the amount of matched images that are identical 
+     */
+    private int getIdenticalImages(List<TestImage> matchedImages) {
+    	int identicalImages = 0;
+    	//TODO: Egentligen så bör man jämföra alla bilder med varandra, inte bara [0] mot alla andra
+    	//Matcha alla bilder mot alla andra, lägg in dom i ett set likt Set[bild[0], <antal matchningar>] etc, sen så kan man bara sortera settet och få ut den med flest matchningar
+    	for( int i = 1; i < MATCHING_METHODS_IN_USE; i++ ) {
+        	if(matchedImages.get(0).compareTestImage(matchedImages.get(i))) {
+        		identicalImages++;
+        	}
+        }
+    	//Since it doesn't compare to itself always add one
+    	identicalImages++;
+    	return identicalImages;
+    }
+    
+    /**
+     * 
+     * @param matchedImages
+     * @return List of MatchedImage where the first element is the one with the most identical matches
+     */
+    private List<MatchedImage> sortMatchedImages(List<TestImage> matchedImages) {
+//    	List<TestImage> sortedMatches = new ArrayList<TestImage>();
+//    	Collections.sort(sortedMatches, new Comparator<TestImage>() {
+//    		public int compare(TestImage testImage1, TestImage testImage2) {
+//    			return -1;
+//    		}
+//    	});
+//    	return sortedMatches;
+////    	return matchedImages;
+    	
+    	
+    	//TODO: Egentligen så bör man jämföra alla bilder med varandra, inte bara [0] mot alla andra
+    	//Matcha alla bilder mot alla andra, lägg in dom i ett set likt Set[bild[0], <antal matchningar>] etc, sen så kan man bara sortera settet och få ut den med flest matchningar
+    	
+//    	Map<TestImage, Integer> sortedImages = new TreeMap<TestImage, Integer>(new Comparator<TestImage>() {
+//    		public int compare(TestImage testImage1, TestImage testImage2) {
+//    			if() {
+//    				
+//    			}
+//    			return -1;
+//    		}
+//    	});
+    	
+    	
+    	List<MatchedImage> sortedMatchImages = new ArrayList<MatchedImage>();
+    	
+    	for( int i = 0; i < MATCHING_METHODS_IN_USE; i++ ) {
+    		sortedMatchImages.add(new MatchedImage(matchedImages.get(i),0));
+    		for (int j = 0; j < MATCHING_METHODS_IN_USE; j++) {
+    			if(matchedImages.get(i).compareTestImage(matchedImages.get(j))) {
+    				sortedMatchImages.get(i).identicalImages += 1;
+            	}
+			}
+        }
+    	
+    	Collections.sort(sortedMatchImages, new Comparator<MatchedImage>() {
+    		public int compare(MatchedImage m1, MatchedImage m2) {
+    			int result;
+    			if(m1.identicalImages < m2.identicalImages) {
+    				result = 1;
+    			} else {
+    				result = -1;
+    			}
+    			return result;
+    		}
+    	});
+    	
+//    	List<TestImage> sortedTestImages = new ArrayList<TestImage>();
+//    	
+//    	for (MatchedImage matchImage : sortedMatchImages) {
+//			sortedTestImages.add(matchImage.testImage);
+//		}
+    	
+//    	return sortedTestImages;
+    	return sortedMatchImages;
     }
     
     private void setupTestImages(TestImage contextImage, TestImage targetImage) {
@@ -78,14 +173,9 @@ public class TemplateMatcher implements ChangeListener {
         }
     }
     
-//    private void compareMatchImages(List<TestImage> matchedImages) {
-//    	//Sortera efter x & y värden, returnera den TestImage som gäller
-//    	//return TestImage;
-//    }
-    
     /**
      * Returns where a match was found
-     * @return
+     * @return TestImage
      */
     private TestImage matchingMethod(int matchMethod) {
         Mat result = new Mat();
@@ -186,4 +276,42 @@ public class TemplateMatcher implements ChangeListener {
 		NEW_LOC_MATCH,
 		NO_MATCH
 	}
+    
+    private class MatchedImage {
+    	
+    	private TestImage testImage;
+    	private int identicalImages;
+    	
+    	MatchedImage(TestImage testImage, int identicalImages){
+    		this.testImage = testImage;
+    		this.identicalImages = identicalImages;
+    	}
+    	
+//    	public TestImage getTestImage() {
+//    		return testImage;
+//    	}
+//    	
+//    	public void setIdenticalMatches(int matches) {
+//    		identicalImages = matches;
+//    	}
+//    	
+//    	public int getIdenticalMatches() {
+//    		return identicalImages;
+//    	}
+    	
+    }
+    
+//    private class MapUtil {
+//        public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
+//            List<Entry<K, V>> list = new ArrayList<>(map.entrySet());
+//            list.sort(Entry.comparingByValue());
+//
+//            Map<K, V> result = new LinkedHashMap<>();
+//            for (Entry<K, V> entry : list) {
+//                result.put(entry.getKey(), entry.getValue());
+//            }
+//
+//            return result;
+//        }
+//    }
 }

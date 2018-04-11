@@ -11,7 +11,8 @@ public class OpenCvMain {
 	public static void main(String[] args) {
 		OpenCvController openCvController = new OpenCvController();
 //		TestImage contextImage = new TestImageImpl("src/main/resources/tests/test_2/3-whole.png", new Point(0,0), 0, 0);
-		TestImage contextImage = new TestImageImpl("src/main/resources/tests/test_2/test2_CI.png", new Point(0,0), 0, 0);
+//		TestImage contextImage = new TestImageImpl("src/main/resources/tests/test_2/test2_CI.png", new Point(0,0), 0, 0);
+//		TestImage contextImage = new TestImageImpl("src/main/resources/tests/test_2/tempContextImage.png", new Point(0,0), 0, 0);
 		
 //		TestImage contextImage = new TestImageImpl("src/main/resources/tests/test_2/3-whole-small.png", new Point(0,0), 0, 0);
 //		TestImage contextImage = new TestImageImpl("src/main/resources/tests/test_2/3-whole-changed-extra.png", new Point(0,0), 2560, 1308);
@@ -25,9 +26,10 @@ public class OpenCvMain {
 //		TestImage[] testImages = {contextImage, targetImage};
 		
 //		openCvController.runComparison(contextImage, targetImage);
+		
 		System.out.println(openCvController.runComparison(contextImage, targetImage));
 		
-		openCvController.runVisualComparison(contextImage, targetImage);
+//		openCvController.runVisualComparison(contextImage, targetImage);
 	}
 
 }
