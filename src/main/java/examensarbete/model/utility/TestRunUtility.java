@@ -57,7 +57,7 @@ public class TestRunUtility {
 	
 	private static String getBrowserImage(ChromeWebAction chrome, String pathAndNameNoFileEnding) throws IOException {
 		final File browserImg = new File(pathAndNameNoFileEnding + ".png").getAbsoluteFile();
-		final File outputFile = ((TakesScreenshot) chrome).getScreenshotAs(OutputType.FILE);
+		final File outputFile = ((TakesScreenshot) chrome.getDriver()).getScreenshotAs(OutputType.FILE);
 		try {
 			FileUtils.copyFile(outputFile, browserImg);
 		} catch (IOException e) {
