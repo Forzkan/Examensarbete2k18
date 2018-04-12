@@ -1,6 +1,7 @@
 package examensarbete.google.cloud.vision;
 
 import java.awt.Point;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class GCVComparator implements ValidChangeAlgorithm{
@@ -26,7 +27,7 @@ public class GCVComparator implements ValidChangeAlgorithm{
 	@Override
 	public boolean isValidChange(GCVImageResult target, GCVImageResult newTarget) {
 		changes = new ArrayList<ImageChange>();
-		
+		System.out.println("");
 		verifyColor(target, newTarget);
 		
 		verifyText(target.getTextResults(), newTarget.getTextResults());
@@ -41,6 +42,7 @@ public class GCVComparator implements ValidChangeAlgorithm{
 	
 
 	private boolean analyzeIfValidChanges() {
+		System.out.println("ANALYZE IF VALID CHANGES.");
 		int changeCounter = 0;
 		for(ImageChange c : changes){
 			System.out.println(c.name());
@@ -67,6 +69,13 @@ public class GCVComparator implements ValidChangeAlgorithm{
 			changeCounter ++;
 		}
 	
+		
+		if(changes.contains(ImageChange.FONT) && 
+				(changes.contains(ImageChange.MAINCOLOR) || 
+				 changes.contains(ImageChange.SECONDARYCOLOR) || 
+				 changes.contains(ImageChange.THIRDCOLOR))) {
+			changeCounter--; // Colorchanges seems to actually have an effect on the vertices, and font changes may for sure have an effect on colors changing..
+		}
 		return changeCounter <= 1;
 	}
 	
@@ -133,8 +142,10 @@ public class GCVComparator implements ValidChangeAlgorithm{
 		}
 		// equalCounter should be the same as the number of vertices in the targetlist.
 		if(equalCounter < target.getVerticesPoints().size()) {
+			System.out.println("ALL VERTICES DO NOT MATCH");
 			return false;
 		}
+		System.out.println("ALL VERTICES MATCH");
 		return true;
 	}
 	
@@ -159,12 +170,17 @@ public class GCVComparator implements ValidChangeAlgorithm{
 		int matches = 0;
 		for(GCVResult t : validTargetList) {
 			for(GCVResult nt : validNewList) {
+				System.out.println("COMPARING DESCRIPTIONS: " + t.getDescription() + " AGAINST -> " + nt.getDescription());
 				if(t.getDescription().equalsIgnoreCase(nt.getDescription())) {
 					matches++;
+					break;
 				}
 			}
 		}
-		double matchPercentage = matches / maxMatches;
+//		DecimalFormat matchPercentage = new DecimalFormat(".##");
+//		matchPercentage = 
+		double matchPercentage = (double)((double)matches/(double)maxMatches); //matches / maxMatches;
+		System.out.println("MATCHES (" + matches + "/" + maxMatches + ")");
 		System.out.println("MATCHING PERCENTAGE - " + change.name() + " : " + matchPercentage + " Threshold : " + minMatchPercentage);
 		if(matchPercentage < minMatchPercentage) {
 			changes.add(change);
