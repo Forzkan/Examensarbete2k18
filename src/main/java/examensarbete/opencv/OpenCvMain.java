@@ -12,7 +12,7 @@ public class OpenCvMain {
 		OpenCvController openCvController = new OpenCvController();
 //		TestImage contextImage = new TestImageImpl("src/main/resources/tests/test_2/3-whole.png", new Point(0,0), 0, 0);
 //		TestImage contextImage = new TestImageImpl("src/main/resources/tests/test_2/test2_CI.png", new Point(0,0), 0, 0);
-//		TestImage contextImage = new TestImageImpl("src/main/resources/tests/test_2/tempContextImage.png", new Point(0,0), 0, 0);
+		TestImage contextImage = new TestImageImpl("src/main/resources/tests/test_2/tempContextImage.png", new Point(0,0), 0, 0);
 		
 //		TestImage contextImage = new TestImageImpl("src/main/resources/tests/test_2/3-whole-small.png", new Point(0,0), 0, 0);
 //		TestImage contextImage = new TestImageImpl("src/main/resources/tests/test_2/3-whole-changed-extra.png", new Point(0,0), 2560, 1308);

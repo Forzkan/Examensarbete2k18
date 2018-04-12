@@ -135,5 +135,10 @@ public class ChromeWebAction extends ActionBase{
 		return new TestImageImpl(outputFile.getAbsolutePath(), new java.awt.Point(0,0), contextScreenshot.getWidth(), contextScreenshot.getHeight());
 	}
 	
+	@JsonIgnore
+	public ChromeDriver getDriver() {
+		return driver;
+	}
+	
 	
 }

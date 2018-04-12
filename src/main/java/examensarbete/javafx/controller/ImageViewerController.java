@@ -73,8 +73,8 @@ public class ImageViewerController {
 		circle.setCenterX(x);
 		circle.setCenterY(y);
 		newCoordinates = new Point();
-		newCoordinates.setLocation(image.getImageScreenCoordinates().getX() + (image.getImageWidth() / 2),
-									image.getImageScreenCoordinates().getY() + (image.getImageHeight() / 2));
+		newCoordinates.setLocation((image.getImageWidth() / 2),
+								    (image.getImageHeight() / 2));
 		imagePane.getChildren().add(circle);
 		imageView.setOnMouseMoved(event -> {
 //			System.out.println(event.getX() + " || " + event.getY());
