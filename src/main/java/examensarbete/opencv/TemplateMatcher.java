@@ -25,6 +25,7 @@ public class TemplateMatcher implements ChangeListener {
     int match_method;
     JLabel templateMatchResultDisplay = new JLabel();
     private static final int MATCHING_METHODS_IN_USE = 6;
+    private static final int MINIMUM_IDENTICAL_MATCHES = 3;
 	
     private TestImage testResultImage;
     
@@ -72,7 +73,7 @@ public class TemplateMatcher implements ChangeListener {
 //    		result = MatchType.MATCH;
 //    	}
     	
-    	if(sortMatchedImages(matchedImages).get(0).identicalImages >= 3) {
+    	if(sortMatchedImages(matchedImages).get(0).identicalImages >= MINIMUM_IDENTICAL_MATCHES) {
     		result = MatchType.MATCH;
     	}
     	
