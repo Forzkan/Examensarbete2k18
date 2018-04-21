@@ -58,7 +58,7 @@ public class TestHandler {
 	
 	
 	private void createTestCollectionList() {
-		File directory = new File(PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()));
+		File directory = new File(FileUtility.getProjectRoot() + "\\TEST CASES");
 		if(directory.exists() && directory.isDirectory()) {
 			for(File f : directory.listFiles()) {
 				if(f.isDirectory()) {

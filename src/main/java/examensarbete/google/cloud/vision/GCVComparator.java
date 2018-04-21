@@ -3,29 +3,32 @@ package examensarbete.google.cloud.vision;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import examensarbete.model.properties.PropertiesHandler;
+import examensarbete.model.properties.TTProperties;
+
 public class GCVComparator implements ValidChangeAlgorithm{
 	
 	
-	private final double MIN_ACCEPTED_TEXT_MATCH = 0.5; // 50%.
-	private final double MIN_TEXT_SCORE = 0.5; // 50%.
-	private final boolean allowNewText = false; // a page with several similar buttons could probably big a huuuge mess to deal with if the one button we are after gets removed, or gets a completely new text.
+	private double MIN_ACCEPTED_TEXT_MATCH = 0.5; // 50%.
+	private double MIN_TEXT_SCORE = 0.5; // 50%.
+	private boolean allowNewText = false; // a page with several similar buttons could probably big a huuuge mess to deal with if the one button we are after gets removed, or gets a completely new text.
 	
 	
-	private final double MIN_ACCEPTED_WEB_MATCH = 0.40; // 70%.
-	private final double MIN_WEB_SCORE = 0.50;
+	private double MIN_ACCEPTED_WEB_MATCH = 0.40; // 70%.
+	private double MIN_WEB_SCORE = 0.50;
 	
-	private final double MIN_ACCEPTED_LABEL_MATCH = 0.60; // 70%.
-	private final double MIN_LABEL_SCORE = 0.65; 
+	private double MIN_ACCEPTED_LABEL_MATCH = 0.60; // 70%.
+	private double MIN_LABEL_SCORE = 0.65; 
 	
 	
-	private final double MIN_ACCEPTED_WEB_MATCH_WHEN_VALID_TEXT = 0.35; // 70%.
-	private final double MIN_ACCEPTED_LABEL_MATCH_WHEN_VALID_TEXT = 0.35; // 70%.
+	private double MIN_ACCEPTED_WEB_MATCH_WHEN_VALID_TEXT = 0.35; // 70%.
+	private double MIN_ACCEPTED_LABEL_MATCH_WHEN_VALID_TEXT = 0.35; // 70%.
 	
-	private final double MIN_WEB_SCORE_WHEN_VALID_TEXT = 0.25;
-	private final double MIN_LABEL_SCORE_WHEN_VALID_TEXT = 0.25; 
+	private double MIN_WEB_SCORE_WHEN_VALID_TEXT = 0.25;
+	private double MIN_LABEL_SCORE_WHEN_VALID_TEXT = 0.25; 
 	
 
-	private final double CONFIDENT_LABEL_THRESHOLD = 0.75; // if over 75% matches, then it is considered to be a very confident label match.
+	private double CONFIDENT_LABEL_THRESHOLD = 0.75; // if over 75% matches, then it is considered to be a very confident label match.
 	private boolean veryConfidentLabelMatch = false;
 	
 	// RULES, 
@@ -38,6 +41,9 @@ public class GCVComparator implements ValidChangeAlgorithm{
 	
 	@Override
 	public boolean isValidChange(GCVImageResult target, GCVImageResult newTarget) {
+		// Set all the gcv parameters from the preferences window.
+		setGCVParameters();
+		
 		changes = new ArrayList<ImageChange>();
 		System.out.println("");
 		verifyColor(target, newTarget);
@@ -56,6 +62,32 @@ public class GCVComparator implements ValidChangeAlgorithm{
 	}
 	
 	
+
+	private void setGCVParameters() {
+		MIN_ACCEPTED_TEXT_MATCH = Double.parseDouble(PropertiesHandler.properties.getProperty(TTProperties.minTextMatch.toString())) / 100;
+		MIN_TEXT_SCORE =  Double.parseDouble(PropertiesHandler.properties.getProperty(TTProperties.minTextScore.toString())) / 100;
+//		private final boolean allowNewText = false; // a page with several similar buttons could probably big a huuuge mess to deal with if the one button we are after gets removed, or gets a completely new text.
+		
+		
+		MIN_ACCEPTED_WEB_MATCH =  Double.parseDouble(PropertiesHandler.properties.getProperty(TTProperties.minWebMatch.toString())) / 100;
+		MIN_WEB_SCORE = Double.parseDouble(PropertiesHandler.properties.getProperty(TTProperties.minWebScore.toString())) / 100;
+		
+		MIN_ACCEPTED_LABEL_MATCH = Double.parseDouble(PropertiesHandler.properties.getProperty(TTProperties.minLabelMatch.toString())) / 100;
+		MIN_LABEL_SCORE =  Double.parseDouble(PropertiesHandler.properties.getProperty(TTProperties.minLabelScore.toString())) / 100;
+		
+		
+		MIN_ACCEPTED_WEB_MATCH_WHEN_VALID_TEXT = Double.parseDouble(PropertiesHandler.properties.getProperty(TTProperties.wvt_minWebMatch.toString())) / 100;
+		MIN_ACCEPTED_LABEL_MATCH_WHEN_VALID_TEXT = Double.parseDouble(PropertiesHandler.properties.getProperty(TTProperties.wvt_minLabelMatch.toString())) / 100;
+		
+		MIN_WEB_SCORE_WHEN_VALID_TEXT = Double.parseDouble(PropertiesHandler.properties.getProperty(TTProperties.wvt_minWebScore.toString())) / 100;
+		MIN_LABEL_SCORE_WHEN_VALID_TEXT = Double.parseDouble(PropertiesHandler.properties.getProperty(TTProperties.wvt_minLabelScore.toString())) / 100; 
+		
+
+		CONFIDENT_LABEL_THRESHOLD = Double.parseDouble(PropertiesHandler.properties.getProperty(TTProperties.confidentLabel.toString())) / 100; 
+		System.out.println();
+	}
+
+
 
 	private void verifyLogos(ArrayList<GCVResult> logoResults, ArrayList<GCVResult> newLogoResults) {
 		
@@ -217,6 +249,7 @@ public class GCVComparator implements ValidChangeAlgorithm{
 	}
 
 	private void verifyGCVList(ArrayList<GCVResult> targetList, ArrayList<GCVResult> newTargetList, double minScore ,double minMatchPercentage, ImageChange change) {
+		System.out.println("");
 		ArrayList<GCVResult> validTargetList = createListOfValidResults(targetList, minScore);
 		ArrayList<GCVResult> validNewList = createListOfValidResults(newTargetList, minScore);
 		
