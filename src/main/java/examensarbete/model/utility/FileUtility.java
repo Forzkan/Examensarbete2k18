@@ -42,7 +42,7 @@ public class FileUtility {
     
     public static String createUniqueSnapImageFilePath(String groupName, String testName) {
     	String fullDirPath = createFilePathAndNeededDirs(groupName, testName);
-    	System.out.println("FULL DIRR PATH: " + fullDirPath);
+//    	System.out.println("FULL DIRR PATH: " + fullDirPath);
     	String fullFilePath = fullDirPath + "\\" + getUniqueImageName(fullDirPath, testName + "_SI"); // SI for Snap Image.
     	return fullFilePath;
     }
@@ -55,8 +55,8 @@ public class FileUtility {
     
     
     private static String createFilePathAndNeededDirs(String groupName, String testName) {
-    	String testCaseDir =  PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString());
-    	System.out.println(testCaseDir);
+    	String testCaseDir = getProjectRoot() + "\\TEST CASES";
+//    	System.out.println(testCaseDir);
     	String fullDirPath = testCaseDir + "\\" + groupName + "\\" + testName + "\\images";
     	if(!new File(fullDirPath).exists()) {
     		File dir = new File(fullDirPath);
@@ -66,7 +66,7 @@ public class FileUtility {
     }
     
     private static String getUniqueImageName(String dirPath, String defaultImageName) {
-    	System.out.println("THE NAME WE CHECK IF ALREADY EXISTS: " + defaultImageName);
+//    	System.out.println("THE NAME WE CHECK IF ALREADY EXISTS: " + defaultImageName);
     	String ret = defaultImageName;
     	int counter = 1;
     	
@@ -80,10 +80,10 @@ public class FileUtility {
     
     private static boolean nameAlreadyExist(String dirPath, String name) {
     	File dir = new File(dirPath);
-    	System.out.println("LIST OF FILES \n"+dir.listFiles());
+//    	System.out.println("LIST OF FILES \n"+dir.listFiles());
     	for(File f : dir.listFiles()) {
-    		System.out.println(f.getAbsolutePath());
-    		System.out.println(f.getName());
+//    		System.out.println(f.getAbsolutePath());
+//    		System.out.println(f.getName());
     		if(f.getName().replaceAll(imageExt, "").equals(name)) {
     			return true;
     		}
@@ -95,5 +95,26 @@ public class FileUtility {
     public static String getProjectRoot() {
     	return System.getProperty("user.dir");
     }
+    
+    
+    
+    public static void createPathIfNoExisting(String path) {
+    	File f = new File(path);
+    	if(f.exists() == false) {
+    		f.mkdirs();
+    	}
+    }
+
+	public static String absoluteToRelativePath(String imagePath) {
+		return imagePath.replace(getProjectRoot(),"");
+	}
+    
+    
+    
+ 
+    
+    
+    
+    
     
 }

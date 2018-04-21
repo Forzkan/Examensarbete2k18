@@ -71,45 +71,50 @@ public class TestStepImpl implements TestStep {
 			SnapImageAction snapImageAction = (SnapImageAction) mainAction;
 			OpenCvController openCvController = new OpenCvController();
 			MatchType matchResult = MatchType.NO_MATCH;
-			matchResult = openCvController.runComparison(chrome.getNewContextImage(), snapImageAction.getTargetImage());
-			if (matchResult == MatchType.MATCH) {
-				System.out.println("TEMPLATE MATCHING FOUND THE IMAGE IN THE SAME LOCATION.");
-				return mainAction.performAction();
-			} else if (matchResult == MatchType.NEW_LOC_MATCH) { // Should we verify this with the AI?
-				System.out.println("TEMPLATE MATCH FOUND THE IMAGE IN A NEW LOCATION.");
-				TestImage newLocationTestImage = openCvController.getResultTestImage();
-				newLocationTestImage.setCoordinateOffset(TestRunUtility.getOffset(chrome));
-				newLocationTestImage.setClickOffset(snapImageAction.getTargetImage().getClickOffset());
 
-				snapImageAction.setTargetImage(newLocationTestImage);
+			// NO MATCH, SO DO AI STUFF.
+			System.out.println("TEMPLATE MATCHING DID NOT FIND A MATCH.");
+			// TAKE NEW IMAGE, IN SAME LOCATION.
+			TestImage newTarget = new TestImageImpl();
+			newTarget.setImagePath(TestRunUtility.takeNewTargetImage(snapImageAction.getTargetImage().getBounds(),
+					FileUtility.getProjectRoot() + "\\tmpNewTargetForGCV")); // TODO:: Should probably create tmp folder
+																				// to store such images in.
+			// GET GCVImageResult FOR THE NEW IMAGE.
+			newTarget.setImageGCVResults(GCVConnector.getGCVImageResult(newTarget.getImagePath()));
+			// IF VALID CHANGE
+			GCVComparator gcvComparator = new GCVComparator();
+			if (gcvComparator.isValidChange(snapImageAction.getTargetImage().getImageGCVResults(),
+					newTarget.getImageGCVResults())) {
+				System.out.println("IS VALID CHANGE.");
+				SnapImageAction newSnapAction = new SnapImageAction();
 
-				return snapImageAction.performAction();
+				newTarget.setCoordinates(snapImageAction.getTargetImage().getCoordinates());
+				newTarget.setCoordinateOffset(snapImageAction.getTargetImage().getCoordinateOffset());
+				newTarget.setClickOffset(snapImageAction.getTargetImage().getClickOffset());
+				newSnapAction.setTargetImage(newTarget);
+				// PERFORM CLICK, AND SAVE THE IMAGE SO THAT THE USER CAN SEE WHAT IS CONSIDERED
+				// A VALID CHANGE, AND UPDATE THE BASELINE IF THE USER WANTS TO DO SO.
+				return newSnapAction.performAction();
 			} else {
-				// NO MATCH, SO DO AI STUFF.
-				System.out.println("TEMPLATE MATCHING DID NOT FIND A MATCH.");
-					// TAKE NEW IMAGE, IN SAME LOCATION.
-				TestImage newTarget = new TestImageImpl();
-				newTarget.setImagePath(TestRunUtility.takeNewTargetImage(snapImageAction.getTargetImage().getBounds(), FileUtility.getProjectRoot() + "\\tmpNewTargetForGCV")); // TODO:: Should probably create tmp folder to store such images in.
-					// GET GCVImageResult FOR THE NEW IMAGE.
-					newTarget.setImageGCVResults(GCVConnector.getGCVImageResult(newTarget.getImagePath()));
-					// IF VALID CHANGE
-					GCVComparator gcvComparator = new GCVComparator();
-					if(gcvComparator.isValidChange(snapImageAction.getTargetImage().getImageGCVResults(), newTarget.getImageGCVResults())) {
-						System.out.println("IS VALID CHANGE.");
-						SnapImageAction newSnapAction = new SnapImageAction();
-						
-						newTarget.setCoordinates(snapImageAction.getTargetImage().getCoordinates());
-						newTarget.setCoordinateOffset(snapImageAction.getTargetImage().getCoordinateOffset());
-						newTarget.setClickOffset(snapImageAction.getTargetImage().getClickOffset());
-						newSnapAction.setTargetImage(newTarget);
-						// PERFORM CLICK, AND SAVE THE IMAGE SO THAT THE USER CAN SEE WHAT IS CONSIDERED A VALID CHANGE, AND UPDATE THE BASELINE IF THE USER WANTS TO DO SO.
-						return newSnapAction.performAction();
-					}else {
-						System.out.println("NOT A VALID CHANGE!");
-						return false;
-					}
-					
+				matchResult = openCvController.runComparison(chrome.getNewContextImage(),
+						snapImageAction.getTargetImage());
+				if (matchResult == MatchType.MATCH) {
+					System.out.println("TEMPLATE MATCHING FOUND THE IMAGE IN THE SAME LOCATION.");
+					return mainAction.performAction();
+				} else if (matchResult == MatchType.NEW_LOC_MATCH) { // Should we verify this with the AI?
+					System.out.println("TEMPLATE MATCH FOUND THE IMAGE IN A NEW LOCATION.");
+					TestImage newLocationTestImage = openCvController.getResultTestImage();
+					newLocationTestImage.setCoordinateOffset(TestRunUtility.getOffset(chrome));
+					newLocationTestImage.setClickOffset(snapImageAction.getTargetImage().getClickOffset());
+
+					snapImageAction.setTargetImage(newLocationTestImage);
+
+					return snapImageAction.performAction();
+				}else {
+					return false; // i.e NO MATCH.
+				}
 			}
+
 			// DO TEMPLATE,
 			// IF TEMPLATE OK AND IN SAME PLACE, GO ON LIKE NOTHING EEELSE MATTEEEEEEERS
 

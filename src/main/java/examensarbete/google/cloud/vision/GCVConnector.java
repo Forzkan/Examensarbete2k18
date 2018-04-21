@@ -254,7 +254,7 @@ public class GCVConnector {
 		try (ImageAnnotatorClient client = ImageAnnotatorClient.create()) {
 			BatchAnnotateImagesResponse response = client.batchAnnotateImages(requests);
 			List<AnnotateImageResponse> responses = response.getResponsesList();
-
+			System.out.println("");
 			for (AnnotateImageResponse res : responses) {
 				if (res.hasError()) {
 //					out.printf("Error: %s\n", res.getError().getMessage());
@@ -263,7 +263,7 @@ public class GCVConnector {
 
 				// For full list of available annotations, see http://g.co/cloud/vision/docs
 				for (EntityAnnotation annotation : res.getLogoAnnotationsList()) {
-					// out.println(annotation.getDescription());
+					System.out.println(annotation.getDescription());
 					GCVResult gcvResult = new GCVResult();
 					gcvResult.setScore(annotation.getScore());
 					gcvResult.setConfident(annotation.getConfidence());

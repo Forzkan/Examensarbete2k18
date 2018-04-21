@@ -2,6 +2,7 @@ package examensarbete.javafx.controller;
 
 import java.awt.AWTException;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +26,7 @@ import examensarbete.model.test.TestHandler;
 import examensarbete.model.test.TestStep;
 import examensarbete.model.utility.FileUtility;
 import examensarbete.model.utility.WaitHandler;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.WeakEventHandler;
@@ -65,6 +67,7 @@ public class WorkAreaController {
 	private StageFactory stageFactory = new StageFactory();
 	private final TestHandler testHandler = new TestHandler();
 
+	
 	@FXML
 	private ImageView aStepsContextImage, aStepsSnapImage;
 
@@ -82,7 +85,7 @@ public class WorkAreaController {
 	}
 
 	private void clearStepInfo() {
-		stepNumberLabel.setText("");
+//		stepNumberLabel.setText("");
 		stepTypeLabel.setText("");
 		targetInfoVBox.getChildren().clear();
 		contextInfoVBox.getChildren().clear();
@@ -254,6 +257,56 @@ public class WorkAreaController {
 		}
 	}
 
+	private long targetImageLastTime = 0;
+	private long targetImageCurrentTime = 0;
+	private long contextImageLastTime = 0;
+	private long contextImageCurrentTime = 0;
+	
+	@FXML
+	private void displayFullSizeTargetImage() {
+		 long diff = 0;
+
+		 targetImageCurrentTime=System.currentTimeMillis();
+
+	        if(targetImageLastTime!=0 && targetImageCurrentTime!=0){
+	            diff=targetImageCurrentTime-targetImageLastTime;
+
+	            if( diff<=215) {
+	            	// doubleclick
+//	            	aStepsContextImage, aStepsSnapImage;
+	            }else {
+	            	
+	            }
+	        }
+
+	        targetImageLastTime=targetImageCurrentTime;
+	}
+	
+	@FXML
+	private void displayFullSizeContextImage() {
+		 long diff = 0;
+
+		 contextImageCurrentTime=System.currentTimeMillis();
+
+	        if(contextImageLastTime!=0 && contextImageCurrentTime!=0){
+	            diff=contextImageCurrentTime-contextImageLastTime;
+
+	            if( diff<=215) {
+	            	// doubleclick
+	            }else {
+	            	//aStepsContextImage, aStepsSnapImage;
+//	            	Image context = aStepsContextImage.getImage();
+////	            	bf.
+//	            	BufferedImage bIContext = SwingFXUtils.fromFXImage(context, null);
+//	            	java.awt.Image contextImage = (java.awt.Image)bIContext;
+	            	Stage viewerStage = stageFactory.getStage(TTStage.IMAGEVIEWER, new ImageViewerController(aStepsContextImage, true));
+	            	viewerStage.show();
+	            }
+	        }
+
+	        contextImageLastTime=contextImageCurrentTime;
+	}
+	
 	@FXML
 	private void snapImageFromBounds() {
 		// if (isRecordingAndTestIsSelected()) { // i.e. we can add actions to a test.
@@ -618,7 +671,7 @@ public class WorkAreaController {
 				System.out.println("Could not display Step image(s)." + " \nError: " + e.getMessage());
 			}
 			// targetInfoVBox, contextInfoVBox;
-			stepNumberLabel.setText("N/A");
+//			stepNumberLabel.setText("N/A");
 			stepTypeLabel.setText(selectedStep.getMainAction().getActionType().name().toUpperCase());
 
 			if (selectedStep.getTestStepContextImage() != null) {

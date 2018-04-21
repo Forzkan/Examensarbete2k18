@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import examensarbete.google.cloud.vision.GCVImageResult;
+import examensarbete.model.utility.FileUtility;
 
 
 public class TestImageImpl implements TestImage{
@@ -134,13 +135,13 @@ public class TestImageImpl implements TestImage{
 	
 	@Override
 	public String getImagePath() {
-		return imagePath;
+		return FileUtility.getProjectRoot() + "//" + imagePath;
 	}
 
 	@Override
 	public void setImagePath(String imagePath) {
-		this.imagePath = imagePath;
-		setImage(imagePath);
+		this.imagePath = FileUtility.absoluteToRelativePath(imagePath);
+		setImage(this.imagePath);
 	}
 	
 	@Override
@@ -212,7 +213,7 @@ public class TestImageImpl implements TestImage{
 	// PRIVATE HELP METHODS.
 	private void setImage(String imagePath) {
 		try {
-			File img = new File(imagePath);
+			File img = new File(FileUtility.getProjectRoot() + "//" + imagePath);
 			image = ImageIO.read(img);
 		} catch (Exception e) {
 			System.out.println("Error when creating image from path: " + imagePath);
