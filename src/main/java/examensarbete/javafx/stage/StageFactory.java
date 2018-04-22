@@ -14,6 +14,8 @@ public class StageFactory {
 	private final static String mainFXML = "fxml/ActionWorkArea.fxml";
 	private final static String newTestFXML = "fxml/NewTestDialog.fxml";
 	private final static String imageViewerFXML = "fxml/ImageViewer.fxml";
+	private final static String testResultFXML = "fxml/TestResultWindow.fxml";
+	
 
 	public Stage openStage(TTStage tt_stage, Object controller) {
 		switch (tt_stage) {
@@ -25,9 +27,13 @@ public class StageFactory {
 
 		case PREFERENCES:
 			return openStage(preferencesFXML, "Preferences", controller);
+			
 		case IMAGEVIEWER:
 			return openStage(imageViewerFXML, "Image Viewer - Set click position.", controller);
 
+		case TEST_RESULT : 
+			return openStage(testResultFXML, "Test results", controller);
+		
 		default:
 			throw new NullPointerException("Invalid type of TTStage. Cannot open stage.");
 		}

@@ -53,7 +53,7 @@ public class WorkAreaController {
 	@FXML
 	private AnchorPane headerPane, toolBarPane, workAreaPane;
 	@FXML
-	private Button playButton, openBrowserButton, mouseClickAction, snipImageButton;
+	private Button playButton, openBrowserButton, mouseClickAction, snipImageButton, testReportButton;
 	@FXML
 	private GridPane workAreaGridPane;
 	@FXML
@@ -154,6 +154,16 @@ public class WorkAreaController {
 		}
 	}
 
+	@FXML
+	private void onTestReportButtonClick() {
+//		testReportButton
+		System.out.println("OPEN TEST RESULTS");
+		TestResultController controller = new TestResultController();
+		preferencesStage = stageFactory.openStage(TTStage.TEST_RESULT, controller);
+		
+	}
+	
+	
 	// TODO :: På browserclick så kollar vi vad som är valt i listan av test,
 	// och om något är valt så hämtar vi gruppnamn och testnamn.
 	// Sedan lägger vi till den action vi har klickat på.

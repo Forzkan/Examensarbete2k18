@@ -253,14 +253,14 @@
                                  <children>
                                     <HBox prefHeight="48.0" prefWidth="325.0">
                                        <children>
-                                          <Label prefHeight="27.0" prefWidth="147.0" text="Last test run" textFill="WHITE">
+                                          <Label prefHeight="27.0" prefWidth="140.0" text="Last test run" textFill="WHITE">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
                                           </Label>
-                                          <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="135.0" style="-fx-background-color: #404040;" text="Test Report" textFill="WHITE">
+                                          <Button fx:id="testReportButton" mnemonicParsing="false" onAction="#onTestReportButtonClick" prefHeight="32.0" prefWidth="135.0" style="-fx-background-color: #404040;" text="Test Report" textFill="WHITE">
                                              <HBox.margin>
-                                                <Insets left="140.0" />
+                                                <Insets left="120.0" />
                                              </HBox.margin>
                                              <font>
                                                 <Font name="System Bold" size="12.0" />
