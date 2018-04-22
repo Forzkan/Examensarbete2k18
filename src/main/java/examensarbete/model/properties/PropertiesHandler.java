@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import examensarbete.model.utility.FileUtility;
+
 public class PropertiesHandler {
 
 	private final static String filename = "tt_properties";
@@ -98,12 +100,35 @@ public class PropertiesHandler {
 		try {
 			output = new FileOutputStream(filename);
 			// set the properties value
-			properties.setProperty(TTProperties.CHROMEDRIVER_EXE_PATH.toString(), "D://WORKSPACE/chromedriver.exe");
-			properties.setProperty(TTProperties.INSTALLATION_DIRECTORY.toString(), "D://WORKSPACE");
-			properties.setProperty(TTProperties.TESTCASE_DIRECTORY.toString(), "D://WORKSPACE");
-			properties.setProperty(TTProperties.IMAGE_DIRECTORY.toString(), "D://WORKSPACE");
-			properties.setProperty(TTProperties.DEFAULT_SELECT_DIR.toString(), "D://WEB_COMPONENTS");
+			String root =  FileUtility.getProjectRoot();
+			String driverPath = root + "//drivers";
+			String testCasesPath =  root + "//TEST CASES";
+			
+			FileUtility.createPathIfNoExisting(driverPath);
+			FileUtility.createPathIfNoExisting(testCasesPath);
+			
+			properties.setProperty(TTProperties.CHROMEDRIVER_EXE_PATH.toString(), driverPath + "//chromedriver.exe");
+			properties.setProperty(TTProperties.INSTALLATION_DIRECTORY.toString(), root);
+			properties.setProperty(TTProperties.TESTCASE_DIRECTORY.toString(), testCasesPath);
+			properties.setProperty(TTProperties.IMAGE_DIRECTORY.toString(), root);
+			properties.setProperty(TTProperties.DEFAULT_SELECT_DIR.toString(), root);
 
+			// GCV 
+			properties.setProperty(TTProperties.minTextScore.toString(), "50"); 
+			properties.setProperty(TTProperties.minTextMatch.toString(),  "50"); 
+			properties.setProperty(TTProperties.wvt_minLabelScore.toString(), "25"); 
+			properties.setProperty(TTProperties.wvt_minLabelMatch.toString(), "35"); 
+			properties.setProperty(TTProperties.wvt_minWebScore.toString(),  "25"); 
+			properties.setProperty(TTProperties.wvt_minWebMatch.toString(),  "35"); 
+			properties.setProperty(TTProperties.minLabelScore.toString(),  "65"); 
+			properties.setProperty(TTProperties.minLabelMatch.toString(),  "60"); 
+			properties.setProperty(TTProperties.confidentLabel.toString(), "75"); 
+			properties.setProperty(TTProperties.minWebScore.toString(),  "50"); 
+			properties.setProperty(TTProperties.minWebMatch.toString(),  "40"); 
+			properties.setProperty(TTProperties.confidentWeb.toString(), "60");
+			properties.setProperty(TTProperties.allowTextChange.toString(), "FALSE");
+			
+			
 			// save properties to project root folder
 			properties.store(output, null);
 			System.out.println("Default Configuration file has been created.");
@@ -119,6 +144,9 @@ public class PropertiesHandler {
 			}
 		}
 	}
+	
+	
+	
 	
 	
 	private static boolean configFileExist() {

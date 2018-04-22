@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="preferencesWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #1e1919; -fx-border-color: black;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="preferencesWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="700.0" style="-fx-background-color: #1e1919; -fx-border-color: black;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox layoutY="33.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -23,6 +27,11 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
+                  <Button mnemonicParsing="false" onAction="#savePreferences" style="-fx-border-color: black; -fx-background-color: black;" text="SAVE" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets left="500.0" top="10.0" />
+                     </HBox.margin>
+                  </Button>
                </children>
             </HBox>
             <Label text="Default Directory To Open" textFill="WHITE">
@@ -147,7 +156,7 @@
                   <Insets />
                </opaqueInsets>
             </HBox>
-            <Label text="Image Directory" textFill="WHITE">
+            <Label disable="true" text="Image Directory" textFill="WHITE" visible="false">
                <font>
                   <Font size="14.0" />
                </font>
@@ -159,14 +168,14 @@
                <children>
                   <VBox prefHeight="34.0" prefWidth="530.0">
                      <children>
-                        <TextField fx:id="imageDirectory" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="523.0" style="-fx-border-color: black; -fx-background-color: black;">
+                        <TextField fx:id="imageDirectory" disable="true" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="523.0" style="-fx-border-color: black; -fx-background-color: black;" visible="false">
                            <VBox.margin>
                               <Insets left="10.0" />
                            </VBox.margin>
                         </TextField>
                      </children>
                   </VBox>
-                  <Button mnemonicParsing="false" onAction="#imageDirOpen" style="-fx-border-color: black; -fx-background-color: black;" text="Open" textFill="WHITE">
+                  <Button disable="true" mnemonicParsing="false" onAction="#imageDirOpen" style="-fx-border-color: black; -fx-background-color: black;" text="Open" textFill="WHITE" visible="false">
                      <HBox.margin>
                         <Insets left="5.0" />
                      </HBox.margin>
@@ -176,9 +185,288 @@
                   <Insets />
                </opaqueInsets>
             </HBox>
-            <AnchorPane prefHeight="139.0" prefWidth="598.0">
+            <Label prefHeight="27.0" prefWidth="130.0" text="GCV Settings" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+            <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="445.0" prefWidth="697.0" style="-fx-border-color: white;">
                <children>
-                  <Button layoutX="538.0" layoutY="70.0" mnemonicParsing="false" onAction="#savePreferences" style="-fx-border-color: black; -fx-background-color: black;" text="SAVE" textFill="WHITE" />
+                  <VBox layoutX="4.0" layoutY="4.0" prefHeight="439.0" prefWidth="697.0" spacing="10.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="-3.0" AnchorPane.topAnchor="3.0">
+                     <children>
+                        <HBox prefHeight="58.0" prefWidth="598.0" spacing="20.0">
+                           <children>
+                              <AnchorPane prefHeight="0.0" prefWidth="150.0">
+                                 <children>
+                                    <Label layoutX="3.0" text="Min Text Score %" textFill="WHITE" />
+                                    <Slider fx:id="minTextScore" layoutX="3.0" layoutY="22.0" maxWidth="100.0" prefWidth="100.0" value="50.0">
+                                       <cursor>
+                                          <Cursor fx:constant="CLOSED_HAND" />
+                                       </cursor>
+                                    </Slider>
+                                    <Text fx:id="minTextScoreText" fill="WHITE" layoutX="113.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="0.0" prefWidth="150.0">
+                                 <children>
+                                    <Label layoutX="3.0" text="Min Text Match %" textFill="WHITE" />
+                                    <Slider fx:id="minTextMatch" layoutX="3.0" layoutY="22.0" maxWidth="100.0" prefWidth="100.0" value="50.0">
+                                       <cursor>
+                                          <Cursor fx:constant="CLOSED_HAND" />
+                                       </cursor>
+                                    </Slider>
+                                    <Text fx:id="minMatchScoreText" fill="WHITE" layoutX="113.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="0.0" prefWidth="150.0">
+                                 <children>
+                                    <Label layoutX="3.0" prefWidth="149.0" text="Allow Text Changes" textFill="WHITE">
+                                       <padding>
+                                          <Insets bottom="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <CheckBox fx:id="alllowTextChangeCheckbox" layoutX="3.0" layoutY="21.0" mnemonicParsing="false" onMouseClicked="#onAllowTextChange" text="Yes" textFill="WHITE" />
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox prefHeight="59.0" prefWidth="693.0" spacing="20.0" style="-fx-background-color: black;">
+                           <children>
+                              <AnchorPane prefHeight="0.0" prefWidth="150.0">
+                                 <children>
+                                    <Label layoutX="3.0" text="Min Label Score %" textFill="WHITE">
+                                       <padding>
+                                          <Insets top="2.0" />
+                                       </padding>
+                                    </Label>
+                                    <Slider fx:id="wvt_minLabelScore" layoutX="3.0" layoutY="22.0" maxWidth="100.0" prefWidth="100.0" value="25.0">
+                                       <cursor>
+                                          <Cursor fx:constant="CLOSED_HAND" />
+                                       </cursor>
+                                    </Slider>
+                                    <Text fx:id="wvt_minLabelScoreText" fill="WHITE" layoutX="113.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Text>
+                                    <Text fill="WHITE" layoutX="-2.0" layoutY="-6.0" strokeType="OUTSIDE" strokeWidth="0.0" text="When Valid Text:" wrappingWidth="103.619140625">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                                 <padding>
+                                    <Insets top="20.0" />
+                                 </padding>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="0.0" prefWidth="150.0">
+                                 <children>
+                                    <Label layoutX="3.0" text="Min Label Match %" textFill="WHITE">
+                                       <padding>
+                                          <Insets top="2.0" />
+                                       </padding>
+                                    </Label>
+                                    <Slider fx:id="wvt_minLabelMatch" layoutX="3.0" layoutY="22.0" maxWidth="100.0" prefWidth="100.0" value="35.0">
+                                       <cursor>
+                                          <Cursor fx:constant="CLOSED_HAND" />
+                                       </cursor>
+                                    </Slider>
+                                    <Text fx:id="wvt_minLabelMatchText" fill="WHITE" layoutX="113.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                                 <padding>
+                                    <Insets top="20.0" />
+                                 </padding>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="0.0" prefWidth="150.0">
+                                 <children>
+                                    <Label layoutX="3.0" text="Min Web Score %" textFill="WHITE">
+                                       <padding>
+                                          <Insets top="2.0" />
+                                       </padding>
+                                    </Label>
+                                    <Slider fx:id="wvt_minWebScore" layoutX="3.0" layoutY="22.0" maxWidth="100.0" prefWidth="100.0" value="25.0">
+                                       <cursor>
+                                          <Cursor fx:constant="CLOSED_HAND" />
+                                       </cursor>
+                                    </Slider>
+                                    <Text fx:id="wvt_minWebScoreText" fill="WHITE" layoutX="113.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                                 <padding>
+                                    <Insets top="20.0" />
+                                 </padding>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="0.0" prefWidth="150.0">
+                                 <children>
+                                    <Label layoutX="3.0" text="Min Web Match %" textFill="WHITE">
+                                       <padding>
+                                          <Insets top="2.0" />
+                                       </padding>
+                                    </Label>
+                                    <Slider fx:id="wvt_minWebMatch" layoutX="3.0" layoutY="22.0" maxWidth="100.0" prefWidth="100.0" value="30.0">
+                                       <cursor>
+                                          <Cursor fx:constant="CLOSED_HAND" />
+                                       </cursor>
+                                    </Slider>
+                                    <Text fx:id="wvt_minWebMatchText" fill="WHITE" layoutX="113.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                                 <padding>
+                                    <Insets top="20.0" />
+                                 </padding>
+                              </AnchorPane>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets bottom="20.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox prefHeight="58.0" prefWidth="598.0" spacing="20.0">
+                           <children>
+                              <AnchorPane prefHeight="0.0" prefWidth="150.0">
+                                 <children>
+                                    <Label layoutX="3.0" text="Min Label Score %" textFill="WHITE" />
+                                    <Slider fx:id="minLabelScore" layoutX="3.0" layoutY="22.0" maxWidth="100.0" prefWidth="100.0" value="65.0">
+                                       <cursor>
+                                          <Cursor fx:constant="CLOSED_HAND" />
+                                       </cursor>
+                                    </Slider>
+                                    <Text fx:id="minLabelScoreText" fill="WHITE" layoutX="113.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="0.0" prefWidth="150.0">
+                                 <children>
+                                    <Label layoutX="3.0" text="Min Label Match %" textFill="WHITE" />
+                                    <Slider fx:id="minLabelMatch" layoutX="3.0" layoutY="22.0" maxWidth="100.0" prefWidth="100.0" value="60.0">
+                                       <cursor>
+                                          <Cursor fx:constant="CLOSED_HAND" />
+                                       </cursor>
+                                    </Slider>
+                                    <Text fx:id="minLabelMatchText" fill="WHITE" layoutX="113.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="58.0" prefWidth="187.0">
+                                 <children>
+                                    <Label layoutX="3.0" prefHeight="27.0" prefWidth="167.0" text="Confident Label Threshold %" textFill="WHITE">
+                                       <padding>
+                                          <Insets bottom="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <Slider fx:id="confidentLabel" layoutY="24.0" maxWidth="100.0" prefWidth="100.0" value="75.0">
+                                       <cursor>
+                                          <Cursor fx:constant="CLOSED_HAND" />
+                                       </cursor>
+                                    </Slider>
+                                    <Text fx:id="confidentLabelText" fill="WHITE" layoutX="115.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox prefHeight="58.0" prefWidth="598.0" spacing="20.0">
+                           <children>
+                              <AnchorPane prefHeight="0.0" prefWidth="150.0">
+                                 <children>
+                                    <Label layoutX="3.0" text="Min Web Score %" textFill="WHITE" />
+                                    <Slider fx:id="minWebScore" layoutX="3.0" layoutY="22.0" maxWidth="100.0" prefWidth="100.0" value="50.0">
+                                       <cursor>
+                                          <Cursor fx:constant="CLOSED_HAND" />
+                                       </cursor>
+                                    </Slider>
+                                    <Text fx:id="minWebScoreText" fill="WHITE" layoutX="113.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="0.0" prefWidth="150.0">
+                                 <children>
+                                    <Label layoutX="3.0" text="Min Web Match %" textFill="WHITE" />
+                                    <Slider fx:id="minWebMatch" layoutX="3.0" layoutY="22.0" maxWidth="100.0" prefWidth="100.0" value="40.0">
+                                       <cursor>
+                                          <Cursor fx:constant="CLOSED_HAND" />
+                                       </cursor>
+                                    </Slider>
+                                    <Text fx:id="minWebMatchText" fill="WHITE" layoutX="113.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="0.0" prefWidth="150.0">
+                                 <children>
+                                    <Label layoutX="3.0" prefWidth="149.0" text="Confident Web Threshold %" textFill="WHITE">
+                                       <padding>
+                                          <Insets bottom="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <Slider fx:id="confidentWeb" layoutY="24.0" maxWidth="100.0" prefWidth="100.0" value="60.0">
+                                       <cursor>
+                                          <Cursor fx:constant="CLOSED_HAND" />
+                                       </cursor>
+                                    </Slider>
+                                    <Text fx:id="confidentWebText" fill="WHITE" layoutX="115.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets top="20.0" />
+                     </padding>
+                  </VBox>
                </children>
             </AnchorPane>
          </children>

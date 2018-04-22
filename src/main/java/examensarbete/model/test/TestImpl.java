@@ -10,6 +10,7 @@ import examensarbete.model.action.ActionBase;
 import examensarbete.model.action.ChromeWebAction;
 import examensarbete.model.action.EActionType;
 import examensarbete.model.utility.FileUtility;
+import examensarbete.model.utility.TestRunUtility;
 import examensarbete.model.utility.WaitHandler;
 import javafx.stage.Screen;
 
@@ -101,9 +102,7 @@ public class TestImpl implements Test{
 			String pathToTmpFullscreen = action.takeScreenShot(FileUtility.getProjectRoot() + "\\tmpFullscreenImg", new java.awt.Rectangle(0,0,width,height));
 			TestImage fullscreenImg = new TestImageImpl();
 			fullscreenImg.setImagePath(pathToTmpFullscreen);
-			// TODO:: Set the coordinates of the Step Context image by doing a template match with the context image as target,
-			// and the FullScreen image as context.
-			//step.getTestStepContextImage()
+			fullscreenImg.setCoordinateOffset(TestRunUtility.getOffset(getChromeWebAction()));
 		} catch (AWTException e) {
 			System.out.println(e.getMessage());
 		} catch (IOException e) {

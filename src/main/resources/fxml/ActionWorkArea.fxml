@@ -124,7 +124,7 @@
                               <FontIcon iconColor="WHITE" iconLiteral="ws-sort" iconSize="30" />
                            </graphic>
                            <tooltip>
-                              <Tooltip text="Move up/down in the browser" />
+                              <Tooltip text="Move up/down in the browser (PLACEHOLDER)" />
                            </tooltip>
                         </Button>
                         <Button fx:id="openBrowserButton" disable="true" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#onBrowserButtonClick" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
@@ -184,7 +184,7 @@
                                  <children>
                                     <Button maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#createNewTest" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #404040;">
                                        <graphic>
-                                          <FontIcon iconColor="WHITE" iconLiteral="ion-android-folder" iconSize="22" />
+                                          <FontIcon iconColor="WHITE" iconLiteral="ion-android-add" iconSize="26" />
                                        </graphic>
                                        <tooltip>
                                           <Tooltip text="Add Test" />
@@ -251,17 +251,20 @@
                            <children>
                               <VBox layoutX="10.0" layoutY="8.0" prefHeight="192.0" prefWidth="335.0" spacing="5.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="3.0">
                                  <children>
-                                    <HBox>
+                                    <HBox prefHeight="48.0" prefWidth="325.0">
                                        <children>
-                                          <Label text="Last test run" textFill="WHITE">
+                                          <Label prefHeight="27.0" prefWidth="147.0" text="Last test run" textFill="WHITE">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
                                           </Label>
-                                          <Button mnemonicParsing="false" style="-fx-background-color: #404040;" text="Test Report" textFill="WHITE">
+                                          <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="135.0" style="-fx-background-color: #404040;" text="Test Report" textFill="WHITE">
                                              <HBox.margin>
                                                 <Insets left="140.0" />
                                              </HBox.margin>
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
                                           </Button>
                                        </children>
                                     </HBox>
@@ -321,27 +324,17 @@
                               </ScrollPane>
                               <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="950.0" prefWidth="1160.0" style="-fx-background-color: #222521;">
                                  <children>
-                                    <HBox layoutX="14.0" layoutY="14.0" spacing="5.0">
+                                    <HBox layoutX="14.0" layoutY="14.0" prefHeight="35.0" prefWidth="528.0" spacing="5.0">
                                        <children>
-                                          <Label text="STEP NUMBER :" textFill="WHITE">
-                                             <font>
-                                                <Font name="System Bold" size="24.0" />
-                                             </font>
-                                          </Label>
-                                          <Label fx:id="stepNumberLabel" text="xyz" textFill="WHITE">
-                                             <font>
-                                                <Font size="24.0" />
-                                             </font>
-                                          </Label>
-                                          <Label text="STEP TYPE :" textFill="WHITE">
+                                          <Label prefHeight="35.0" prefWidth="157.0" text="STEP TYPE :" textFill="WHITE">
                                              <font>
                                                 <Font name="System Bold" size="24.0" />
                                              </font>
                                              <HBox.margin>
-                                                <Insets left="135.0" />
+                                                <Insets />
                                              </HBox.margin>
                                           </Label>
-                                          <Label fx:id="stepTypeLabel" text="xyz" textFill="WHITE">
+                                          <Label fx:id="stepTypeLabel" text="." textFill="WHITE">
                                              <font>
                                                 <Font size="24.0" />
                                              </font>
@@ -350,12 +343,12 @@
                                     </HBox>
                                     <AnchorPane layoutX="373.0" layoutY="544.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="392.0" prefWidth="696.0" style="-fx-border-color: black; -fx-background-color: #181818; -fx-border-width: 5;">
                                        <children>
-                                          <ImageView fx:id="aStepsContextImage" fitHeight="385.0" fitWidth="685.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                          <ImageView fx:id="aStepsContextImage" fitHeight="385.0" fitWidth="685.0" onMouseClicked="#displayFullSizeContextImage" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                        </children>
                                     </AnchorPane>
                                     <AnchorPane layoutX="373.0" layoutY="92.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="392.0" prefWidth="696.0" style="-fx-border-color: black; -fx-background-color: #181818; -fx-border-width: 5;">
                                        <children>
-                                          <ImageView fx:id="aStepsSnapImage" fitHeight="385.0" fitWidth="685.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <ImageView fx:id="aStepsSnapImage" fitHeight="385.0" fitWidth="685.0" onMouseClicked="#displayFullSizeTargetImage" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <viewport>
                                                 <Rectangle2D />
                                              </viewport>
