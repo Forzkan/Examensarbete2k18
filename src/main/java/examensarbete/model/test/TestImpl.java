@@ -79,7 +79,7 @@ public class TestImpl implements Test{
 	public void initializeTest() {
 		ChromeWebAction browser;
 		try {
-			browser = new ChromeWebAction();
+			browser = new ChromeWebAction(localHtml);
 			browser.actionSetup();
 			TestStepImpl firstStep = new TestStepImpl(browser);
 			testSteps.add(firstStep);
@@ -153,11 +153,13 @@ public class TestImpl implements Test{
 	public ChromeWebAction getChromeWebAction() {
 		return (ChromeWebAction)testSteps.get(0).getMainAction();
 	}
-	
+	@JsonIgnore
+	boolean localHtml = false;
 	// CONSTRUCTORS
-	public TestImpl(String testGroup, String testName) {
+	public TestImpl(String testGroup, String testName, boolean localHtml) {
 		setTestName(testName);
 		setTestGroupName(testGroup);
+		this.localHtml = localHtml;
 	}
 	
 	public TestImpl() {}

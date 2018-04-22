@@ -15,7 +15,7 @@ public class NewTestController {
 	private WorkAreaController waController;
 	
 	@FXML
-	private CheckBox useExistingTGCheckBox;
+	private CheckBox useExistingTGCheckBox, useLocalHtmlCheckbox;
 	
 	@FXML
 	private TextField newTestGroupTextField, testNameTextField;
@@ -44,7 +44,7 @@ public class NewTestController {
 		
 						   //TODO :: PERFORM SOM VALIDATION ON THE VALUES.
 		String testName = testNameTextField.getText();
-		TestImpl test = new TestImpl(groupName, testName);
+		TestImpl test = new TestImpl(groupName, testName, useLocalHtmlCheckbox.isSelected());
 		test.initializeTest();
 		testHandler.saveNewTest(testName, groupName, test);
 		waController.treeViewLoader(); // reload treeview with the new test.

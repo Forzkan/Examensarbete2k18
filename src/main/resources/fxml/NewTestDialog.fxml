@@ -26,14 +26,23 @@
                </padding>
             </Label>
             <HBox prefHeight="100.0" prefWidth="200.0" />
-            <CheckBox fx:id="useExistingTGCheckBox" mnemonicParsing="false" onAction="#onClickUseExistingTGCheckBox" selected="true" text="Add test to existing Test Group">
+            <HBox spacing="10.0">
                <VBox.margin>
                   <Insets bottom="20.0" left="45.0" />
                </VBox.margin>
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </CheckBox>
+               <children>
+                  <CheckBox fx:id="useExistingTGCheckBox" mnemonicParsing="false" onAction="#onClickUseExistingTGCheckBox" selected="true" text="Add test to existing Test Group">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CheckBox>
+                  <CheckBox fx:id="useLocalHtmlCheckbox" mnemonicParsing="false" selected="true" text="Use local html">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CheckBox>
+               </children>
+            </HBox>
             <Label text="Test Group">
                <VBox.margin>
                   <Insets left="45.0" />

@@ -21,5 +21,5 @@ public enum TTProperties {
 	minWebMatch,
 	confidentWeb,
 	allowTextChange,
-
+	LOCAL_HTML_DIRECTORY
 }

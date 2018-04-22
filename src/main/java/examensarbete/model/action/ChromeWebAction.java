@@ -32,6 +32,7 @@ public class ChromeWebAction extends ActionBase{
 	
 	private ChromeDriver driver;
 	private String url;
+	private boolean useLocalHtml;
 	
 	public String getUrl() {
 		return url;
@@ -39,7 +40,12 @@ public class ChromeWebAction extends ActionBase{
 	public void setUrl(String url) {
 		this.url = url;
 	}
-
+	public boolean isUseLocalHtml() {
+		return useLocalHtml;
+	}
+	public void setUseLocalHtml(boolean useLocalHtml) {
+		this.useLocalHtml = useLocalHtml;
+	}
 	@Override
 	public EActionType getActionType() {
 		return this.actionType;
@@ -50,7 +56,12 @@ public class ChromeWebAction extends ActionBase{
 		this.actionType = EActionType.CHROMEBROWSER;
 		System.setProperty("webdriver.chrome.driver", PropertiesHandler.properties.getProperty(TTProperties.CHROMEDRIVER_EXE_PATH.toString()));
 	}
-	
+	public ChromeWebAction(boolean useLocalHtml) throws AWTException {
+		super();
+		this.actionType = EActionType.CHROMEBROWSER;
+		this.setUseLocalHtml(useLocalHtml);
+		System.setProperty("webdriver.chrome.driver", PropertiesHandler.properties.getProperty(TTProperties.CHROMEDRIVER_EXE_PATH.toString()));
+	}
 	
 	@Override
 	public void actionSetup()    
@@ -78,7 +89,12 @@ public class ChromeWebAction extends ActionBase{
 		    driver = new ChromeDriver();
 		    driver.manage().deleteAllCookies();
 		    driver.manage().window().maximize();
-		    driver.navigate().to(url);
+		    if(useLocalHtml) {
+			    driver.navigate().to("file:///" + PropertiesHandler.properties.getProperty(TTProperties.LOCAL_HTML_DIRECTORY.toString()) + "//" + url);
+		    }else {
+		    	driver.navigate().to(url);
+		    }
+		    
 		    driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
 		    return true;
 		}catch(Exception e) {
@@ -139,6 +155,7 @@ public class ChromeWebAction extends ActionBase{
 	public ChromeDriver getDriver() {
 		return driver;
 	}
+
 	
 	
 }

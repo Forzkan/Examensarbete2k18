@@ -99,7 +99,7 @@ public class PreferencesController {
 	
 
 	@FXML
-	private TextField defaultSelectedDir, installationDir, chromeDriverExePath, testcaseDir, imageDirectory;
+	private TextField defaultSelectedDir, installationDir, chromeDriverExePath, testcaseDir, localHtmlDirectory;
 
 	@FXML
 	private void initialize() {
@@ -112,7 +112,7 @@ public class PreferencesController {
 			chromeDriverExePath
 					.setText(PropertiesHandler.properties.getProperty(TTProperties.CHROMEDRIVER_EXE_PATH.toString()));
 			testcaseDir.setText(PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()));
-			imageDirectory.setText(PropertiesHandler.properties.getProperty(TTProperties.IMAGE_DIRECTORY.toString()));
+			localHtmlDirectory.setText(PropertiesHandler.properties.getProperty(TTProperties.LOCAL_HTML_DIRECTORY.toString()));
 			
 			minTextScore.setValue(Double.parseDouble(PropertiesHandler.properties.getProperty(TTProperties.minTextScore.toString()))); 
 			minTextMatch.setValue(Double.parseDouble(PropertiesHandler.properties.getProperty(TTProperties.minTextMatch.toString())));
@@ -139,7 +139,7 @@ public class PreferencesController {
 		PropertiesHandler.saveConfigProperty(TTProperties.INSTALLATION_DIRECTORY, installationDir.getText());
 		PropertiesHandler.saveConfigProperty(TTProperties.CHROMEDRIVER_EXE_PATH, chromeDriverExePath.getText());
 		PropertiesHandler.saveConfigProperty(TTProperties.TESTCASE_DIRECTORY, testcaseDir.getText());
-		PropertiesHandler.saveConfigProperty(TTProperties.IMAGE_DIRECTORY, imageDirectory.getText());
+		PropertiesHandler.saveConfigProperty(TTProperties.LOCAL_HTML_DIRECTORY, localHtmlDirectory.getText());
 		
 		// GCV 
 		PropertiesHandler.saveConfigProperty(TTProperties.minTextScore, Math.round(minTextScore.getValue()) + ""); 
@@ -171,8 +171,8 @@ public class PreferencesController {
 	}
 
 	@FXML
-	void imageDirOpen() {
-		setTextFieldTextIfNotNullOrEmpty(imageDirectory, selectDirectory());
+	void localHTMLDirOpen() {
+		setTextFieldTextIfNotNullOrEmpty(localHtmlDirectory, selectDirectory());
 	}
 
 	@FXML

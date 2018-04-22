@@ -156,7 +156,7 @@
                   <Insets />
                </opaqueInsets>
             </HBox>
-            <Label disable="true" text="Image Directory" textFill="WHITE" visible="false">
+            <Label text="Local html file paths" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
@@ -168,14 +168,14 @@
                <children>
                   <VBox prefHeight="34.0" prefWidth="530.0">
                      <children>
-                        <TextField fx:id="imageDirectory" disable="true" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="523.0" style="-fx-border-color: black; -fx-background-color: black;" visible="false">
+                        <TextField fx:id="localHtmlDirectory" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="523.0" style="-fx-border-color: black; -fx-background-color: black;">
                            <VBox.margin>
                               <Insets left="10.0" />
                            </VBox.margin>
                         </TextField>
                      </children>
                   </VBox>
-                  <Button disable="true" mnemonicParsing="false" onAction="#imageDirOpen" style="-fx-border-color: black; -fx-background-color: black;" text="Open" textFill="WHITE" visible="false">
+                  <Button mnemonicParsing="false" onAction="#localHTMLDirOpen" style="-fx-border-color: black; -fx-background-color: black;" text="Open" textFill="WHITE">
                      <HBox.margin>
                         <Insets left="5.0" />
                      </HBox.margin>

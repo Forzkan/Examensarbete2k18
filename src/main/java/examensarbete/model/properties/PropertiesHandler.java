@@ -110,9 +110,9 @@ public class PropertiesHandler {
 			properties.setProperty(TTProperties.CHROMEDRIVER_EXE_PATH.toString(), driverPath + "//chromedriver.exe");
 			properties.setProperty(TTProperties.INSTALLATION_DIRECTORY.toString(), root);
 			properties.setProperty(TTProperties.TESTCASE_DIRECTORY.toString(), testCasesPath);
-			properties.setProperty(TTProperties.IMAGE_DIRECTORY.toString(), root);
+			properties.setProperty(TTProperties.LOCAL_HTML_DIRECTORY.toString(), root + "//LOCAL_HTML");
 			properties.setProperty(TTProperties.DEFAULT_SELECT_DIR.toString(), root);
-
+			
 			// GCV 
 			properties.setProperty(TTProperties.minTextScore.toString(), "50"); 
 			properties.setProperty(TTProperties.minTextMatch.toString(),  "50"); 
