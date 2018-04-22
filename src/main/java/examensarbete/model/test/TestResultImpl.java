@@ -12,4 +12,10 @@ public class TestResultImpl implements TestResult {
 		testStepResults.add(testStepResult);
 	}
 
+	@Override
+	public Test getTest() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
