@@ -3,7 +3,7 @@ package examensarbete.opencv;
 import org.opencv.core.Core;
 
 import examensarbete.model.test.TestImage;
-import examensarbete.opencv.TemplateMatcher.MatchType;
+import examensarbete.model.test.MatchType;
 
 public class OpenCvController {
 

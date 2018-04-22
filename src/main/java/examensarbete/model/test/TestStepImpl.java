@@ -15,7 +15,7 @@ import examensarbete.model.action.SnapImageAction;
 import examensarbete.model.utility.FileUtility;
 import examensarbete.model.utility.TestRunUtility;
 import examensarbete.opencv.OpenCvController;
-import examensarbete.opencv.TemplateMatcher.MatchType;
+import examensarbete.model.test.MatchType;
 
 public class TestStepImpl implements TestStep {
 
@@ -65,7 +65,9 @@ public class TestStepImpl implements TestStep {
 	}
 
 	@Override
-	public boolean performTestStep() throws IOException, AWTException {
+	public TestStepResult performTestStep() throws IOException, AWTException {
+		boolean actionOutcome = false;
+		
 		// TODO:: PERFORM THE MAIN ACTION, AND HANDLE THE OUTCOME OF IT.
 		if (mainAction.getActionType() == EActionType.IMAGESNAP) {
 			SnapImageAction snapImageAction = (SnapImageAction) mainAction;
@@ -94,13 +96,13 @@ public class TestStepImpl implements TestStep {
 				newSnapAction.setTargetImage(newTarget);
 				// PERFORM CLICK, AND SAVE THE IMAGE SO THAT THE USER CAN SEE WHAT IS CONSIDERED
 				// A VALID CHANGE, AND UPDATE THE BASELINE IF THE USER WANTS TO DO SO.
-				return newSnapAction.performAction();
+				actionOutcome = newSnapAction.performAction();
 			} else {
 				matchResult = openCvController.runComparison(chrome.getNewContextImage(),
 						snapImageAction.getTargetImage());
 				if (matchResult == MatchType.MATCH) {
 					System.out.println("TEMPLATE MATCHING FOUND THE IMAGE IN THE SAME LOCATION.");
-					return mainAction.performAction();
+					actionOutcome = mainAction.performAction();
 				} else if (matchResult == MatchType.NEW_LOC_MATCH) { // Should we verify this with the AI?
 					System.out.println("TEMPLATE MATCH FOUND THE IMAGE IN A NEW LOCATION.");
 					TestImage newLocationTestImage = openCvController.getResultTestImage();
@@ -109,9 +111,7 @@ public class TestStepImpl implements TestStep {
 
 					snapImageAction.setTargetImage(newLocationTestImage);
 
-					return snapImageAction.performAction();
-				}else {
-					return false; // i.e NO MATCH.
+					actionOutcome = snapImageAction.performAction();
 				}
 			}
 
@@ -128,9 +128,13 @@ public class TestStepImpl implements TestStep {
 			// CLICK ON THE PREVIOUS USER-DEFINED CLICK-COORDINATES AND CONTINUE.
 			// ELSE IF INVALID CHANGE, RETURN FALSE.
 
+		} else {
+			actionOutcome = mainAction.performAction();
 		}
 
-		return mainAction.performAction();
+		MatchType testStepMatchType = actionOutcome ? MatchType.MATCH : MatchType.NO_MATCH;
+		
+		return new TestStepResultImpl(testStepMatchType, new TestImageImpl(), new TestImageImpl(), new TestImageImpl(), new TestImageImpl() );
 	}
 
 	@Override

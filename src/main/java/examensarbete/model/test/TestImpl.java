@@ -112,9 +112,40 @@ public class TestImpl implements Test{
 	}
 
 	
+//	@Override
+//	public boolean runTest() {
+//		boolean passed = true;
+//		for(TestStep step : testSteps) {
+//			
+//			if(step.getMainAction().getActionType() == EActionType.IMAGESNAP) {
+//				//step.takeScreenshot((ChromeWebAction)testSteps.get(0).getMainAction(), testGroupName, testName);
+//				// TODO:: do something with the image. // Should we do this for all types of actions?
+//				// Maybe take the image at different times depending on what type of action we're dealing with?
+//			}
+//			try {
+//				step.setChrome((ChromeWebAction)testSteps.get(0).getMainAction());
+//				passed = step.performTestStep();
+//			} catch (IOException e) {
+//				// TODO SKRIV UT VAD SOM GICK FEL I DIALOG
+//				e.printStackTrace();
+//				return false;
+//			} catch (AWTException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//				return false;
+//			}
+//			WaitHandler.waitForMilliseconds(waitTimeBetweenSteps);
+//
+//			if(passed == false) {
+//				return false;
+//			}
+//		}
+//		return passed;
+//	}
+	
 	@Override
-	public boolean runTest() {
-		boolean passed = true;
+	public TestResult runTest() {
+		TestResult testResult = new TestResultImpl();
 		for(TestStep step : testSteps) {
 			
 			if(step.getMainAction().getActionType() == EActionType.IMAGESNAP) {
@@ -124,23 +155,23 @@ public class TestImpl implements Test{
 			}
 			try {
 				step.setChrome((ChromeWebAction)testSteps.get(0).getMainAction());
-				passed = step.performTestStep();
+				testResult.addStepResult(step.performTestStep());
 			} catch (IOException e) {
 				// TODO SKRIV UT VAD SOM GICK FEL I DIALOG
 				e.printStackTrace();
-				return false;
+				return testResult;
 			} catch (AWTException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				return false;
+				return testResult;
 			}
 			WaitHandler.waitForMilliseconds(waitTimeBetweenSteps);
 
-			if(passed == false) {
-				return false;
-			}
+//			if(testResult == false) {
+//				return false;
+//			}
 		}
-		return passed;
+		return testResult;
 	}
 
 	@Override

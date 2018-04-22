@@ -8,6 +8,7 @@ import org.opencv.imgproc.Imgproc;
 
 import examensarbete.model.test.TestImage;
 import examensarbete.model.test.TestImageImpl;
+import examensarbete.model.test.MatchType;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -272,11 +273,11 @@ public class TemplateMatcher implements ChangeListener {
         frame.setVisible(true);
     }
     
-    public enum MatchType {
-		MATCH,
-		NEW_LOC_MATCH,
-		NO_MATCH
-	}
+//    public enum MatchType {
+//		MATCH,
+//		NEW_LOC_MATCH,
+//		NO_MATCH
+//	}
     
     private class MatchedImage {
     	
