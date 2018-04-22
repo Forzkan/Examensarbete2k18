@@ -8,7 +8,7 @@ import examensarbete.model.action.ActionBase;
 public interface Test {
 	
 	void initializeTest();
-	boolean runTest();
+	TestResult runTest();
 	void cleanup();
 
 	void addTestStep(ActionBase action);

@@ -21,7 +21,7 @@ public interface TestStep {
 	void setTestStepTargetImage(TestImage testStepTargetImage);
 
 	
-	boolean performTestStep() throws IOException, AWTException;
+	TestStepResult performTestStep() throws IOException, AWTException;
 	void takeScreenshot(String groupName, String testName);
 	ArrayList<String> getListOfContextInformation();
 	void setChrome(ChromeWebAction chrome);

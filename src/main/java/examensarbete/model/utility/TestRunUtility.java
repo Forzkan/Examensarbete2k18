@@ -18,7 +18,7 @@ import examensarbete.model.action.ChromeWebAction;
 import examensarbete.model.test.TestImage;
 import examensarbete.model.test.TestImageImpl;
 import examensarbete.opencv.OpenCvController;
-import examensarbete.opencv.TemplateMatcher.MatchType;
+import examensarbete.model.test.MatchType;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 
