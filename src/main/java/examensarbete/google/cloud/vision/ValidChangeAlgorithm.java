@@ -1,9 +1,10 @@
 package examensarbete.google.cloud.vision;
 
+import examensarbete.model.test.MatchType;
 
 public interface ValidChangeAlgorithm {
 
 	
-	public boolean isValidChange(GCVImageResult target, GCVImageResult newTarget);
+	public MatchType isValidChange(GCVImageResult target, GCVImageResult newTarget);
 
 }

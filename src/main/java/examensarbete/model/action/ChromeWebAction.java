@@ -24,6 +24,7 @@ import examensarbete.model.test.TestImage;
 import examensarbete.model.test.TestImageImpl;
 import examensarbete.model.utility.FileUtility;
 import javafx.scene.control.TextInputDialog;
+import javafx.stage.Screen;
 
 import org.apache.commons.io.FileUtils;
 
@@ -147,9 +148,31 @@ public class ChromeWebAction extends ActionBase{
 	@JsonIgnore
 	public TestImage getNewContextImage() throws IOException {
 		final File outputFile = new File(takeBrowserScreenshot(FileUtility.getProjectRoot() + "\\tempContextImage"));
+	
 		BufferedImage contextScreenshot = ImageIO.read(outputFile);
 		return new TestImageImpl(outputFile.getAbsolutePath(), new java.awt.Point(0,0), contextScreenshot.getWidth(), contextScreenshot.getHeight());
 	}
+	
+	@JsonIgnore
+	public TestImage getNewFullScreenContextImage() throws IOException {
+//		final File outputFile = new File(takeBrowserScreenshot(FileUtility.getProjectRoot() + "\\tempContextImage"));
+		File outputFile;
+		try {
+			Screen screen = Screen.getPrimary();
+			Rectangle bounds = new Rectangle((int)screen.getBounds().getMinX(),
+					(int)screen.getBounds().getMinX(),
+					(int)screen.getBounds().getWidth(),
+					(int)screen.getBounds().getHeight());
+			outputFile = new File(this.takeScreenShot(FileUtility.getProjectRoot() + "\\tempContextImage", bounds));
+			BufferedImage contextScreenshot = ImageIO.read(outputFile);
+			return new TestImageImpl(outputFile.getAbsolutePath(), new java.awt.Point(0,0), contextScreenshot.getWidth(), contextScreenshot.getHeight());
+		} catch (AWTException e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+
+	}
+	
 	
 	@JsonIgnore
 	public ChromeDriver getDriver() {

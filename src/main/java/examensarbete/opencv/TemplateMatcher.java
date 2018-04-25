@@ -79,7 +79,7 @@ public class TemplateMatcher implements ChangeListener {
     	}
     	
     	if(result == MatchType.MATCH && !targetImage.compareTestImage(matchedImages.get(0))) {
-    		result = MatchType.NEW_LOC_MATCH;
+    		result = MatchType.LOCATION_CHANGED_MATCH;
     	}
     	testResultImage = matchedImages.get(0);
     	return result;

@@ -18,7 +18,7 @@ public class TestStepResultImpl implements TestStepResult {
 
 	@Override
 	public boolean getStepSuccess() {
-		if(testStepMatchType == MatchType.MATCH || testStepMatchType == MatchType.NEW_LOC_MATCH) {
+		if(testStepMatchType == MatchType.MATCH || testStepMatchType == MatchType.LOCATION_CHANGED_MATCH) {
 			return true;
 		}
 		return false;

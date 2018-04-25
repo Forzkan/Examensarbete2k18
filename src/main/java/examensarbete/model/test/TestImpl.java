@@ -167,9 +167,9 @@ public class TestImpl implements Test{
 			}
 			WaitHandler.waitForMilliseconds(waitTimeBetweenSteps);
 
-//			if(testResult == false) {
-//				return false;
-//			}
+			if(testResult.getLatestMatchResult() == MatchType.NO_MATCH) {
+				break;
+			}
 		}
 		return testResult;
 	}

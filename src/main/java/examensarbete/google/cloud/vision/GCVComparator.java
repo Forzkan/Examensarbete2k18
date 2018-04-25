@@ -3,8 +3,11 @@ package examensarbete.google.cloud.vision;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import org.opencv.core.Mat;
+
 import examensarbete.model.properties.PropertiesHandler;
 import examensarbete.model.properties.TTProperties;
+import examensarbete.model.test.MatchType;
 
 public class GCVComparator implements ValidChangeAlgorithm{
 	
@@ -40,7 +43,7 @@ public class GCVComparator implements ValidChangeAlgorithm{
 	private static ArrayList<ImageChange> changes;
 	
 	@Override
-	public boolean isValidChange(GCVImageResult target, GCVImageResult newTarget) {
+	public MatchType isValidChange(GCVImageResult target, GCVImageResult newTarget) {
 		// Set all the gcv parameters from the preferences window.
 		setGCVParameters();
 		
@@ -61,6 +64,12 @@ public class GCVComparator implements ValidChangeAlgorithm{
 		return analyzeIfValidChanges();
 	}
 	
+	public boolean isValidGCVMatchType(MatchType match) {
+		if(match == MatchType.NO_MATCH) {
+			return false;
+		}
+		return true;
+	}
 	
 
 	private void setGCVParameters() {
@@ -103,46 +112,52 @@ public class GCVComparator implements ValidChangeAlgorithm{
 
 
 
-	private boolean analyzeIfValidChanges() {
+	private MatchType analyzeIfValidChanges() {
 		System.out.println("ANALYZE IF VALID CHANGES.");
+		MatchType change = MatchType.MATCH;
 		int changeCounter = 0;
-		for(ImageChange c : changes){
-			System.out.println(c.name());
-		}
+
 		// TODO:: First attempt, the logic here should be well thought through.
 		if(changes.contains(ImageChange.INVALID_TEXTCHANGE) && allowNewText == false) {
-			return false;
+			return MatchType.NO_MATCH;
 		}
 		if(changes.contains(ImageChange.MAINCOLOR)  || 
 			changes.contains(ImageChange.SECONDARYCOLOR) ||
 			changes.contains(ImageChange.THIRDCOLOR)) {
 			changeCounter ++;
+			change = MatchType.COLOR_CHANGED_MATCH;
 		}
 		if(changes.contains(ImageChange.FONT)) {
 			changeCounter ++;
+			change = MatchType.TEXTSTYLE_CHANGED_MATCH;
 		}
 		if(changes.contains(ImageChange.TEXT)) {
 			changeCounter ++;
+			change = MatchType.TEXT_CHANGED_MATCH;
 		}
 		if(changes.contains(ImageChange.LABEL)) {
 			changeCounter ++;
+			change = MatchType.LABEL_CHANGED_MATCH;
 		}
 		if(changes.contains(ImageChange.WEBENTITIES)) {
 			if(veryConfidentLabelMatch == false) { // if true, leave out the results of web entities, because it seems to vary a lot between very similar images
 												   // otherwise... add a change to the counter..
 				changeCounter ++;
+				change = MatchType.WEB_CHANGED_MATCH;
 			}
-			
 		}
-		
-		
 		if(changes.contains(ImageChange.FONT) && 
 				(changes.contains(ImageChange.MAINCOLOR) || 
 				 changes.contains(ImageChange.SECONDARYCOLOR) || 
 				 changes.contains(ImageChange.THIRDCOLOR))) {
 			changeCounter--; // Colorchanges seems to actually have an effect on the vertices, and font changes may for sure have an effect on colors changing..
+			return MatchType.TEXTSTYLE_CHANGED_MATCH;
 		}
-		return changeCounter <= 1;
+		if(changeCounter > 1) {
+			return MatchType.NO_MATCH;
+		}
+		return change;
+//		return changeCounter <= 1;
 	}
 	
 

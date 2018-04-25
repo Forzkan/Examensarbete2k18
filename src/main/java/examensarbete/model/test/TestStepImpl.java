@@ -74,8 +74,6 @@ public class TestStepImpl implements TestStep {
 			OpenCvController openCvController = new OpenCvController();
 			MatchType matchResult = MatchType.NO_MATCH;
 
-			// NO MATCH, SO DO AI STUFF.
-			System.out.println("TEMPLATE MATCHING DID NOT FIND A MATCH.");
 			// TAKE NEW IMAGE, IN SAME LOCATION.
 			TestImage newTarget = new TestImageImpl();
 			newTarget.setImagePath(TestRunUtility.takeNewTargetImage(snapImageAction.getTargetImage().getBounds(),
@@ -85,9 +83,10 @@ public class TestStepImpl implements TestStep {
 			newTarget.setImageGCVResults(GCVConnector.getGCVImageResult(newTarget.getImagePath()));
 			// IF VALID CHANGE
 			GCVComparator gcvComparator = new GCVComparator();
-			if (gcvComparator.isValidChange(snapImageAction.getTargetImage().getImageGCVResults(),
-					newTarget.getImageGCVResults())) {
-				System.out.println("IS VALID CHANGE.");
+			MatchType gcvMatchType = gcvComparator.isValidChange(snapImageAction.getTargetImage().getImageGCVResults(), newTarget.getImageGCVResults());
+//			if (gcvComparator.isValidGCVMatchType(gcvMatchType)) {
+			if(false) {
+				System.out.println("IS VALID GCV change.");
 				SnapImageAction newSnapAction = new SnapImageAction();
 
 				newTarget.setCoordinates(snapImageAction.getTargetImage().getCoordinates());
@@ -98,12 +97,12 @@ public class TestStepImpl implements TestStep {
 				// A VALID CHANGE, AND UPDATE THE BASELINE IF THE USER WANTS TO DO SO.
 				actionOutcome = newSnapAction.performAction();
 			} else {
-				matchResult = openCvController.runComparison(chrome.getNewContextImage(),
+				matchResult = openCvController.runComparison(chrome.getNewFullScreenContextImage(),
 						snapImageAction.getTargetImage());
 				if (matchResult == MatchType.MATCH) {
 					System.out.println("TEMPLATE MATCHING FOUND THE IMAGE IN THE SAME LOCATION.");
 					actionOutcome = mainAction.performAction();
-				} else if (matchResult == MatchType.NEW_LOC_MATCH) { // Should we verify this with the AI?
+				} else if (matchResult == MatchType.LOCATION_CHANGED_MATCH) { // Should we verify this with the AI?
 					System.out.println("TEMPLATE MATCH FOUND THE IMAGE IN A NEW LOCATION.");
 					TestImage newLocationTestImage = openCvController.getResultTestImage();
 					newLocationTestImage.setCoordinateOffset(TestRunUtility.getOffset(chrome));
