@@ -18,4 +18,10 @@ public class TestResultImpl implements TestResult {
 		return testStepResults.get(testStepResults.size()-1).getTestStepMatchType();
 	}
 
+	@Override
+	public Test getTest() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
