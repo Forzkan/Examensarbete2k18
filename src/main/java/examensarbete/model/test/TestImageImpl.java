@@ -131,16 +131,20 @@ public class TestImageImpl implements TestImage{
 		this.coordinateOffset = coordinateOffset;
 	}
 	
-	
+	@JsonIgnore
+	@Override
+	public String getFullImagePath() {
+		return FileUtility.getProjectRoot() + "//" + imagePath;
+	}
 	
 	@Override
 	public String getImagePath() {
-		return FileUtility.getProjectRoot() + "//" + imagePath;
+		return /*FileUtility.getProjectRoot() + "//" +*/ imagePath;
 	}
 
 	@Override
 	public void setImagePath(String imagePath) {
-		this.imagePath = FileUtility.absoluteToRelativePath(imagePath);
+		this.imagePath = FileUtility.absoluteToRelativePath(imagePath); 
 		setImage(this.imagePath);
 	}
 	

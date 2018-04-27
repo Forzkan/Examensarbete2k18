@@ -35,7 +35,7 @@ public class AutomaticImageSnapAction extends ActionBase {
 	}
 
 	public String getSnapImagePath() {
-		return snapImage.getImagePath();
+		return snapImage.getFullImagePath();
 	}
 
 	public AutomaticImageSnapAction() {

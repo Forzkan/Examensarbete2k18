@@ -104,7 +104,7 @@ public class ImageViewerController {
 	
 	public ImageViewerController(TestImage image) {
 		this.image = image;
-		this.imagePath = image.getImagePath();
+		this.imagePath = image.getFullImagePath();
 	}
 	
 	

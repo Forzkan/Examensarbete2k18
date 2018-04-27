@@ -219,7 +219,7 @@ public class SnapImageAction extends ActionBase {
 				stageFactory.getStage(TTStage.IMAGEVIEWER, new ImageViewerController(targetImage)).showAndWait();
 				WaitHandler.waitForMilliseconds(1000);
 				performAction();
-				targetImage.setImageGCVResults(GCVConnector.getGCVImageResult(targetImage.getImagePath()));
+				targetImage.setImageGCVResults(GCVConnector.getGCVImageResult(targetImage.getFullImagePath()));
 				displayWindow();
 			} catch (AWTException | IOException e) {
 				System.out.println(e.getMessage());
@@ -257,7 +257,7 @@ public class SnapImageAction extends ActionBase {
 	public ArrayList<String> getListOfActionInformation() {
 		ArrayList<String> ret = new ArrayList<String>();
 		if (targetImage != null) {
-			ret.add("Target Image: " + targetImage.getImagePath());
+			ret.add("Target Image: " + targetImage.getFullImagePath());
 			if (targetImage.getImageScreenCoordinates() != null) {
 				ret.add("X Coordinate: " + targetImage.getImageScreenCoordinates().x);
 				ret.add("Y Coordinate: " + targetImage.getImageScreenCoordinates().y);

@@ -80,12 +80,12 @@ public class TestStepImpl implements TestStep {
 					FileUtility.getProjectRoot() + "\\tmpNewTargetForGCV")); // TODO:: Should probably create tmp folder
 																				// to store such images in.
 			// GET GCVImageResult FOR THE NEW IMAGE.
-			newTarget.setImageGCVResults(GCVConnector.getGCVImageResult(newTarget.getImagePath()));
+			newTarget.setImageGCVResults(GCVConnector.getGCVImageResult(newTarget.getFullImagePath()));
 			// IF VALID CHANGE
 			GCVComparator gcvComparator = new GCVComparator();
 			MatchType gcvMatchType = gcvComparator.isValidChange(snapImageAction.getTargetImage().getImageGCVResults(), newTarget.getImageGCVResults());
-//			if (gcvComparator.isValidGCVMatchType(gcvMatchType)) {
-			if(false) {
+			if (gcvComparator.isValidGCVMatchType(gcvMatchType)) {
+//			if(false) {
 				System.out.println("IS VALID GCV change.");
 				SnapImageAction newSnapAction = new SnapImageAction();
 
@@ -147,7 +147,7 @@ public class TestStepImpl implements TestStep {
 	public ArrayList<String> getListOfContextInformation() {
 		ArrayList<String> ret = new ArrayList<String>();
 		if (testStepContextImage != null) {
-			ret.add("Context Image: " + testStepContextImage.getImagePath());
+			ret.add("Context Image: " + testStepContextImage.getFullImagePath());
 			if (testStepContextImage.getImageScreenCoordinates() != null) {
 				ret.add("X Coordinate: " + testStepContextImage.getImageScreenCoordinates().x);
 				ret.add("Y Coordinate: " + testStepContextImage.getImageScreenCoordinates().y);

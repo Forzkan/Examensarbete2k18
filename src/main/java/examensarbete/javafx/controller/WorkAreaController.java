@@ -649,8 +649,8 @@ public class WorkAreaController {
 			switch (selectedStep.getMainAction().getActionType()) {
 			case IMAGESNAP:
 				SnapImageAction snapAction = (SnapImageAction) selectedStep.getMainAction();
-				snapURL = FileUtility.getImageUrlFromPath(snapAction.getTargetImage().getImagePath());
-				contextURL = FileUtility.getImageUrlFromPath(selectedStep.getTestStepContextImage().getImagePath());
+				snapURL = FileUtility.getImageUrlFromPath(snapAction.getTargetImage().getFullImagePath());
+				contextURL = FileUtility.getImageUrlFromPath(selectedStep.getTestStepContextImage().getFullImagePath());
 				for (String info : snapAction.getListOfActionInformation()) {
 					Label l = new Label(info);
 					l.setStyle("-fx-font-size: 18px;");
@@ -662,12 +662,12 @@ public class WorkAreaController {
 				break;
 			case AUTOIMAGESNAP:
 				AutomaticImageSnapAction aSnapAction = (AutomaticImageSnapAction) selectedStep.getMainAction();
-				snapURL = FileUtility.getImageUrlFromPath(aSnapAction.getSnapImage().getImagePath());// TODO:: Target
+				snapURL = FileUtility.getImageUrlFromPath(aSnapAction.getSnapImage().getFullImagePath());// TODO:: Target
 																										// Image, once
 																										// im looking
 																										// into this
 																										// one..
-				contextURL = FileUtility.getImageUrlFromPath(selectedStep.getTestStepContextImage().getImagePath());
+				contextURL = FileUtility.getImageUrlFromPath(selectedStep.getTestStepContextImage().getFullImagePath());
 				break;
 			default:
 				break;
