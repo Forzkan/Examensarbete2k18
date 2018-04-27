@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import examensarbete.model.action.ActionBase;
 import examensarbete.model.action.ChromeWebAction;
 import examensarbete.model.action.EActionType;
+import examensarbete.model.properties.PropertiesHandler;
+import examensarbete.model.properties.TTProperties;
 import examensarbete.model.utility.FileUtility;
 import examensarbete.model.utility.TestRunUtility;
 import examensarbete.model.utility.WaitHandler;
@@ -99,7 +101,7 @@ public class TestImpl implements Test{
 		try {
 			int width = (int) Screen.getPrimary().getBounds().getWidth();
 			int height = (int) Screen.getPrimary().getBounds().getHeight();
-			String pathToTmpFullscreen = action.takeScreenShot(FileUtility.getProjectRoot() + "\\tmpFullscreenImg", new java.awt.Rectangle(0,0,width,height));
+			String pathToTmpFullscreen = action.takeScreenShot(PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "\\tmpFullscreenImg", new java.awt.Rectangle(0,0,width,height));
 			TestImage fullscreenImg = new TestImageImpl();
 			fullscreenImg.setImagePath(pathToTmpFullscreen);
 			fullscreenImg.setCoordinateOffset(TestRunUtility.getOffset(getChromeWebAction()));

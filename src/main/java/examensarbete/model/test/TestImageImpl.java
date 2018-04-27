@@ -10,6 +10,8 @@ import javax.imageio.ImageIO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import examensarbete.google.cloud.vision.GCVImageResult;
+import examensarbete.model.properties.PropertiesHandler;
+import examensarbete.model.properties.TTProperties;
 import examensarbete.model.utility.FileUtility;
 
 
@@ -134,7 +136,7 @@ public class TestImageImpl implements TestImage{
 	@JsonIgnore
 	@Override
 	public String getFullImagePath() {
-		return FileUtility.getProjectRoot() + "//" + imagePath;
+		return PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "//" + imagePath;
 	}
 	
 	@Override
@@ -144,6 +146,7 @@ public class TestImageImpl implements TestImage{
 
 	@Override
 	public void setImagePath(String imagePath) {
+		System.out.println("");
 		this.imagePath = FileUtility.absoluteToRelativePath(imagePath); 
 		setImage(this.imagePath);
 	}
@@ -217,10 +220,11 @@ public class TestImageImpl implements TestImage{
 	// PRIVATE HELP METHODS.
 	private void setImage(String imagePath) {
 		try {
-			File img = new File(FileUtility.getProjectRoot() + "//" + imagePath);
+			System.out.println(PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()));
+			File img = new File(PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "//" + imagePath);
 			image = ImageIO.read(img);
 		} catch (Exception e) {
-			System.out.println("Error when creating image from path: " + imagePath);
+			System.out.println("Error when creating image from path: " + PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "//" + imagePath);
 		}
 	}
 	

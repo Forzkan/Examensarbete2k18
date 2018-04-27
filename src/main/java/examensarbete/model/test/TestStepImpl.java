@@ -12,6 +12,8 @@ import examensarbete.model.action.ActionBase;
 import examensarbete.model.action.ChromeWebAction;
 import examensarbete.model.action.EActionType;
 import examensarbete.model.action.SnapImageAction;
+import examensarbete.model.properties.PropertiesHandler;
+import examensarbete.model.properties.TTProperties;
 import examensarbete.model.utility.FileUtility;
 import examensarbete.model.utility.TestRunUtility;
 import examensarbete.opencv.OpenCvController;
@@ -77,7 +79,7 @@ public class TestStepImpl implements TestStep {
 			// TAKE NEW IMAGE, IN SAME LOCATION.
 			TestImage newTarget = new TestImageImpl();
 			newTarget.setImagePath(TestRunUtility.takeNewTargetImage(snapImageAction.getTargetImage().getBounds(),
-					FileUtility.getProjectRoot() + "\\tmpNewTargetForGCV")); // TODO:: Should probably create tmp folder
+					PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "\\tmpNewTargetForGCV")); // TODO:: Should probably create tmp folder
 																				// to store such images in.
 			// GET GCVImageResult FOR THE NEW IMAGE.
 			newTarget.setImageGCVResults(GCVConnector.getGCVImageResult(newTarget.getFullImagePath()));
@@ -140,6 +142,7 @@ public class TestStepImpl implements TestStep {
 	public void takeScreenshot(String groupName, String testName) {
 		String path = chrome.takeBrowserScreenshot(FileUtility.createUniqueContextImageFilePath(groupName, testName));
 		testStepContextImage = new TestImageImpl();
+		System.out.println("");
 		testStepContextImage.setImagePath(path);
 	}
 

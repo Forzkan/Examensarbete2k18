@@ -118,7 +118,7 @@ public class SnapImageAction extends ActionBase {
 		popup.getContent().add(rect);
 		popup.setX(screen.getVisualBounds().getMinX());
 		popup.setY(screen.getVisualBounds().getMinY());
-		popup.setOpacity(0.08);
+		popup.setOpacity(0.3);
 
 		popup.show(TTMain.primaryStage.getScene().getWindow());
 

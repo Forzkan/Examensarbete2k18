@@ -55,7 +55,7 @@ public class FileUtility {
     
     
     private static String createFilePathAndNeededDirs(String groupName, String testName) {
-    	String testCaseDir = getProjectRoot() + "\\TEST CASES";
+    	String testCaseDir = PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString());
 //    	System.out.println(testCaseDir);
     	String fullDirPath = testCaseDir + "\\" + groupName + "\\" + testName + "\\images";
     	if(!new File(fullDirPath).exists()) {
@@ -106,7 +106,8 @@ public class FileUtility {
     }
 
 	public static String absoluteToRelativePath(String imagePath) {
-		return imagePath.replace(getProjectRoot(),"");
+		System.out.println(PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()));
+		return imagePath.replace(PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()),"");
 	}
     
     
