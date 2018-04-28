@@ -24,4 +24,9 @@ public class TestResultImpl implements TestResult {
 		return null;
 	}
 
+	@Override
+	public List<TestStepResult> getStepResults() {
+		return testStepResults;
+	}
+
 }

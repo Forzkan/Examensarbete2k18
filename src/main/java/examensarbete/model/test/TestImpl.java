@@ -3,6 +3,7 @@ package examensarbete.model.test;
 import java.awt.AWTException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
@@ -173,7 +174,15 @@ public class TestImpl implements Test{
 				break;
 			}
 		}
+		printResult(testResult);
 		return testResult;
+	}
+	
+	private void printResult(TestResult testResult) {
+		System.out.println("Test result:");
+		for (TestStepResult testStepResult :  testResult.getStepResults()) {
+			System.out.println(testStepResult.getTestStepMatchType());
+		}
 	}
 
 	@Override
