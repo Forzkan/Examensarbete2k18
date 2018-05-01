@@ -6,6 +6,7 @@ import examensarbete.javafx.controller.WorkAreaController;
 import examensarbete.javafx.stage.StageFactory;
 import examensarbete.javafx.stage.TTStage;
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Screen;
 //import javafx.fxml.FXMLLoader;
 //import javafx.scene.Parent;
@@ -48,6 +49,17 @@ public class TTMain extends Application{
 			this.primaryStage.setMaximized(true);
 		}
 		
+		this.primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/gui_images/beetle_16.png")));
+		this.primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/gui_images/beetle_24.png")));
+		this.primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/gui_images/beetle_32.png")));
+		this.primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/gui_images/beetle_64.png")));
+		this.primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/gui_images/beetle_128.png")));
+		this.primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/gui_images/beetle_256.png")));
+
+//		Image image = new Image("/icons/beetle.png");
+//		primaryStage.getIcons().add(image);
+
+//		primaryStage.getIcons().add(new Image(getClass().getClassLoader().getResource("/src/main/resources/gui_images/beetle.png"))); //));
 //		
 //			
 //		} catch(Exception e) {

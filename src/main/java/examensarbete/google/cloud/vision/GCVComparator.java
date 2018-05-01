@@ -64,6 +64,16 @@ public class GCVComparator implements ValidChangeAlgorithm{
 		return analyzeIfValidChanges();
 	}
 	
+	
+	public boolean performTextMatch(GCVImageResult target, GCVImageResult newTarget) {
+		changes = new ArrayList<ImageChange>();
+		verifyText(target.getTextResults(), newTarget.getTextResults());
+		if(changes.contains(ImageChange.TEXT)) {
+			return false;
+		}
+		return true;
+	}
+	
 	public boolean isValidGCVMatchType(MatchType match) {
 		if(match == MatchType.NO_MATCH) {
 			return false;

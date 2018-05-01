@@ -163,7 +163,7 @@ public class ChromeWebAction extends ActionBase{
 					(int)screen.getBounds().getMinX(),
 					(int)screen.getBounds().getWidth(),
 					(int)screen.getBounds().getHeight());
-			outputFile = new File(this.takeScreenShot(FileUtility.getProjectRoot() + "\\tempContextImage", bounds));
+			outputFile = new File(this.takeScreenShot(PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "/tempContextImage", bounds));
 			BufferedImage contextScreenshot = ImageIO.read(outputFile);
 			return new TestImageImpl(outputFile.getAbsolutePath(), new java.awt.Point(0,0), contextScreenshot.getWidth(), contextScreenshot.getHeight());
 		} catch (AWTException e) {

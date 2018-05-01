@@ -1,8 +1,12 @@
 package examensarbete.model.test;
 
 import java.awt.AWTException;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -101,18 +105,36 @@ public class TestStepImpl implements TestStep {
 			} else {
 				matchResult = openCvController.runComparison(chrome.getNewFullScreenContextImage(),
 						snapImageAction.getTargetImage());
+				
+				TestImage newLocationTestImage = openCvController.getResultTestImage();
+				// Save image to filesystem..
+				String filePathAndName = PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) +"/newTmpTemplateMatchImage.png";
+				File image = new File(filePathAndName);
+				ImageIO.write((BufferedImage)newLocationTestImage.getImage(), "PNG", image);
+				newLocationTestImage.setImagePath(image.getAbsolutePath());
+				newLocationTestImage.setImageGCVResults(GCVConnector.getGCVImageResult(newLocationTestImage.getFullImagePath()));
+				
 				if (matchResult == MatchType.MATCH) {
-					System.out.println("TEMPLATE MATCHING FOUND THE IMAGE IN THE SAME LOCATION.");
-					actionOutcome = mainAction.performAction();
+					if(gcvComparator.performTextMatch(snapImageAction.getTargetImage().getImageGCVResults(), newLocationTestImage.getImageGCVResults())) {
+						System.out.println("TEMPLATE MATCHING FOUND THE IMAGE IN THE SAME LOCATION.");
+						actionOutcome = mainAction.performAction();
+					}else {
+						actionOutcome = false;
+					}
+
 				} else if (matchResult == MatchType.LOCATION_CHANGED_MATCH) { // Should we verify this with the AI?
-					System.out.println("TEMPLATE MATCH FOUND THE IMAGE IN A NEW LOCATION.");
-					TestImage newLocationTestImage = openCvController.getResultTestImage();
-					newLocationTestImage.setCoordinateOffset(TestRunUtility.getOffset(chrome));
-					newLocationTestImage.setClickOffset(snapImageAction.getTargetImage().getClickOffset());
+					if(gcvComparator.performTextMatch(snapImageAction.getTargetImage().getImageGCVResults(), newLocationTestImage.getImageGCVResults())){	
+	//					newLocationTestImage.setCoordinateOffset(TestRunUtility.getOffset(chrome));
+						System.out.println("TEMPLATE MATCH FOUND THE IMAGE IN A NEW LOCATION.");
+						newLocationTestImage.setClickOffset(snapImageAction.getTargetImage().getClickOffset());
+	
+						snapImageAction.setTargetImage(newLocationTestImage);
+	
+						actionOutcome = snapImageAction.performAction();
+					}else {
+						actionOutcome = false;
+					}
 
-					snapImageAction.setTargetImage(newLocationTestImage);
-
-					actionOutcome = snapImageAction.performAction();
 				}
 			}
 
