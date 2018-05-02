@@ -108,10 +108,12 @@ public class TestStepImpl implements TestStep {
 				
 				TestImage newLocationTestImage = openCvController.getResultTestImage();
 				// Save image to filesystem..
-				String filePathAndName = PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) +"/newTmpTemplateMatchImage.png";
-				File image = new File(filePathAndName);
+				newLocationTestImage.setImagePath(TestRunUtility.takeNewTargetImage(newLocationTestImage.getBounds(),
+						PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "/newTmpTemplateMatchImage"));
+//				String filePathAndName = PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) +"/newTmpTemplateMatchImage.png";
+				File image = new File(newLocationTestImage.getImagePath());
 				ImageIO.write((BufferedImage)newLocationTestImage.getImage(), "PNG", image);
-				newLocationTestImage.setImagePath(image.getAbsolutePath());
+//				newLocationTestImage.setImagePath(image.getAbsolutePath());
 				newLocationTestImage.setImageGCVResults(GCVConnector.getGCVImageResult(newLocationTestImage.getFullImagePath()));
 				
 				if (matchResult == MatchType.MATCH) {

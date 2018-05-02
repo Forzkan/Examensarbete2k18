@@ -114,7 +114,7 @@ public class PropertiesHandler {
 			properties.setProperty(TTProperties.DEFAULT_SELECT_DIR.toString(), root);
 			
 			// GCV 
-			properties.setProperty(TTProperties.minTextScore.toString(), "50"); 
+			properties.setProperty(TTProperties.minTextScore.toString(), "0"); 
 			properties.setProperty(TTProperties.minTextMatch.toString(),  "50"); 
 			properties.setProperty(TTProperties.wvt_minLabelScore.toString(), "25"); 
 			properties.setProperty(TTProperties.wvt_minLabelMatch.toString(), "35"); 

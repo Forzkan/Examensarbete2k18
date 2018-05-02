@@ -67,8 +67,8 @@ public class GCVComparator implements ValidChangeAlgorithm{
 	
 	public boolean performTextMatch(GCVImageResult target, GCVImageResult newTarget) {
 		changes = new ArrayList<ImageChange>();
-		verifyText(target.getTextResults(), newTarget.getTextResults());
-		if(changes.contains(ImageChange.TEXT)) {
+		verifyAllText(target.getTextResults(), newTarget.getTextResults());
+		if(changes.contains(ImageChange.INVALID_TEXTCHANGE)) {
 			return false;
 		}
 		return true;
@@ -206,11 +206,10 @@ public class GCVComparator implements ValidChangeAlgorithm{
 	}
 	
 	
-	
-	private void verifyText(ArrayList<GCVResult> targetList, ArrayList<GCVResult> newTargetList) {
+	private void verifyAllText(ArrayList<GCVResult> targetList, ArrayList<GCVResult> newTargetList) {
 		int foundCounter = 0;
-		ArrayList<GCVResult> validTargetList = createListOfValidResults(targetList, MIN_TEXT_SCORE);
-		ArrayList<GCVResult> validNewTargetList = createListOfValidResults(newTargetList, MIN_TEXT_SCORE);
+		ArrayList<GCVResult> validTargetList = createListOfValidResults(targetList, 0);
+		ArrayList<GCVResult> validNewTargetList = createListOfValidResults(newTargetList, 0);
 		
 		
 		for(GCVResult r : validNewTargetList) {
@@ -232,6 +231,37 @@ public class GCVComparator implements ValidChangeAlgorithm{
 			System.out.println("ATLEAST ONE TEXT STRING HAS CHANGED.");
 			changes.add(ImageChange.INVALID_TEXTCHANGE);
 		}
+	}
+	
+	private void verifyText(ArrayList<GCVResult> targetList, ArrayList<GCVResult> newTargetList) {
+		int foundCounter = 0;
+		ArrayList<GCVResult> validTargetList = createListOfValidResults(targetList, MIN_TEXT_SCORE);
+		ArrayList<GCVResult> validNewTargetList = createListOfValidResults(newTargetList, MIN_TEXT_SCORE);
+		
+		
+		for(GCVResult r : validNewTargetList) {
+			for(GCVResult tr : validTargetList) {
+				System.err.println(r.getDescription() + " - <||> - " + tr.getDescription());
+				if(r.getDescription().toString().equalsIgnoreCase(tr.getDescription())) {
+					if(verifyTextVertices(tr, r) == false) {
+						changes.add(ImageChange.FONT);
+					}
+					foundCounter++;
+					break;
+				}
+			}
+		}
+		if(validTargetList.size() > 0 &&  validNewTargetList.size() > 0) {
+			int maxMatches = validTargetList.size() > validNewTargetList.size() ? validTargetList.size() : validNewTargetList.size();
+			double matchPercentage = (double)((double)foundCounter/ (double)maxMatches);
+			if(matchPercentage < MIN_ACCEPTED_TEXT_MATCH) {
+				System.out.println("ATLEAST ONE TEXT STRING HAS CHANGED.");
+				changes.add(ImageChange.INVALID_TEXTCHANGE);
+			}
+		}else if((validTargetList.size() > 0 && validNewTargetList.size() == 0) || (validTargetList.size() == 0 && validNewTargetList.size() > 0)) {
+			changes.add(ImageChange.INVALID_TEXTCHANGE);
+		}
+
 	}
 	
 	private boolean verifyTextVertices(GCVResult target, GCVResult newTarget) {
