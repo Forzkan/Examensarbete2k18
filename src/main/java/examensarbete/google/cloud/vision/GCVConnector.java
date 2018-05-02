@@ -76,7 +76,7 @@ public class GCVConnector {
 	 *             on Input/Output errors.
 	 */
 	public static void detectLabels(String filePath, GCVImageResult result) throws Exception, IOException {
-		System.out.println("\nSTART LABEL DETECTION::\n ");
+		System.out.println("START LABEL DETECTION.... ");
 
 		List<AnnotateImageRequest> requests = new ArrayList<>();
 		ArrayList<GCVResult> labelResults = new ArrayList<GCVResult>();
@@ -109,14 +109,13 @@ public class GCVConnector {
 				}
 			}
 		}result.setLabelResults(labelResults);
-		System.out.println("\nEND LABEL DETECTION::\n ");
 	}
 
 	
 	@SuppressWarnings("unused")
 	public void detectWebDetections(String filePath, PrintStream out)
 			throws Exception, IOException {
-		System.out.println("\nSTART WEB DETECTION::\n ");
+		System.out.println("START WEB DETECTION.... ");
 
 		List<AnnotateImageRequest> requests = new ArrayList<>();
 		ArrayList<GCVResult> webResults = new ArrayList<GCVResult>();
@@ -141,27 +140,25 @@ public class GCVConnector {
 				// for user input moderation or linking external references.
 				// For a full list of available annotations, see http://g.co/cloud/vision/docs
 				WebDetection annotation = res.getWebDetection();
-				out.println("Entity:Id:Score");
-				out.println("===============");
+//				out.println("Entity:Id:Score");
+//				out.println("===============");
 				for (WebEntity entity : annotation.getWebEntitiesList()) {
 					out.println(entity.getDescription() + " : " + entity.getEntityId() + " : " + entity.getScore());
 				}
-				out.println("\nPages with matching images: Score\n==");
+//				out.println("\nPages with matching images: Score\n==");
 				for (WebPage page : annotation.getPagesWithMatchingImagesList()) {
 					out.println(page.getUrl() + " : " + page.getScore());
 				}
-				out.println("\nPages with partially matching images: Score\n==");
+//				out.println("\nPages with partially matching images: Score\n==");
 				for (WebImage image : annotation.getPartialMatchingImagesList()) {
 					out.println(image.getUrl() + " : " + image.getScore());
 				}
-				out.println("\nPages with fully matching images: Score\n==");
+//				out.println("\nPages with fully matching images: Score\n==");
 				for (WebImage image : annotation.getFullMatchingImagesList()) {
 					out.println(image.getUrl() + " : " + image.getScore());
 				}
 			}
 		}
-
-		System.out.println("\nEND WEB DETECTION::\n ");
 	}
 
 	/**
@@ -177,7 +174,7 @@ public class GCVConnector {
 	 *             on Input/Output errors.
 	 */
 	public static void detectText(String filePath, GCVImageResult result) throws Exception, IOException {
-		System.out.println("\nSTART TEXT DETECTION::\n ");
+		System.out.println("START TEXT DETECTION......");
 		List<AnnotateImageRequest> requests = new ArrayList<>();
 
 		ByteString imgBytes = ByteString.readFrom(new FileInputStream(filePath));
@@ -225,7 +222,6 @@ public class GCVConnector {
 			}
 		}
 		result.setTextResults(textResults);
-		System.out.println("\nEND TEXT DETECTION::\n ");
 	}
 
 	/**
@@ -241,7 +237,7 @@ public class GCVConnector {
 	 *             on Input/Output errors.
 	 */
 	public static void detectLogos(String filePath, GCVImageResult result) throws Exception, IOException {
-		System.out.println("\nSTART LOGOS DETECTION::\n ");
+		System.out.println("START LOGOS DETECTION...... ");
 		List<AnnotateImageRequest> requests = new ArrayList<>();
 
 		ByteString imgBytes = ByteString.readFrom(new FileInputStream(filePath));
@@ -254,7 +250,7 @@ public class GCVConnector {
 		try (ImageAnnotatorClient client = ImageAnnotatorClient.create()) {
 			BatchAnnotateImagesResponse response = client.batchAnnotateImages(requests);
 			List<AnnotateImageResponse> responses = response.getResponsesList();
-			System.out.println("");
+
 			for (AnnotateImageResponse res : responses) {
 				if (res.hasError()) {
 //					out.printf("Error: %s\n", res.getError().getMessage());
@@ -263,7 +259,7 @@ public class GCVConnector {
 
 				// For full list of available annotations, see http://g.co/cloud/vision/docs
 				for (EntityAnnotation annotation : res.getLogoAnnotationsList()) {
-					System.out.println(annotation.getDescription());
+//					System.out.println(annotation.getDescription());
 					GCVResult gcvResult = new GCVResult();
 					gcvResult.setScore(annotation.getScore());
 					gcvResult.setConfident(annotation.getConfidence());
@@ -273,7 +269,6 @@ public class GCVConnector {
 			}
 		}
 		result.setLogoResults(logoResults);
-		System.out.println("\nEND LOGOS DETECTION::\n ");
 	}
 
 	/**
@@ -291,7 +286,7 @@ public class GCVConnector {
 	 */
 	public static void detectProperties(String filePath, GCVImageResult result)
 			throws Exception, IOException {
-		System.out.println("\nSTART PROPERTIES DETECTION::\n ");
+		System.out.println("START PROPERTIES DETECTION...... ");
 		List<AnnotateImageRequest> requests = new ArrayList<>();
 
 		ByteString imgBytes = ByteString.readFrom(new FileInputStream(filePath));
@@ -339,7 +334,6 @@ public class GCVConnector {
 				}
 			}
 		}
-		System.out.println("\nEND PROPERTIES DETECTION::\n ");
 	}
 
 	// // [START vision_detect_document]
@@ -427,7 +421,7 @@ public class GCVConnector {
 	 */
 	public static void detectCropHints(String filePath, GCVImageResult result) throws Exception, IOException {
 
-		System.out.println("\nSTART CROP HINTS DETECTION::\n ");
+		System.out.println("START CROP HINTS DETECTION...... ");
 		List<AnnotateImageRequest> requests = new ArrayList<>();
 
 		ByteString imgBytes = ByteString.readFrom(new FileInputStream(filePath));
@@ -454,7 +448,6 @@ public class GCVConnector {
 //				}
 			}
 		}
-		System.out.println("\nEND CROP HINTS DETECTION::\n ");
 	}
 
 	/**
@@ -471,7 +464,7 @@ public class GCVConnector {
 	 */
 	public static void detectWebEntities(String filePath, GCVImageResult result)
 			throws Exception, IOException {
-		System.out.println("\nSTART WEB ENTITIES DETECTION::\n ");
+		System.out.println("START WEB ENTITIES DETECTION......");
 		// Instantiates a client
 		try (ImageAnnotatorClient client = ImageAnnotatorClient.create()) {
 			ArrayList<GCVResult> webEntitiesResult = new ArrayList<GCVResult>();
@@ -509,7 +502,6 @@ public class GCVConnector {
 			System.out.println("Error when detecting web entities in the image");
 			System.out.println(e.getMessage());
 		}
-		System.out.println("\nEND WEB ENTITIES DETECTION::\n ");
 	}
 
 	// // [START vision_web_entities_include_geo_results]

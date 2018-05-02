@@ -58,7 +58,9 @@ public class TestHandler {
 	
 	
 	private void createTestCollectionList() {
-		File directory = new File(FileUtility.getProjectRoot() + "\\TEST CASES");
+		File directory = new File(PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()));
+		System.out.println("LOADING TESTS FROM: " + directory.getAbsolutePath());
+		int counter = 0;
 		if(directory.exists() && directory.isDirectory()) {
 			for(File f : directory.listFiles()) {
 				if(f.isDirectory()) {
@@ -69,12 +71,14 @@ public class TestHandler {
 								testGroups.add(new TestGroup(FileUtility.getNameWithoutJsonEnd(test), 
 													collectionName, 
 													json.readTest(f.getName(), FileUtility.getNameWithoutJsonEnd(test))));
+								counter++;
 							}
 						}
 					}
 				}
 			}
 		}
+		System.out.println("LOADED A TOTAL OF (" + counter + ") TESTS");
 	}
 
 

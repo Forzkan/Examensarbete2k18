@@ -92,7 +92,7 @@ public class TestStepImpl implements TestStep {
 			MatchType gcvMatchType = gcvComparator.isValidChange(snapImageAction.getTargetImage().getImageGCVResults(), newTarget.getImageGCVResults());
 			if (gcvComparator.isValidGCVMatchType(gcvMatchType)) {
 //			if(false) {
-				System.out.println("IS VALID GCV change.");
+				System.out.println("GCV DETECTED A VALID CHANGE: " + gcvMatchType.toString());
 				SnapImageAction newSnapAction = new SnapImageAction();
 
 				newTarget.setCoordinates(snapImageAction.getTargetImage().getCoordinates());
@@ -103,6 +103,7 @@ public class TestStepImpl implements TestStep {
 				// A VALID CHANGE, AND UPDATE THE BASELINE IF THE USER WANTS TO DO SO.
 				actionOutcome = newSnapAction.performAction();
 			} else {
+				System.out.println("GCV COULD NOT DETECT A VALID CHANGE -> PERFORMING A SECOND ATTEMPT IN COMBINATION WITH TEMPLATE MATCHING..");
 				matchResult = openCvController.runComparison(chrome.getNewFullScreenContextImage(),
 						snapImageAction.getTargetImage());
 				
@@ -166,7 +167,7 @@ public class TestStepImpl implements TestStep {
 	public void takeScreenshot(String groupName, String testName) {
 		String path = chrome.takeBrowserScreenshot(FileUtility.createUniqueContextImageFilePath(groupName, testName));
 		testStepContextImage = new TestImageImpl();
-		System.out.println("");
+//		System.out.println("");
 		testStepContextImage.setImagePath(path);
 	}
 

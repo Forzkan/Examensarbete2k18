@@ -106,7 +106,7 @@ public class FileUtility {
     }
 
 	public static String absoluteToRelativePath(String imagePath) {
-		System.out.println(PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()));
+//		System.out.println(PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()));
 		return imagePath.replace(PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()),"");
 	}
     

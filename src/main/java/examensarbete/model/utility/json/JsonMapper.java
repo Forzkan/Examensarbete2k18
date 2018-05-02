@@ -42,7 +42,7 @@ public class JsonMapper {
 		try {
 			// Convert JSON string from file to Object
 			GCVImageResult result = mapper.readValue(new File(jsonPath), GCVImageResult.class);
-			System.out.println(result);
+//			System.out.println(result);
 			return result;
 			
 		} catch (JsonGenerationException e) {
@@ -81,7 +81,7 @@ public class JsonMapper {
 //		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		try {
 			// Convert JSON string from file to Object
-			System.out.println("Trying to read from path: " + createFullTestPath(groupName, testName));
+//			System.out.println("Trying to read from path: " + createFullTestPath(groupName, testName));
 			TestImpl test = mapper.readValue(new File(createFullTestPath(groupName, testName)), TestImpl.class);
 			return test;
 		} catch (JsonGenerationException e) {

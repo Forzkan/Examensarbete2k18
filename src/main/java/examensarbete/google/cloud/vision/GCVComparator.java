@@ -13,7 +13,7 @@ public class GCVComparator implements ValidChangeAlgorithm{
 	
 	
 	private double MIN_ACCEPTED_TEXT_MATCH = 0.5; // 50%.
-	private double MIN_TEXT_SCORE = 0.5; // 50%.
+	private double MIN_TEXT_SCORE = 0.0; // 0%.
 	private boolean allowNewText = false; // a page with several similar buttons could probably big a huuuge mess to deal with if the one button we are after gets removed, or gets a completely new text.
 	
 	
@@ -48,7 +48,7 @@ public class GCVComparator implements ValidChangeAlgorithm{
 		setGCVParameters();
 		
 		changes = new ArrayList<ImageChange>();
-		System.out.println("");
+//		System.out.println("");
 		verifyColor(target, newTarget);
 		
 		verifyText(target.getTextResults(), newTarget.getTextResults());
@@ -103,7 +103,7 @@ public class GCVComparator implements ValidChangeAlgorithm{
 		
 
 		CONFIDENT_LABEL_THRESHOLD = Double.parseDouble(PropertiesHandler.properties.getProperty(TTProperties.confidentLabel.toString())) / 100; 
-		System.out.println();
+//		System.out.println();
 	}
 
 
@@ -111,24 +111,25 @@ public class GCVComparator implements ValidChangeAlgorithm{
 	private void verifyLogos(ArrayList<GCVResult> logoResults, ArrayList<GCVResult> newLogoResults) {
 		
 		for(GCVResult r : logoResults ) {
-			System.out.println("LOGO: " + r.getDescription() + " SCORE: " + r.getScore());
+//			System.out.println("LOGO: " + r.getDescription() + " SCORE: " + r.getScore());
 		}
 		for(GCVResult r : newLogoResults ) {
-			System.out.println("LOGO: " + r.getDescription() + " SCORE: " + r.getScore());
+//			System.out.println("LOGO: " + r.getDescription() + " SCORE: " + r.getScore());
 		}
-		System.out.println("LOGO RESULTS: ");
+//		System.out.println("LOGO RESULTS: ");  // Currently not using logo results because it is not sending back any responses that often... IT EVEN HAD PROBLEMS WITH A YOUTUBE LOGO....... ?!
 		
 	}
 
 
 
 	private MatchType analyzeIfValidChanges() {
-		System.out.println("ANALYZE IF VALID CHANGES.");
+		System.out.println("GCV ALGORITHM IN PROGRESS....");
 		MatchType change = MatchType.MATCH;
 		int changeCounter = 0;
 
 		// TODO:: First attempt, the logic here should be well thought through.
 		if(changes.contains(ImageChange.INVALID_TEXTCHANGE) && allowNewText == false) {
+			System.out.println("GCV ALGORITHM DONE....");
 			return MatchType.NO_MATCH;
 		}
 		if(changes.contains(ImageChange.MAINCOLOR)  || 
@@ -166,6 +167,7 @@ public class GCVComparator implements ValidChangeAlgorithm{
 		if(changeCounter > 1) {
 			return MatchType.NO_MATCH;
 		}
+		System.out.println("GCV ALGORITHM DONE.");
 		return change;
 //		return changeCounter <= 1;
 	}
@@ -175,17 +177,17 @@ public class GCVComparator implements ValidChangeAlgorithm{
 		// Main color.
 		if(isSameColorValues(target.getDominantColor(), newTarget.getDominantColor()) == false) {
 			changes.add(ImageChange.MAINCOLOR);
-			System.out.println("MAIN COLOR HAS CHANGED");
+//			System.out.println("MAIN COLOR HAS CHANGED");
 		}
 		// Secondary color.
 		if(isSameColorValues(target.getSecondaryColor(), newTarget.getSecondaryColor()) == false) {
 			changes.add(ImageChange.SECONDARYCOLOR);
-			System.out.println("SECONDARY COLOR HAS CHANGED");
+//			System.out.println("SECONDARY COLOR HAS CHANGED");
 		}
 		// Third color.
 		if(isSameColorValues(target.getThirdColor(), newTarget.getThirdColor()) == false) {
 			changes.add(ImageChange.THIRDCOLOR);
-			System.out.println("THIRD COLOR HAS CHANGED");
+//			System.out.println("THIRD COLOR HAS CHANGED");
 		}
 	}
 	
@@ -214,34 +216,7 @@ public class GCVComparator implements ValidChangeAlgorithm{
 		
 		for(GCVResult r : validNewTargetList) {
 			for(GCVResult tr : validTargetList) {
-				System.err.println(r.getDescription() + " - <||> - " + tr.getDescription());
-				if(r.getDescription().toString().equalsIgnoreCase(tr.getDescription())) {
-					if(verifyTextVertices(tr, r) == false) {
-						changes.add(ImageChange.FONT);
-					}
-					foundCounter++;
-					break;
-				}
-			}
-		}
-		
-		int maxMatches = validTargetList.size() > validNewTargetList.size() ? validTargetList.size() : validNewTargetList.size();
-		double matchPercentage = (double)((double)foundCounter/ (double)maxMatches);
-		if(matchPercentage < MIN_ACCEPTED_TEXT_MATCH) {
-			System.out.println("ATLEAST ONE TEXT STRING HAS CHANGED.");
-			changes.add(ImageChange.INVALID_TEXTCHANGE);
-		}
-	}
-	
-	private void verifyText(ArrayList<GCVResult> targetList, ArrayList<GCVResult> newTargetList) {
-		int foundCounter = 0;
-		ArrayList<GCVResult> validTargetList = createListOfValidResults(targetList, MIN_TEXT_SCORE);
-		ArrayList<GCVResult> validNewTargetList = createListOfValidResults(newTargetList, MIN_TEXT_SCORE);
-		
-		
-		for(GCVResult r : validNewTargetList) {
-			for(GCVResult tr : validTargetList) {
-				System.err.println(r.getDescription() + " - <||> - " + tr.getDescription());
+//				System.err.println(r.getDescription() + " - <||> - " + tr.getDescription());
 				if(r.getDescription().toString().equalsIgnoreCase(tr.getDescription())) {
 					if(verifyTextVertices(tr, r) == false) {
 						changes.add(ImageChange.FONT);
@@ -255,7 +230,37 @@ public class GCVComparator implements ValidChangeAlgorithm{
 			int maxMatches = validTargetList.size() > validNewTargetList.size() ? validTargetList.size() : validNewTargetList.size();
 			double matchPercentage = (double)((double)foundCounter/ (double)maxMatches);
 			if(matchPercentage < MIN_ACCEPTED_TEXT_MATCH) {
-				System.out.println("ATLEAST ONE TEXT STRING HAS CHANGED.");
+				System.out.println("TEXT MATCH FAILED - "+matchPercentage + " / " + MIN_ACCEPTED_TEXT_MATCH);
+				changes.add(ImageChange.INVALID_TEXTCHANGE);
+			}
+		}else if((validTargetList.size() > 0 && validNewTargetList.size() == 0) || (validTargetList.size() == 0 && validNewTargetList.size() > 0)) {
+			changes.add(ImageChange.INVALID_TEXTCHANGE);
+		}
+	}
+	
+	private void verifyText(ArrayList<GCVResult> targetList, ArrayList<GCVResult> newTargetList) {
+		int foundCounter = 0;
+		ArrayList<GCVResult> validTargetList = createListOfValidResults(targetList, MIN_TEXT_SCORE);
+		ArrayList<GCVResult> validNewTargetList = createListOfValidResults(newTargetList, MIN_TEXT_SCORE);
+		
+		
+		for(GCVResult r : validNewTargetList) {
+			for(GCVResult tr : validTargetList) {
+//				System.err.println(r.getDescription() + " - <||> - " + tr.getDescription());
+				if(r.getDescription().toString().equalsIgnoreCase(tr.getDescription())) {
+					if(verifyTextVertices(tr, r) == false) {
+						changes.add(ImageChange.FONT);
+					}
+					foundCounter++;
+					break;
+				}
+			}
+		}
+		if(validTargetList.size() > 0 &&  validNewTargetList.size() > 0) {
+			int maxMatches = validTargetList.size() > validNewTargetList.size() ? validTargetList.size() : validNewTargetList.size();
+			double matchPercentage = (double)((double)foundCounter/ (double)maxMatches);
+			if(matchPercentage < MIN_ACCEPTED_TEXT_MATCH) {
+				System.out.println("TEXT MATCH FAILED - "+matchPercentage + " / " + MIN_ACCEPTED_TEXT_MATCH);
 				changes.add(ImageChange.INVALID_TEXTCHANGE);
 			}
 		}else if((validTargetList.size() > 0 && validNewTargetList.size() == 0) || (validTargetList.size() == 0 && validNewTargetList.size() > 0)) {
@@ -276,10 +281,10 @@ public class GCVComparator implements ValidChangeAlgorithm{
 		}
 		// equalCounter should be the same as the number of vertices in the targetlist.
 		if(equalCounter < target.getVerticesPoints().size()) {
-			System.out.println("ALL VERTICES DO NOT MATCH");
+//			System.out.println("ALL VERTICES DO NOT MATCH");
 			return false;
 		}
-		System.out.println("ALL VERTICES MATCH");
+//		System.out.println("ALL VERTICES MATCH");
 		return true;
 	}
 	
@@ -304,7 +309,6 @@ public class GCVComparator implements ValidChangeAlgorithm{
 	}
 
 	private void verifyGCVList(ArrayList<GCVResult> targetList, ArrayList<GCVResult> newTargetList, double minScore ,double minMatchPercentage, ImageChange change) {
-		System.out.println("");
 		ArrayList<GCVResult> validTargetList = createListOfValidResults(targetList, minScore);
 		ArrayList<GCVResult> validNewList = createListOfValidResults(newTargetList, minScore);
 		
@@ -323,8 +327,10 @@ public class GCVComparator implements ValidChangeAlgorithm{
 //		DecimalFormat matchPercentage = new DecimalFormat(".##");
 //		matchPercentage = 
 		double matchPercentage = (double)((double)matches/(double)maxMatches); //matches / maxMatches;
-		System.out.println("MATCHES (" + matches + "/" + maxMatches + ")");
+		
 		System.out.println("MATCHING PERCENTAGE - " + change.name() + " : " + matchPercentage + " Threshold : " + minMatchPercentage);
+		System.out.println("MATCHES (" + matches + "/" + maxMatches + ")");
+		
 		if(matchPercentage < minMatchPercentage) {
 			changes.add(change);
 		}

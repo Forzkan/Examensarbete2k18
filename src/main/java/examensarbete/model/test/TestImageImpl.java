@@ -146,7 +146,6 @@ public class TestImageImpl implements TestImage{
 
 	@Override
 	public void setImagePath(String imagePath) {
-		System.out.println("");
 		this.imagePath = FileUtility.absoluteToRelativePath(imagePath); 
 		setImage(this.imagePath);
 	}
@@ -220,7 +219,6 @@ public class TestImageImpl implements TestImage{
 	// PRIVATE HELP METHODS.
 	private void setImage(String imagePath) {
 		try {
-			System.out.println(PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()));
 			File img = new File(PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "//" + imagePath);
 			image = ImageIO.read(img);
 		} catch (Exception e) {
