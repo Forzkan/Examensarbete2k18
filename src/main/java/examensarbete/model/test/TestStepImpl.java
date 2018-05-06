@@ -73,12 +73,13 @@ public class TestStepImpl implements TestStep {
 	@Override
 	public TestStepResult performTestStep() throws IOException, AWTException {
 		boolean actionOutcome = false;
+		MatchType matchResult = MatchType.NO_MATCH;
 		
 		// TODO:: PERFORM THE MAIN ACTION, AND HANDLE THE OUTCOME OF IT.
 		if (mainAction.getActionType() == EActionType.IMAGESNAP) {
 			SnapImageAction snapImageAction = (SnapImageAction) mainAction;
 			OpenCvController openCvController = new OpenCvController();
-			MatchType matchResult = MatchType.NO_MATCH;
+			
 
 			// TAKE NEW IMAGE, IN SAME LOCATION.
 			TestImage newTarget = new TestImageImpl();
@@ -89,10 +90,10 @@ public class TestStepImpl implements TestStep {
 			newTarget.setImageGCVResults(GCVConnector.getGCVImageResult(newTarget.getFullImagePath()));
 			// IF VALID CHANGE
 			GCVComparator gcvComparator = new GCVComparator();
-			MatchType gcvMatchType = gcvComparator.isValidChange(snapImageAction.getTargetImage().getImageGCVResults(), newTarget.getImageGCVResults());
-			if (gcvComparator.isValidGCVMatchType(gcvMatchType)) {
+			matchResult = gcvComparator.isValidChange(snapImageAction.getTargetImage().getImageGCVResults(), newTarget.getImageGCVResults());
+			if (gcvComparator.isValidGCVMatchType(matchResult)) {
 //			if(false) {
-				System.out.println("GCV DETECTED A VALID CHANGE: " + gcvMatchType.toString());
+				System.out.println("GCV DETECTED A VALID CHANGE: " + matchResult.toString());
 				SnapImageAction newSnapAction = new SnapImageAction();
 
 				newTarget.setCoordinates(snapImageAction.getTargetImage().getCoordinates());
@@ -110,9 +111,9 @@ public class TestStepImpl implements TestStep {
 				TestImage newLocationTestImage = openCvController.getResultTestImage();
 				// Save image to filesystem..
 				newLocationTestImage.setImagePath(TestRunUtility.takeNewTargetImage(newLocationTestImage.getBounds(),
-						PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "/newTmpTemplateMatchImage"));
+						PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "\\newTmpTemplateMatchImage"));
 //				String filePathAndName = PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) +"/newTmpTemplateMatchImage.png";
-				File image = new File(newLocationTestImage.getImagePath());
+				File image = new File(newLocationTestImage.getFullImagePath());
 				ImageIO.write((BufferedImage)newLocationTestImage.getImage(), "PNG", image);
 //				newLocationTestImage.setImagePath(image.getAbsolutePath());
 				newLocationTestImage.setImageGCVResults(GCVConnector.getGCVImageResult(newLocationTestImage.getFullImagePath()));
@@ -158,9 +159,15 @@ public class TestStepImpl implements TestStep {
 			actionOutcome = mainAction.performAction();
 		}
 
-		MatchType testStepMatchType = actionOutcome ? MatchType.MATCH : MatchType.NO_MATCH;
+//		MatchType testStepMatchType = actionOutcome ? MatchType.MATCH : MatchType.NO_MATCH;
 		
-		return new TestStepResultImpl(testStepMatchType, new TestImageImpl(), new TestImageImpl(), new TestImageImpl(), new TestImageImpl() );
+//		return new TestStepResultImpl(testStepMatchType, new TestImageImpl(), new TestImageImpl(), new TestImageImpl(), new TestImageImpl() );
+
+		if(matchResult == MatchType.NO_MATCH) {
+			matchResult = actionOutcome ? MatchType.MATCH : MatchType.NO_MATCH;
+		}
+		
+		return new TestStepResultImpl(matchResult, new TestImageImpl(), new TestImageImpl(), new TestImageImpl(), new TestImageImpl() );
 	}
 
 	@Override
