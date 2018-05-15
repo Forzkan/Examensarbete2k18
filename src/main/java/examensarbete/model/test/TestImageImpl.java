@@ -136,7 +136,7 @@ public class TestImageImpl implements TestImage{
 	@JsonIgnore
 	@Override
 	public String getFullImagePath() {
-		return PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "//" + imagePath;
+		return PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + imagePath;
 	}
 	
 	@Override

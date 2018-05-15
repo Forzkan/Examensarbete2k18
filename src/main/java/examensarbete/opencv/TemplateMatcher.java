@@ -168,11 +168,17 @@ public class TemplateMatcher implements ChangeListener {
     }
     
     private void setupTestImages(TestImage contextImage, TestImage targetImage) {
-    	System.out.println("");
     	this.contextImage = Imgcodecs.imread( contextImage.getFullImagePath(), Imgcodecs.IMREAD_COLOR );
         this.targetImage = Imgcodecs.imread( targetImage.getFullImagePath(), Imgcodecs.IMREAD_COLOR );
         if(this.contextImage.empty() || this.targetImage.empty()) {
-            System.out.println("Can't read one of the images");
+        	if(this.contextImage.empty()) {
+        		System.out.println("Can't read context image");
+        		System.out.println(contextImage.getFullImagePath());
+        	}
+        	if(this.targetImage.empty()) {
+        		System.out.println("Can't read target image");
+        		System.out.println(targetImage.getFullImagePath());
+        	}
             System.exit(-1);
         }
     }
