@@ -148,7 +148,7 @@ public class TestImpl implements Test{
 	
 	@Override
 	public TestResult runTest() {
-		TestResult testResult = new TestResultImpl();
+		TestResult testResult = new TestResultImpl(this);
 		for(TestStep step : testSteps) {
 			
 			if(step.getMainAction().getActionType() == EActionType.IMAGESNAP) {

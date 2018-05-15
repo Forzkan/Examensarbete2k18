@@ -7,6 +7,12 @@ public class TestResultImpl implements TestResult {
 
 	private List<TestStepResult> testStepResults = new ArrayList<TestStepResult>();
 	
+	private Test test;
+	
+	public TestResultImpl(Test test) {
+		this.test = test;
+	}
+	
 	@Override
 	public void addStepResult(TestStepResult testStepResult) {
 		// TODO Auto-generated method stub
@@ -20,8 +26,7 @@ public class TestResultImpl implements TestResult {
 
 	@Override
 	public Test getTest() {
-		// TODO Auto-generated method stub
-		return null;
+		return test;
 	}
 
 	@Override

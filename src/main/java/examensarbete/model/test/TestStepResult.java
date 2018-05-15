@@ -2,7 +2,7 @@ package examensarbete.model.test;
 
 public interface TestStepResult {
 	boolean getStepSuccess();
-//	void setStepSuccess();
+
 	MatchType getTestStepMatchType();
 	
 	TestImage getOriginalContextImage();
