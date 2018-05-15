@@ -103,6 +103,7 @@ public class TestStepImpl implements TestStep {
 				// A VALID CHANGE, AND UPDATE THE BASELINE IF THE USER WANTS TO DO SO.
 				actionOutcome = newSnapAction.performAction();
 			} else {
+				System.out.println("");
 				System.out.println("GCV COULD NOT DETECT A VALID CHANGE -> PERFORMING A SECOND ATTEMPT IN COMBINATION WITH TEMPLATE MATCHING..");
 				matchResult = openCvController.runComparison(chrome.getNewFullScreenContextImage(),
 						snapImageAction.getTargetImage());
@@ -110,9 +111,9 @@ public class TestStepImpl implements TestStep {
 				TestImage newLocationTestImage = openCvController.getResultTestImage();
 				// Save image to filesystem..
 				newLocationTestImage.setImagePath(TestRunUtility.takeNewTargetImage(newLocationTestImage.getBounds(),
-						PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "/newTmpTemplateMatchImage"));
+						PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "\\newTmpTemplateMatchImage"));
 //				String filePathAndName = PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) +"/newTmpTemplateMatchImage.png";
-				File image = new File(newLocationTestImage.getImagePath());
+				File image = new File(newLocationTestImage.getFullImagePath());
 				ImageIO.write((BufferedImage)newLocationTestImage.getImage(), "PNG", image);
 //				newLocationTestImage.setImagePath(image.getAbsolutePath());
 				newLocationTestImage.setImageGCVResults(GCVConnector.getGCVImageResult(newLocationTestImage.getFullImagePath()));
