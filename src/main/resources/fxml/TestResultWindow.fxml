@@ -13,7 +13,10 @@
    <children>
       <HBox style="-fx-background-color: #1e1919;">
          <children>
-            <ScrollPane fx:id="treeViewScrollPane" prefHeight="800.0" prefWidth="233.0" style="-fx-background-color: #1e1919;" />
+            <ScrollPane fx:id="treeViewScrollPane" prefHeight="800.0" prefWidth="233.0" style="-fx-background-color: #1e1919;">
+               <content>
+                  <AnchorPane fx:id="treeViewPane" prefHeight="787.0" prefWidth="222.0" />
+               </content></ScrollPane>
             <ScrollPane prefHeight="800.0" prefWidth="62.0">
                <content>
                   <VBox fx:id="testStepVBox" prefHeight="797.0" prefWidth="60.0" style="-fx-background-color: black;" />

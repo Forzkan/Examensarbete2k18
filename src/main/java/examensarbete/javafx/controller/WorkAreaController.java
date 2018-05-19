@@ -23,6 +23,7 @@ import examensarbete.model.action.TimerAction;
 import examensarbete.model.properties.PropertiesHandler;
 import examensarbete.model.test.TestGroup;
 import examensarbete.model.test.TestHandler;
+import examensarbete.model.test.TestResult;
 import examensarbete.model.test.TestStep;
 import examensarbete.model.utility.FileUtility;
 import examensarbete.model.utility.WaitHandler;
@@ -134,6 +135,10 @@ public class WorkAreaController {
 		}
 	}
 
+	
+	private ArrayList<TestGroup> lastRunTests = new ArrayList<TestGroup>();
+	private ArrayList<TestResult> lastTestResults = new ArrayList<TestResult>();
+	
 	@FXML
 	private void runSelectedTests() {
 		// TODO:: Do something with the results. (create report)
@@ -142,13 +147,26 @@ public class WorkAreaController {
 				// Run all tests for all groups.
 			} else if (parentIsSelected()) {
 				// Run all tests in group.
-				for (TestGroup tg : getSelectedTestsAndOrGroup()) {
-					tg.getTest().runTest();
+				lastRunTests.clear();
+				lastTestResults.clear();
+				ArrayList<TestGroup> selectedTests = getSelectedTestsAndOrGroup();
+				lastRunTests.addAll(selectedTests);
+				for (TestGroup tg : selectedTests) {
+					
+					lastTestResults.add(tg.getTest()
+										.runTest());
+					
 					tg.getTest().cleanup();
 				}
 			} else if (selectedTest != null) {
 				// Run selected test.
-				selectedTest.getTest().runTest();
+				lastRunTests.clear();
+				lastRunTests.add(selectedTest);
+				lastTestResults.clear();
+				lastTestResults.add(selectedTest
+									.getTest()
+									.runTest());
+				
 				selectedTest.getTest().cleanup();
 			}
 		}
@@ -158,7 +176,7 @@ public class WorkAreaController {
 	private void onTestReportButtonClick() {
 //		testReportButton
 		System.out.println("OPEN TEST RESULTS");
-		TestResultController controller = new TestResultController();
+		TestResultController controller = new TestResultController(lastTestResults); // LATEST TEST RESULTS.
 		preferencesStage = stageFactory.openStage(TTStage.TEST_RESULT, controller);
 		
 	}

@@ -59,6 +59,9 @@ public class TestResultController {
 	@FXML
 	private ScrollPane treeViewScrollPane;
     
+    @FXML
+    private AnchorPane treeViewPane;
+    
     
     @FXML
     void failTest(ActionEvent event) {
@@ -74,10 +77,14 @@ public class TestResultController {
     private List<TestResult> resultCollection = new ArrayList<TestResult>();
     
     
-    public void TestResultController(ArrayList<TestResult> results) {
+    public TestResultController(ArrayList<TestResult> results) {
     	// Get test result, 
     	resultCollection = results;
-
+    }
+    
+    
+    @FXML
+    private void initialize() {
     	// populate test list.
     	treeViewLoader();
     }
@@ -128,10 +135,19 @@ public class TestResultController {
 
 		resultTreeView = new TreeView<String>(rootNode);
 		resultTreeView.getStyleClass().add("testTree");
-		treeViewScrollPane.getChildrenUnmodifiable().add(resultTreeView);
+		treeViewPane.getChildren().add(resultTreeView);
 		resultTreeView.prefHeightProperty().bind(treeViewScrollPane.heightProperty());
 		resultTreeView.prefWidthProperty().bind(treeViewScrollPane.widthProperty());
 		setOnTestSelectedEvent(resultTreeView);
+		
+//		testTreeView = new TreeView<String>(rootNode);
+//		testTreeView.getStyleClass().add("testTree");
+//		treeViewPane.getChildren().add(testTreeView);
+		
+//		testTreeView.prefHeightProperty().bind(treeViewScrollPane.heightProperty());
+//		testTreeView.prefWidthProperty().bind(treeViewScrollPane.widthProperty());
+//		setOnTestSelectedEvent(testTreeView);
+		
 	}
     
 	EventHandler<MouseEvent> event_handler;
@@ -251,7 +267,7 @@ public class TestResultController {
 		baselineImageView.setImage(new Image(contextURL.toString()));
 		newContextImageView.setImage(new Image(newContextURL.toString()));
 
-	
+		System.out.println(baselineImageView.getFitHeight());
 		
 		// SET ON UPDATE BASELINE BUTTON CLICKED, WITH REFERENCES TO NEW IMAGES.
 		//TODO::
