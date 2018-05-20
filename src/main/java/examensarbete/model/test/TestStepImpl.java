@@ -79,7 +79,7 @@ public class TestStepImpl implements TestStep {
 		if (mainAction.getActionType() == EActionType.IMAGESNAP) {
 			SnapImageAction snapImageAction = (SnapImageAction) mainAction;
 			OpenCvController openCvController = new OpenCvController();
-			
+			TestImage originalTestImage = snapImageAction.getTargetImage();
 
 			// TAKE NEW IMAGE, IN SAME LOCATION.
 			TestImage newTarget = new TestImageImpl();
@@ -109,18 +109,18 @@ public class TestStepImpl implements TestStep {
 				matchResult = openCvController.runComparison(chrome.getNewFullScreenContextImage(),
 						snapImageAction.getTargetImage());
 				
-				TestImage newLocationTestImage = openCvController.getResultTestImage();
+				newTarget = openCvController.getResultTestImage();
 				// Save image to filesystem..
-				newLocationTestImage.setImagePath(TestRunUtility.takeNewTargetImage(newLocationTestImage.getBounds(),
+				newTarget.setImagePath(TestRunUtility.takeNewTargetImage(newTarget.getBounds(),
 						PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "\\newTmpTemplateMatchImage"));
 //				String filePathAndName = PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) +"/newTmpTemplateMatchImage.png";
-				File image = new File(newLocationTestImage.getFullImagePath());
-				ImageIO.write((BufferedImage)newLocationTestImage.getImage(), "PNG", image);
+				File image = new File(newTarget.getFullImagePath());
+				ImageIO.write((BufferedImage)newTarget.getImage(), "PNG", image);
 //				newLocationTestImage.setImagePath(image.getAbsolutePath());
-				newLocationTestImage.setImageGCVResults(GCVConnector.getGCVImageResult(newLocationTestImage.getFullImagePath()));
+				newTarget.setImageGCVResults(GCVConnector.getGCVImageResult(newTarget.getFullImagePath()));
 				
 				if (matchResult == MatchType.MATCH) {
-					if(gcvComparator.performTextMatch(snapImageAction.getTargetImage().getImageGCVResults(), newLocationTestImage.getImageGCVResults())) {
+					if(gcvComparator.performTextMatch(snapImageAction.getTargetImage().getImageGCVResults(), newTarget.getImageGCVResults())) {
 						System.out.println("TEMPLATE MATCHING FOUND THE IMAGE IN THE SAME LOCATION.");
 						actionOutcome = mainAction.performAction();
 					}else {
@@ -128,12 +128,12 @@ public class TestStepImpl implements TestStep {
 					}
 
 				} else if (matchResult == MatchType.LOCATION_CHANGED_MATCH) { // Should we verify this with the AI?
-					if(gcvComparator.performTextMatch(snapImageAction.getTargetImage().getImageGCVResults(), newLocationTestImage.getImageGCVResults())){	
+					if(gcvComparator.performTextMatch(snapImageAction.getTargetImage().getImageGCVResults(), newTarget.getImageGCVResults())){	
 	//					newLocationTestImage.setCoordinateOffset(TestRunUtility.getOffset(chrome));
 						System.out.println("TEMPLATE MATCH FOUND THE IMAGE IN A NEW LOCATION.");
-						newLocationTestImage.setClickOffset(snapImageAction.getTargetImage().getClickOffset());
+						newTarget.setClickOffset(snapImageAction.getTargetImage().getClickOffset());
 	
-						snapImageAction.setTargetImage(newLocationTestImage);
+						snapImageAction.setTargetImage(newTarget);
 	
 						actionOutcome = snapImageAction.performAction();
 					}else {
@@ -156,6 +156,14 @@ public class TestStepImpl implements TestStep {
 			// CLICK ON THE PREVIOUS USER-DEFINED CLICK-COORDINATES AND CONTINUE.
 			// ELSE IF INVALID CHANGE, RETURN FALSE.
 
+			
+//			testStepContextImage
+//			newLocationTestImage
+
+
+//			return new TestStepResultImpl(matchResult, testStepContextImage, ot, mc, mt );
+//			snapImageAction.getTargetImage()
+			return new TestStepResultImpl(matchResult, testStepContextImage, originalTestImage, new TestImageImpl(), newTarget );
 		} else {
 			actionOutcome = mainAction.performAction();
 		}
@@ -168,6 +176,7 @@ public class TestStepImpl implements TestStep {
 			matchResult = actionOutcome ? MatchType.MATCH : MatchType.NO_MATCH;
 		}
 		
+		//Return TestStepResult withouth any actual images if the step was just open chrome or other such step where no images are saved or used
 		return new TestStepResultImpl(matchResult, new TestImageImpl(), new TestImageImpl(), new TestImageImpl(), new TestImageImpl() );
 	}
 
