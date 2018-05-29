@@ -1,11 +1,16 @@
 package examensarbete.javafx.controller;
 
 import java.awt.Point;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -13,6 +18,7 @@ import examensarbete.model.action.ActionBase;
 import examensarbete.model.action.EActionType;
 import examensarbete.model.test.Test;
 import examensarbete.model.test.TestGroup;
+import examensarbete.model.test.TestHandler;
 import examensarbete.model.test.TestImage;
 import examensarbete.model.test.TestResult;
 import examensarbete.model.test.TestStep;
@@ -70,16 +76,53 @@ public class TestResultController {
 
     @FXML
     void updateStepBaseline(ActionEvent event) {
-    	
+    	// From selectedTests... locate the selected test.. and then the correct step.
+    	for(TestGroup tg : selectedTests) {
+    		if(tg.getTestName().equals(selectedTest.getTest().getTestName()) &&
+				tg.getGroupName().equals(selectedTest.getTest().getTestGroupName())) {
+    			// TG is Selected Test.
+//    			String targetNameAndPath = selectedTest.getTest().getTestSteps().get(stepIndex).getTestStepTargetImage().getImage();
+//    			String contextNameAndPath = selectedTest.getTest().getTestSteps().get(stepIndex).getTestStepContextImage().getImage();
+    			
+    			String uniqueTrgName = FileUtility.createUniqueSnapImageFilePath(tg.getGroupName(), tg.getTestName());
+    			String uniqueContextName = FileUtility.createUniqueContextImageFilePath(tg.getGroupName(), tg.getTestName());
+    			
+    			// SAVE
+				File targetImg = new File(uniqueTrgName + ".png");
+				System.out.println(targetImg.getAbsolutePath());
+				File contextImg = new File(uniqueContextName + ".png");
+				
+				try {
+					ImageIO.write((BufferedImage)matchedTargetImg.getImage(), "PNG", targetImg);
+					ImageIO.write((BufferedImage)matchedContextImg.getImage(), "PNG", contextImg);
+				} catch (IOException e) {
+					System.out.println("Error occured while saving new matches.");
+					System.out.println(e.getMessage());
+				}
+				
+    			// set new image paths.
+    			tg.getTest().getTestSteps().get(stepIndex).getTestStepTargetImage().setImagePath(uniqueTrgName + ".png");
+    			tg.getTest().getTestSteps().get(stepIndex).getTestStepContextImage().setImagePath(uniqueContextName + ".png");
+    			
+    			
+    			System.out.println("SAVING BASELINE CHANGES");
+    			testHandler.saveTest(tg);
+    		}
+    	}
+
     }
-    	
+
     
+    private TestHandler testHandler;
     private List<TestResult> resultCollection = new ArrayList<TestResult>();
     
-    
-    public TestResultController(ArrayList<TestResult> results) {
+    ArrayList<TestGroup> selectedTests = new ArrayList<TestGroup>();
+    public TestResultController(ArrayList<TestResult> results, ArrayList<TestGroup> selectedTests, TestHandler testHandler) {
     	// Get test result, 
+    	this.selectedTests = selectedTests;
     	resultCollection = results;
+    	this.testHandler = testHandler;
+    	
     }
     
     
@@ -228,6 +271,7 @@ public class TestResultController {
 
 	}
 	
+	private int stepIndex = 0;
 	private ArrayList<Button> getStepsAsButtonList() {
 		ArrayList<Button> list = new ArrayList<Button>();
 
@@ -242,6 +286,7 @@ public class TestResultController {
 			btn.setOnMouseClicked(event -> {
 				for (int i = 0; i < testStepVBox.getChildren().size(); i++) {
 					if (testStepVBox.getChildren().get(i).equals(btn)) {
+						stepIndex = i;
 						updateSelectedStepInformation(selectedTest.getStepResults().get(i), selectedTest.getTest().getTestSteps().get(i).getMainAction().getActionType());
 					}
 				}
@@ -268,7 +313,12 @@ public class TestResultController {
 		newContextImageView.setImage(new Image(newContextURL.toString()));
 
 		System.out.println(baselineImageView.getFitHeight());
+		matchedContextImg =  testStepResult.getMatchedContextImage();
+		matchedTargetImg = testStepResult.getMatchedTargetImage();
+		testStepResult.getOriginalTargetImage().setCoordinateOffset(testStepResult.getMatchedTargetImage().getCoordinateOffset());  // TODO:: TEMPORARY SOLUTION FOR OLDER TESTS.
+		drawTargetOnImageView(currentContextPane, testStepResult.getOriginalContextImage() ,testStepResult.getOriginalTargetImage());
 		
+		drawTargetOnImageView(newContextPane, testStepResult.getMatchedContextImage() ,testStepResult.getMatchedTargetImage());
 		// SET ON UPDATE BASELINE BUTTON CLICKED, WITH REFERENCES TO NEW IMAGES.
 		//TODO::
 		
@@ -276,30 +326,46 @@ public class TestResultController {
 		//TODO::
 		
 	}
-	
+	private TestImage matchedContextImg, matchedTargetImg;
 	
 	@FXML 
 	AnchorPane currentContextPane, newContextPane;
 	
-	private void drawTargetOnImageView(AnchorPane imagePane, TestImage target) {
+	private void drawTargetOnImageView(AnchorPane imagePane, TestImage context, TestImage target) {
 		
-		
+//		System.out.println("");
 		// Calculate Scale factor 
 		ImageView imgView = (ImageView) imagePane.getChildrenUnmodifiable().get(0); // This is the ImageView.
-		double xScale = imgView.getFitWidth() / target.getImageWidth();
-		double yScale = imgView.getFitHeight() / target.getImageHeight();
+		double xScale = imgView.getFitWidth() / context.getImageWidth();
+		double yScale = imgView.getFitHeight() / context.getImageHeight();
 		
 		// Calculate new position and size with the scale factor.
-		Rectangle rect = new Rectangle(target.getCoordinates().getX() * xScale,
-									   target.getCoordinates().getY() * yScale,
+		Rectangle rect = new Rectangle(((target.getCoordinates().getX()) - target.getCoordinateOffset().getX()) * xScale,
+									   (target.getCoordinates().getY() - target.getCoordinateOffset().getY()) * yScale,
 									   target.getImageWidth()  * xScale,
 									   target.getImageHeight() * yScale);
 		
+//		System.out.println(target.getClickOffset());
+//		
+		double aspectRatio = (double)context.getImageWidth() / (double)context.getImageHeight();
+		double realWidth = Math.min(imgView.getFitWidth(), imgView.getFitHeight() * aspectRatio);
+		double realHeight = Math.min(imgView.getFitHeight(), imgView.getFitWidth() / aspectRatio);
+		
+		double xfactor = realWidth / context.getImageWidth();
+		double yfactor = realHeight / context.getImageHeight();
+		Rectangle rect2 = new Rectangle((target.getCoordinates().getX()) * xfactor,
+				   (target.getCoordinates().getY()) * yfactor,
+				   target.getImageWidth()  * xfactor,
+				   target.getImageHeight() * yfactor);
 		
 		rect.setStrokeWidth(2);
 		rect.setStroke(Paint.valueOf("red"));
 		rect.setFill(Paint.valueOf("#1e92ff00"));
 		imagePane.getChildren().add(rect);
+		rect2.setStrokeWidth(2);
+		rect2.setStroke(Paint.valueOf("blue"));
+		rect2.setFill(Paint.valueOf("#1e92ff00"));
+//		imagePane.getChildren().add(rect2);
 	}
 
 	

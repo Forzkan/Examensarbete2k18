@@ -127,7 +127,7 @@ public class ChromeWebAction extends ActionBase{
 	
 	public String takeBrowserScreenshot(String pathAndFileNameNoEnding) {
 		final File screenShot = new File(pathAndFileNameNoEnding + ".png").getAbsoluteFile();
-
+System.out.println("");
 		final File outputFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 		try {
 			FileUtils.copyFile(outputFile, screenShot);
@@ -147,7 +147,7 @@ public class ChromeWebAction extends ActionBase{
 	
 	@JsonIgnore
 	public TestImage getNewContextImage() throws IOException {
-		final File outputFile = new File(takeBrowserScreenshot(FileUtility.getProjectRoot() + "\\tempContextImage"));
+		final File outputFile = new File(takeBrowserScreenshot(PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "\\tempContextImage"));
 	
 		BufferedImage contextScreenshot = ImageIO.read(outputFile);
 		return new TestImageImpl(outputFile.getAbsolutePath(), new java.awt.Point(0,0), contextScreenshot.getWidth(), contextScreenshot.getHeight());

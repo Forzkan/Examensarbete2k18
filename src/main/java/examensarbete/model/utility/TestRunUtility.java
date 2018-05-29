@@ -29,11 +29,11 @@ public class TestRunUtility {
 	public static Point getOffset(ChromeWebAction chrome) throws AWTException, IOException {
 		// Template match.
 		TestImage target = new TestImageImpl();
-		target.setImagePath(getBrowserImage(chrome, PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "\\tmpBrowserAsTarget"));
+		target.setImagePath(getBrowserImage(chrome, PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "\\tmpBrowserAsTargetForOffset"));
 		TestImage context = new TestImageImpl();
 		Rectangle2D bounds = Screen.getPrimary().getBounds();
 		Rectangle area = new Rectangle((int)bounds.getMinX(), (int)bounds.getMinY(), (int)bounds.getWidth(), (int)bounds.getHeight());
-		context.setImagePath(getScreenImage(area, PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "\\tmpFullscreenAsContext")); // TODO::RELATIVE FILE PATHS.
+		context.setImagePath(getScreenImage(area, PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "\\tmpFullscreenAsContextForOffset")); // TODO::RELATIVE FILE PATHS.
 		
 		OpenCvController openCvController = new OpenCvController();
 		MatchType matchResult = MatchType.NO_MATCH;

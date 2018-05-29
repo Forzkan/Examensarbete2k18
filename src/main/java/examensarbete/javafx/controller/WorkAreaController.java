@@ -169,15 +169,24 @@ public class WorkAreaController {
 				
 				selectedTest.getTest().cleanup();
 			}
+		
+			onTestReportButtonClick();
 		}
 	}
+	
+	private Stage resultStage = null;
 
 	@FXML
 	private void onTestReportButtonClick() {
 //		testReportButton
 		System.out.println("OPEN TEST RESULTS");
-		TestResultController controller = new TestResultController(lastTestResults); // LATEST TEST RESULTS.
-		preferencesStage = stageFactory.openStage(TTStage.TEST_RESULT, controller);
+//		if(resultStage == null) {
+				TestResultController controller = new TestResultController(lastTestResults, getSelectedTestsAndOrGroup(), testHandler); // LATEST TEST RESULTS.
+				resultStage = stageFactory.openStage(TTStage.TEST_RESULT, controller);	
+//		}else {
+//			resultStage.show();
+//		}
+
 		
 	}
 	

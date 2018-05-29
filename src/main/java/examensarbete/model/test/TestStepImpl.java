@@ -1,6 +1,7 @@
 package examensarbete.model.test;
 
 import java.awt.AWTException;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -74,9 +75,19 @@ public class TestStepImpl implements TestStep {
 	public TestStepResult performTestStep() throws IOException, AWTException {
 		boolean actionOutcome = false;
 		MatchType matchResult = MatchType.NO_MATCH;
+
+		TestImage matchedContext = new TestImageImpl();
+	
+	
 		
 		// TODO:: PERFORM THE MAIN ACTION, AND HANDLE THE OUTCOME OF IT.
 		if (mainAction.getActionType() == EActionType.IMAGESNAP) {
+			Point browserOffset = TestRunUtility.getOffset(chrome);	
+			String path = chrome.takeBrowserScreenshot(PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "\\temporaryMatchedContextImage");
+//			System.out.println("");
+			matchedContext.setImagePath(path);
+//			matchedContext.setImagePath(chrome.takeBrowserScreenshot(PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "\\tempContextImage"));
+			
 			SnapImageAction snapImageAction = (SnapImageAction) mainAction;
 			OpenCvController openCvController = new OpenCvController();
 			TestImage originalTestImage = snapImageAction.getTargetImage();
@@ -100,22 +111,30 @@ public class TestStepImpl implements TestStep {
 				newTarget.setCoordinateOffset(snapImageAction.getTargetImage().getCoordinateOffset());
 				newTarget.setClickOffset(snapImageAction.getTargetImage().getClickOffset());
 				newSnapAction.setTargetImage(newTarget);
+				
 				// PERFORM CLICK, AND SAVE THE IMAGE SO THAT THE USER CAN SEE WHAT IS CONSIDERED
 				// A VALID CHANGE, AND UPDATE THE BASELINE IF THE USER WANTS TO DO SO.
 				actionOutcome = newSnapAction.performAction();
+				newTarget.setCoordinateOffset(browserOffset);
 			} else {
 				System.out.println("");
 				System.out.println("GCV COULD NOT DETECT A VALID CHANGE -> PERFORMING A SECOND ATTEMPT IN COMBINATION WITH TEMPLATE MATCHING..");
 				matchResult = openCvController.runComparison(chrome.getNewFullScreenContextImage(),
 						snapImageAction.getTargetImage());
+				// TODO:: Ta helbild, och sen hemsidebild och hämta kordinat offset. 
 				
 				newTarget = openCvController.getResultTestImage();
 				// Save image to filesystem..
 				newTarget.setImagePath(TestRunUtility.takeNewTargetImage(newTarget.getBounds(),
 						PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) + "\\newTmpTemplateMatchImage"));
 //				String filePathAndName = PropertiesHandler.properties.getProperty(TTProperties.TESTCASE_DIRECTORY.toString()) +"/newTmpTemplateMatchImage.png";
+				System.out.println(newTarget.getFullImagePath());
 				File image = new File(newTarget.getFullImagePath());
 				ImageIO.write((BufferedImage)newTarget.getImage(), "PNG", image);
+				
+				
+				
+				
 //				newLocationTestImage.setImagePath(image.getAbsolutePath());
 				newTarget.setImageGCVResults(GCVConnector.getGCVImageResult(newTarget.getFullImagePath()));
 				
@@ -123,6 +142,8 @@ public class TestStepImpl implements TestStep {
 					if(gcvComparator.performTextMatch(snapImageAction.getTargetImage().getImageGCVResults(), newTarget.getImageGCVResults())) {
 						System.out.println("TEMPLATE MATCHING FOUND THE IMAGE IN THE SAME LOCATION.");
 						actionOutcome = mainAction.performAction();
+						newTarget.setClickOffset(snapImageAction.getTargetImage().getClickOffset());
+						newTarget.setCoordinateOffset(browserOffset);
 					}else {
 						actionOutcome = false;
 					}
@@ -134,8 +155,9 @@ public class TestStepImpl implements TestStep {
 						newTarget.setClickOffset(snapImageAction.getTargetImage().getClickOffset());
 	
 						snapImageAction.setTargetImage(newTarget);
-	
+						newTarget.setClickOffset(snapImageAction.getTargetImage().getClickOffset());
 						actionOutcome = snapImageAction.performAction();
+						newTarget.setCoordinateOffset(browserOffset);
 					}else {
 						actionOutcome = false;
 					}
@@ -163,7 +185,7 @@ public class TestStepImpl implements TestStep {
 
 //			return new TestStepResultImpl(matchResult, testStepContextImage, ot, mc, mt );
 //			snapImageAction.getTargetImage()
-			return new TestStepResultImpl(matchResult, testStepContextImage, originalTestImage, new TestImageImpl(), newTarget );
+			return new TestStepResultImpl(matchResult, testStepContextImage, originalTestImage, matchedContext, newTarget );
 		} else {
 			actionOutcome = mainAction.performAction();
 		}
